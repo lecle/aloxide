@@ -1,5 +1,7 @@
 import { meaningOfLife } from '@aloxide/foo';
-import logger from '@aloxide/logger';
+import { createLogger } from '@aloxide/logger';
+
+const logger = createLogger();
 
 // eslint-disable-next-line no-console
 logger.log(meaningOfLife);
