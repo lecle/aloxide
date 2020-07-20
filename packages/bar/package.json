@@ -9,12 +9,16 @@
   "scripts": {
     "build": "yarn run clean && yarn run compile",
     "clean": "rimraf -rf ./dist",
+    "lint": "tslint --project . --fix",
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn run build",
-    "test": "yarn run build"
+    "test": "yarn run build",
+    "prestart": "yarn build",
+    "start": "node ./dist/index.js"
   },
   "dependencies": {
-    "@aloxide/foo": "^1.0.0"
+    "@aloxide/foo": "^1.0.0",
+    "@aloxide/logger": "^1.0.0"
   },
   "devDependencies": {
     "rimraf": "~3.0.2",
