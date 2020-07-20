@@ -1,6 +1,8 @@
 'use strict';
 
-const logger = require('..');
+const { createLogger } = require('..');
+
+const logger = createLogger();
 
 describe('logger', () => {
   it('should print a log', () => {

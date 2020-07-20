@@ -19,7 +19,7 @@
     "url": "git+https://github.com/lecle/aloxide.git"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest -o"
   },
   "bugs": {
     "url": "https://github.com/lecle/aloxide/issues"
