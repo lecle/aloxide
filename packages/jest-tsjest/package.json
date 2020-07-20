@@ -3,6 +3,7 @@
   "description": "Example of using jest with a TS monorepo",
   "version": "1.0.0",
   "scripts": {
+    "lint": "tslint --project . --fix",
     "test": "jest"
   },
   "devDependencies": {
