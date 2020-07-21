@@ -22,7 +22,7 @@ export class ContractGenerator {
 
     this.logger.debug('-- config.aloxideConfigPath', config.aloxideConfigPath);
     this.logger.debug('-- config.resultPath', config.resultPath);
-    this.logger.debug('-- config.adapter', config.adapter);
+    // this.logger.debug('-- config.adapter', config.adapter);
 
     this.readAloxidecofig(config.aloxideConfigPath);
 
