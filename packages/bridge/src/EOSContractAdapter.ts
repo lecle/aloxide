@@ -10,17 +10,15 @@ export class EOSContractAdapter extends AbsContractAdapter {
   }
 
   generateFromTemplate() {
+    this.templatePath = path.resolve(this.templatePath, 'eos');
+
     this.generateCpp();
     this.generateHpp();
   }
 
   generateCpp() {
-    const cppHandlerbarsTemplate = fs.readFileSync(
-      path.resolve(this.templatePath, 'eos', 'hello.cpp.hbs'),
-      'utf-8',
-    );
-
-    const template = Handlebars.compile(cppHandlerbarsTemplate);
+    const hbsTemplate = fs.readFileSync(path.resolve(this.templatePath, 'hello.cpp.hbs'), 'utf-8');
+    const template = Handlebars.compile(hbsTemplate);
 
     // translate
     const outText = template({});
@@ -32,12 +30,8 @@ export class EOSContractAdapter extends AbsContractAdapter {
   }
 
   generateHpp() {
-    const cppHandlerbarsTemplate = fs.readFileSync(
-      path.resolve(this.templatePath, 'eos', 'hello.hpp.hbs'),
-      'utf-8',
-    );
-
-    const template = Handlebars.compile(cppHandlerbarsTemplate);
+    const hbsTemplate = fs.readFileSync(path.resolve(this.templatePath, 'hello.hpp.hbs'), 'utf-8');
+    const template = Handlebars.compile(hbsTemplate);
 
     // translate
     const outText = template({});
