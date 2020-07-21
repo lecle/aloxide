@@ -1,11 +1,12 @@
 {
-  "name": "@aloxide/logger",
+  "name": "@aloxide/bridge",
   "description": "Example of using jest with a TS monorepo",
   "version": "1.0.0",
   "license": "ISC",
   "main": "./dist/index",
   "files": [
-    "dist"
+    "dist",
+    "smart-contract-templates"
   ],
   "types": "./dist/*.d.ts",
   "scripts": {
@@ -16,5 +17,8 @@
     "lint": "tslint --project . --fix",
     "test": "jest -o"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@aloxide/logger": "^1.0.0",
+    "handlebars": "^4.7.6"
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@aloxide/logger",
+  "name": "@aloxide/abstraction",
   "description": "Example of using jest with a TS monorepo",
   "version": "1.0.0",
   "license": "ISC",
@@ -16,5 +16,9 @@
     "lint": "tslint --project . --fix",
     "test": "jest -o"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@aloxide/bridge": "^1.0.0",
+    "@aloxide/logger": "^1.0.0",
+    "js-yaml": "^3.14.0"
+  }
 }

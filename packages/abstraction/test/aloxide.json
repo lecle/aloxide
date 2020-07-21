@@ -1,0 +1,44 @@
+{
+  "entities": [
+    {
+      "name": "Poll",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uint64_t"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        }
+      ],
+      "key": "id"
+    },
+    {
+      "name": "Vote",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uint64_t"
+        },
+        {
+          "name": "pollId",
+          "type": "uint64_t"
+        },
+        {
+          "name": "ownerId",
+          "type": "uint64_t"
+        },
+        {
+          "name": "point",
+          "type": "number"
+        }
+      ],
+      "key": "id"
+    }
+  ]
+}

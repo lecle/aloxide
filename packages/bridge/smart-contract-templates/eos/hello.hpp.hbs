@@ -1,0 +1,11 @@
+#include <eosio/eosio.hpp>
+
+class[[eosio::contract("hello")]] hello : public eosio::contract
+{
+    public:
+      using contract::contract;
+
+      hello(eosio::name receiver, eosio::name code, eosio::datastream<const char *> ds): eosio::contract(receiver, code, ds){}
+
+    [[eosio::action]] void hi(eosio::name user);
+};

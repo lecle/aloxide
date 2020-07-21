@@ -1,20 +1,22 @@
 {
-  "name": "@aloxide/logger",
+  "name": "@aloxide/example-generate-eos-sm",
   "description": "Example of using jest with a TS monorepo",
   "version": "1.0.0",
   "license": "ISC",
-  "main": "./dist/index",
-  "files": [
-    "dist"
-  ],
-  "types": "./dist/*.d.ts",
+  "private": "true",
   "scripts": {
     "build": "yarn run clean && yarn run compile",
-    "clean": "rimraf -rf ./dist",
+    "prestart": "yarn build",
+    "start": "node ./dist/index.js",
+    "clean": "rimraf -rf ./dist ./out",
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn run build",
     "lint": "tslint --project . --fix",
     "test": "jest -o"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@aloxide/abstraction": "^1.0.0",
+    "@aloxide/bridge": "^1.0.0",
+    "@aloxide/logger": "^1.0.0"
+  }
 }
