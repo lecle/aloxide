@@ -11,13 +11,16 @@ export abstract class AbsContractAdapter implements ContractAdapter {
   templatePath: string;
   outputPath: string;
 
-  constructor(protected blockchainType: string) {
-    // FIXME read template from node_modules folder
-    this.templatePath = path.resolve(__dirname, '../smart-contract-templates');
-  }
+  constructor(protected blockchainType: string) {}
 
   generate(outputPath: string) {
     this.logger.debug(`output path is: ${outputPath}, blockchain type: ${this.blockchainType}`);
+
+    // read template from node_modules folder
+    this.templatePath = path.resolve(
+      path.dirname(require.resolve('@aloxide/bridge')),
+      '../smart-contract-templates',
+    );
 
     this.outputPath = path.resolve(outputPath, this.blockchainType);
 
