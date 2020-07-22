@@ -5,12 +5,12 @@
   "license": "ISC",
   "private": "true",
   "scripts": {
-    "build": "yarn run clean && yarn run compile",
-    "prestart": "yarn build",
+    "build": "yarn clean && yarn compile",
+    "prestart": "rimraf ./out",
     "start": "node ./dist/index.js",
     "clean": "rimraf -rf ./dist ./out",
     "compile": "tsc -p tsconfig.build.json",
-    "prepublishOnly": "yarn run build",
+    "prepublishOnly": "yarn build",
     "lint": "tslint --project . --fix",
     "test": "jest -o"
   },

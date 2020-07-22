@@ -3,6 +3,8 @@ import Handlebars from 'handlebars';
 import path from 'path';
 
 import { AbsContractAdapter } from './AbsContractAdapter';
+import mapPrimaryKeyType from './mapPrimaryKeyType';
+import mapType from './mapType';
 
 export class EOSContractAdapter extends AbsContractAdapter {
   constructor() {
@@ -34,7 +36,19 @@ export class EOSContractAdapter extends AbsContractAdapter {
     const template = Handlebars.compile(hbsTemplate);
 
     // translate
-    const outText = template({});
+    const outText = template({
+      tables: this.entityConfigs?.map(item => {
+        return {
+          name: item.name,
+          fields: item.fields.map(({ name, type }) => ({
+            name,
+            type: mapType(type),
+          })),
+          primaryKeyType: mapPrimaryKeyType(item.fields, item.key),
+          primaryKeyName: item.key,
+        };
+      }),
+    });
 
     const fileName = 'hello.hpp';
     const outFile = path.resolve(this.outputPath, fileName);

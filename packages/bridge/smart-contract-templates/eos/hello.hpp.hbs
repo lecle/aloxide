@@ -8,4 +8,17 @@ class[[eosio::contract("hello")]] hello : public eosio::contract
       hello(eosio::name receiver, eosio::name code, eosio::datastream<const char *> ds): eosio::contract(receiver, code, ds){}
 
     [[eosio::action]] void hi(eosio::name user);
+
+    {{#each tables}}
+    TABLE {{name}}
+    {
+      {{#each fields}}
+      {{type}} {{name}};
+      {{/each}}
+
+      {{primaryKeyType}} primary_key() const { return {{primaryKeyName}}; }
+    };
+    typedef eosio::multi_index<"{{name}}"_n, {{name}}> {{name}}_table;
+
+    {{/each}}
 };

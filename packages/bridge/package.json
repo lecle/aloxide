@@ -10,10 +10,10 @@
   ],
   "types": "./dist/*.d.ts",
   "scripts": {
-    "build": "yarn run clean && yarn run compile",
+    "build": "yarn clean && yarn compile",
     "clean": "rimraf -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
-    "prepublishOnly": "yarn run build",
+    "prepublishOnly": "yarn build",
     "lint": "tslint --project . --fix",
     "test": "jest -o"
   },
