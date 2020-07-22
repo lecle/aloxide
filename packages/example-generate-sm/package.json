@@ -1,5 +1,5 @@
 {
-  "name": "@aloxide/example-generate-eos-sm",
+  "name": "@aloxide/example-generate-sm",
   "description": "Example of using jest with a TS monorepo",
   "version": "1.0.0",
   "license": "ISC",

@@ -1,9 +1,11 @@
 import { ContractGenerator } from '@aloxide/abstraction';
-import { ICONContractAdapter } from '@aloxide/bridge';
+import { EOSContractAdapter, ICONContractAdapter, MultipleContractAdapter } from '@aloxide/bridge';
 import { createLogger } from '@aloxide/logger';
 import path from 'path';
 
-const adapter = new ICONContractAdapter();
+const adapter = new MultipleContractAdapter();
+
+adapter.addAdapters(new EOSContractAdapter(), new ICONContractAdapter());
 
 const contractGenerator = new ContractGenerator({
   aloxideConfigPath: path.resolve(__dirname, '../samples/aloxide.yml'),
