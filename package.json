@@ -7,8 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "install": "lerna bootstrap",
-    "postinstall": "yarn build",
+    "postinstall": "lerna bootstrap && lerna run build",
     "start": "lerna run start",
     "docs": "doctoc --title '**Table of content**' README.md",
     "clean": "lerna run clean",
