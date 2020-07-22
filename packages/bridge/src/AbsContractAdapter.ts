@@ -24,15 +24,19 @@ export abstract class AbsContractAdapter implements ContractAdapter {
 
     this.outputPath = path.resolve(outputPath, this.blockchainType);
 
-    // make sure directory is exist
-    if (!fs.existsSync(this.outputPath)) {
-      fs.mkdirSync(this.outputPath, {
-        recursive: true,
-      });
-      this.logger.debug(`make directory: ${this.outputPath}`);
-    }
+    this.ensureExistingFolder(this.outputPath);
 
     this.generateFromTemplate();
+  }
+
+  ensureExistingFolder(folderPath: string) {
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, {
+        recursive: true,
+      });
+      this.logger.debug(`make directory: ${folderPath}`);
+    }
+    return folderPath;
   }
 
   abstract generateFromTemplate();
