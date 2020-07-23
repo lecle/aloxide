@@ -1,7 +1,14 @@
-#include "hello.hpp"
+#include "{{contractName}}.hpp"
 
 using namespace eosio;
 
-void hello::hi(name user){
-    print( "Hello, ", user);
+void {{contractName}}::hi(name user){
+    print( "{{contractName}}, ", user);
 }
+
+{{#each actions}}
+void {{actionName}}({{#each params}}{{type}} {{name}}{{#unless @last}}, {{/unless}}{{/each}}) {
+{{code}}
+}
+
+{{/each}}

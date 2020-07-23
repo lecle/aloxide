@@ -1,13 +1,18 @@
 #include <eosio/eosio.hpp>
 
-class[[eosio::contract("hello")]] hello : public eosio::contract
+class[[eosio::contract("{{contractName}}")]] {{contractName}} : public eosio::contract
 {
     public:
       using contract::contract;
 
-      hello(eosio::name receiver, eosio::name code, eosio::datastream<const char *> ds): eosio::contract(receiver, code, ds){}
+      {{contractName}}(eosio::name receiver, eosio::name code, eosio::datastream<const char *> ds): eosio::contract(receiver, code, ds){}
 
     [[eosio::action]] void hi(eosio::name user);
+
+    {{#each actions}}
+    [[eosio::action]] void {{actionName}}({{#each params}}{{type}} {{name}}{{#unless @last}}, {{/unless}}{{/each}});
+
+    {{/each}}
 
     {{#each tables}}
     TABLE {{name}}

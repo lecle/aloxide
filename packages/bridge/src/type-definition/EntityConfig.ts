@@ -1,8 +1,7 @@
+import { Field } from './Field';
+
 export interface EntityConfig {
   name: string;
-  fields: {
-    name: string;
-    type: string;
-  }[];
+  fields: Field[];
   key: string;
 }
