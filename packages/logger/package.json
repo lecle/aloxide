@@ -1,0 +1,20 @@
+{
+  "name": "@aloxide/logger",
+  "description": "Example of using jest with a TS monorepo",
+  "version": "1.0.0",
+  "license": "ISC",
+  "main": "./dist/index",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/*.d.ts",
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "clean": "rimraf -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "yarn build",
+    "lint": "tslint --project . --fix",
+    "test": "jest -o"
+  },
+  "dependencies": {}
+}
