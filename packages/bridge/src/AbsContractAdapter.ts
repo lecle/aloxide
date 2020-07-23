@@ -1,15 +1,15 @@
 import { createLogger, Logger } from '@aloxide/logger';
-import fs from 'fs';
 import path from 'path';
 
 import { ContractAdapter } from './ContractAdapter';
-import { EntityConfig } from './EntityConfig';
+import { EntityConfig } from './type-definition/EntityConfig';
 
 export abstract class AbsContractAdapter implements ContractAdapter {
   entityConfigs: EntityConfig[];
   logger?: Logger = createLogger();
   templatePath: string;
   outputPath: string;
+  contractName: string;
 
   constructor(protected blockchainType: string) {}
 
@@ -24,19 +24,7 @@ export abstract class AbsContractAdapter implements ContractAdapter {
 
     this.outputPath = path.resolve(outputPath, this.blockchainType);
 
-    this.ensureExistingFolder(this.outputPath);
-
     this.generateFromTemplate();
-  }
-
-  ensureExistingFolder(folderPath: string) {
-    if (!fs.existsSync(folderPath)) {
-      fs.mkdirSync(folderPath, {
-        recursive: true,
-      });
-      this.logger.debug(`make directory: ${folderPath}`);
-    }
-    return folderPath;
   }
 
   abstract generateFromTemplate();

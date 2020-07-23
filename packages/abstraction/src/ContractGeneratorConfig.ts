@@ -18,4 +18,9 @@ export interface ContractGeneratorConfig {
   adapter: ContractAdapter;
 
   logger?: Logger;
+
+  /**
+   * name of the contract
+   */
+  contractName?: string;
 }

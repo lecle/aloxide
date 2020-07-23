@@ -1,0 +1,12 @@
+    require_auth(user);
+
+    {{tableName}}_table _{{tableName}}(get_self(), get_self().value);
+    auto item = _{{tableName}}.find({{primaryField.name}});
+
+    check(item != _{{tableName}}.end(), "item does not exist");
+
+    _{{tableName}}.modify(item, user, [&](auto &row) {
+        {{#each fields}}
+        row.{{name}} = {{name}};
+        {{/each}}
+    });

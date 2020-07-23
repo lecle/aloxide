@@ -1,0 +1,9 @@
+    require_auth(user);
+
+    {{tableName}}_table _{{tableName}}(get_self(), get_self().value);
+
+    _{{tableName}}.emplace(user, [&](auto &row) {
+        {{#each fields}}
+        row.{{name}} = {{name}};
+        {{/each}}
+    });

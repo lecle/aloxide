@@ -2,9 +2,10 @@ import { Logger } from '@aloxide/logger/src';
 
 import { ContractAdapter } from './ContractAdapter';
 
-import type { EntityConfig } from './EntityConfig';
+import type { EntityConfig } from './type-definition/EntityConfig';
 
 export class MultipleContractAdapter implements ContractAdapter {
+  contractName: string;
   entityConfigs: EntityConfig[];
   logger?: Logger;
   private adapters: ContractAdapter[] = [];
