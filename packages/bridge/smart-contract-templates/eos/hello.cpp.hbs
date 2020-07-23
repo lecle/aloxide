@@ -7,7 +7,7 @@ void {{contractName}}::hi(name user){
 }
 
 {{#each actions}}
-void {{actionName}}({{#each params}}{{type}} {{name}}{{#unless @last}}, {{/unless}}{{/each}}) {
+void {{@root.contractName}}::{{actionName}}({{#each params}}{{type}} {{name}}{{#unless @last}}, {{/unless}}{{/each}}) {
 {{code}}
 }
 

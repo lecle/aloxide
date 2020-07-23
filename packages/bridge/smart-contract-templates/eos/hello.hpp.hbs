@@ -21,7 +21,7 @@ class[[eosio::contract("{{contractName}}")]] {{contractName}} : public eosio::co
       {{type}} {{name}};
       {{/each}}
 
-      {{primaryKeyType}} primary_key() const { return {{primaryKeyName}}; }
+      {{primaryKeyField.type}} primary_key() const { return {{primaryKeyField.name}}; }
     };
     typedef eosio::multi_index<"{{name}}"_n, {{name}}> {{name}}_table;
 

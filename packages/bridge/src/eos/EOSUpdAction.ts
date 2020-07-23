@@ -10,7 +10,7 @@ export class EOSUpdAction extends EOSAction {
   implement(entity: Table): string {
     return this.template({
       tableName: entity.name,
-      primaryField: entity.primaryField,
+      primaryKeyField: entity.primaryKeyField,
       fields: entity.fields,
     });
   }

@@ -51,9 +51,9 @@ export class EOSContractAdapter extends AbsContractAdapter {
       }));
 
       return {
-        name: item.name,
+        name: item.name.substr(0, 12).toLocaleLowerCase(),
         fields,
-        primaryField: fields.find(({ name }) => item.key),
+        primaryKeyField: fields.find(({ name }) => name == item.key),
       };
     });
   }
