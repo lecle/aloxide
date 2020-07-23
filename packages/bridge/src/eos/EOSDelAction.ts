@@ -10,7 +10,7 @@ export class EOSDelAction extends EOSAction {
   implement(entity: Table): string {
     return this.template({
       tableName: entity.name,
-      primaryField: entity.primaryField,
+      primaryKeyField: entity.primaryKeyField,
     });
   }
   makeParams(entity: Table): Field[] {
@@ -19,7 +19,7 @@ export class EOSDelAction extends EOSAction {
         name: 'user',
         type: 'eosio::name',
       },
-      entity.primaryField,
+      entity.primaryKeyField,
     ];
   }
 }

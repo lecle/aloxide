@@ -1,7 +1,7 @@
     require_auth(user);
 
     {{tableName}}_table _{{tableName}}(get_self(), get_self().value);
-    auto item = _{{tableName}}.find({{primaryField.name}});
+    auto item = _{{tableName}}.find({{primaryKeyField.name}});
 
     check(item != _{{tableName}}.end(), "item does not exist");
 
