@@ -7,7 +7,6 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "lerna bootstrap && lerna run build",
     "start": "lerna run start",
     "docs": "doctoc --title '**Table of content**' README.md",
     "clean": "lerna run clean",
