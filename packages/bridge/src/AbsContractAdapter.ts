@@ -2,6 +2,7 @@ import { createLogger, Logger } from '@aloxide/logger';
 import path from 'path';
 
 import { ContractAdapter } from './ContractAdapter';
+import { AbsTypeInterpreter } from './interpreter/AbsTypeInterpreter';
 import { EntityConfig } from './type-definition/EntityConfig';
 
 export abstract class AbsContractAdapter implements ContractAdapter {
@@ -10,6 +11,7 @@ export abstract class AbsContractAdapter implements ContractAdapter {
   templatePath: string;
   outputPath: string;
   contractName: string;
+  typeInterpreter: AbsTypeInterpreter;
 
   constructor(protected blockchainType: string) {}
 
