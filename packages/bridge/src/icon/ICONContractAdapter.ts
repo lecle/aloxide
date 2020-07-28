@@ -3,6 +3,7 @@ import Handlebars from 'handlebars';
 import path from 'path';
 
 import { AbsContractAdapter } from '../AbsContractAdapter';
+import { ICONTypeInterpreter } from '../interpreter/ICONTypeInterpreter';
 import { JsPrettier } from '../prettier/JsPrettier';
 import { PythonPrettier } from '../prettier/PythonPrettier';
 import { FilePrinter } from '../printer/FilePrinter';
@@ -16,6 +17,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
 
   constructor() {
     super('icon');
+    this.typeInterpreter = new ICONTypeInterpreter();
   }
 
   generateFromTemplate() {

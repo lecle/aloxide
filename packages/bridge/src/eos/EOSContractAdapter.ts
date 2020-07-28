@@ -4,9 +4,10 @@ import path from 'path';
 
 import { AbsContractAdapter } from '../AbsContractAdapter';
 import { ActionCreator } from '../ActionCreator';
-import mapType from '../mapType';
+import { EOSTypeInterpreter } from '../interpreter/EOSTypeInterpreter';
 import { CplusplusPrettier } from '../prettier/CplusplusPrettier';
 import { FilePrinter } from '../printer/FilePrinter';
+import { FieldTypeEnum } from '../type-definition/FieldTypeEnum';
 import { EOSCreAction } from './EOSCreAction';
 import { EOSDelAction } from './EOSDelAction';
 import { EOSUpdAction } from './EOSUpdAction';
@@ -22,6 +23,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
 
   constructor() {
     super('eos');
+    this.typeInterpreter = new EOSTypeInterpreter();
   }
 
   generateFromTemplate() {
@@ -47,7 +49,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
     this.tables = this.entityConfigs?.map<Table>(item => {
       const fields = item.fields.map(({ name, type }) => ({
         name,
-        type: mapType(type, this.blockchainType),
+        type: this.typeInterpreter.interpret(type as FieldTypeEnum),
       }));
 
       return {
