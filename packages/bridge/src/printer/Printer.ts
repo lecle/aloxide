@@ -5,11 +5,11 @@ import { Prettier } from '../prettier/Prettier';
  * - print to a file: FileCoder
  * - return as string: StringCoder
  */
-export interface Coder {
+export interface Printer {
   prettier: Prettier;
 
   /**
    * print code
    */
-  code(fileName: string, outputText: string, outputPath?: string);
+  print(fileName: string, outputText: string, outputPath?: string);
 }
