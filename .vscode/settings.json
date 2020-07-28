@@ -1,3 +1,12 @@
 {
-  "conventionalCommits.scopes": ["setup", "app"]
+  "conventionalCommits.scopes": [
+    "setup",
+    "app",
+    "logger",
+    "abstraction",
+    "bridge",
+    "api-gateway",
+    "example-api-gateway",
+    "example-generante-sm"
+  ]
 }

@@ -3,24 +3,24 @@ import Handlebars from 'handlebars';
 import path from 'path';
 
 import { AbsContractAdapter } from '../AbsContractAdapter';
-import { FileCoder } from '../coder/FileCoder';
 import { JsPrettier } from '../prettier/JsPrettier';
 import { PythonPrettier } from '../prettier/PythonPrettier';
+import { FilePrinter } from '../printer/FilePrinter';
 
-import type { Coder } from '../coder/Coder';
+import type { Printer } from '../printer/Printer';
 export class ICONContractAdapter extends AbsContractAdapter {
   folderName: string = 'icon_hello';
   folderTestName: string = 'tests';
-  pyFileCoder: Coder;
-  jsFileCoder: Coder;
+  pyFilePrinter: Printer;
+  jsFilePrinter: Printer;
 
   constructor() {
     super('icon');
   }
 
   generateFromTemplate() {
-    this.pyFileCoder = new FileCoder(this.outputPath, new PythonPrettier(), this.logger);
-    this.jsFileCoder = new FileCoder(this.outputPath, new JsPrettier(), this.logger);
+    this.pyFilePrinter = new FilePrinter(this.outputPath, new PythonPrettier(), this.logger);
+    this.jsFilePrinter = new FilePrinter(this.outputPath, new JsPrettier(), this.logger);
 
     this.templatePath = path.resolve(this.templatePath, 'icon');
 
@@ -43,7 +43,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
     // translate
     const outText = template({});
 
-    this.jsFileCoder.code(fileName, outText, this.folderName);
+    this.jsFilePrinter.print(fileName, outText, this.folderName);
   }
 
   generatePy() {
@@ -57,10 +57,10 @@ export class ICONContractAdapter extends AbsContractAdapter {
     // translate
     const outText = template({});
 
-    this.pyFileCoder.code(fileName, outText, this.folderName);
+    this.pyFilePrinter.print(fileName, outText, this.folderName);
 
     // copy __init__.py
-    this.pyFileCoder.code(
+    this.pyFilePrinter.print(
       '__init__.py',
       fs.readFileSync(path.resolve(this.templatePath, this.folderName, '__init__.py'), 'utf-8'),
       this.folderName,
@@ -78,10 +78,10 @@ export class ICONContractAdapter extends AbsContractAdapter {
     // translate
     const outText = template({});
 
-    this.pyFileCoder.code(fileName, outText, path.join(this.folderName, this.folderTestName));
+    this.pyFilePrinter.print(fileName, outText, path.join(this.folderName, this.folderTestName));
 
     // copy __init__.py
-    this.pyFileCoder.code(
+    this.pyFilePrinter.print(
       '__init__.py',
       fs.readFileSync(path.resolve(this.templatePath, this.folderName, '__init__.py'), 'utf-8'),
       path.join(this.folderName, this.folderTestName),
@@ -99,7 +99,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
     // translate
     const outText = template({});
 
-    this.pyFileCoder.code(fileName, outText, path.join(this.folderName, this.folderTestName));
+    this.pyFilePrinter.print(fileName, outText, path.join(this.folderName, this.folderTestName));
   }
 
   generatePackageJson() {
@@ -113,6 +113,6 @@ export class ICONContractAdapter extends AbsContractAdapter {
     // translate
     const outText = template({});
 
-    this.jsFileCoder.code(fileName, outText, this.folderName);
+    this.jsFilePrinter.print(fileName, outText, this.folderName);
   }
 }

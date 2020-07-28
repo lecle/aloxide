@@ -4,21 +4,21 @@ import path from 'path';
 
 import { AbsContractAdapter } from '../AbsContractAdapter';
 import { ActionCreator } from '../ActionCreator';
-import { FileCoder } from '../coder/FileCoder';
 import mapType from '../mapType';
 import { CplusplusPrettier } from '../prettier/CplusplusPrettier';
+import { FilePrinter } from '../printer/FilePrinter';
 import { EOSCreAction } from './EOSCreAction';
 import { EOSDelAction } from './EOSDelAction';
 import { EOSUpdAction } from './EOSUpdAction';
 
-import type { Coder } from '../coder/Coder';
+import type { Printer } from '../printer/Printer';
 import type { Table } from '../type-definition/Table';
 import type { Action } from '../type-definition/Action';
 export class EOSContractAdapter extends AbsContractAdapter {
   actions: Action[];
   tables: Table[];
   actionCreators: ActionCreator[];
-  coder: Coder;
+  printer: Printer;
 
   constructor() {
     super('eos');
@@ -32,7 +32,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
       ac.templatePath = this.templatePath;
     });
 
-    this.coder = new FileCoder(this.outputPath, new CplusplusPrettier(), this.logger);
+    this.printer = new FilePrinter(this.outputPath, new CplusplusPrettier(), this.logger);
 
     this.createTables();
     this.createActions();
@@ -81,7 +81,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
 
     const fileName = `${this.contractName}.cpp`;
 
-    this.coder.code(fileName, outText);
+    this.printer.print(fileName, outText);
   }
 
   generateHpp() {
@@ -99,6 +99,6 @@ export class EOSContractAdapter extends AbsContractAdapter {
 
     const fileName = `${this.contractName}.hpp`;
 
-    this.coder.code(fileName, outText);
+    this.printer.print(fileName, outText);
   }
 }
