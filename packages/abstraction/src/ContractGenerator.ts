@@ -22,13 +22,13 @@ export class ContractGenerator {
 
     this.logger.debug('-- config.aloxideConfigPath', config.aloxideConfigPath);
     this.logger.debug('-- config.resultPath', config.resultPath);
-    // this.logger.debug('-- config.adapter', config.adapter);
-
-    this.readAloxidecofig(config.aloxideConfigPath);
 
     if (this.config.adapter) {
       this.config.adapter.logger = this.logger;
+      this.config.adapter.contractName = config.contractName || 'hello';
     }
+
+    this.readAloxidecofig(config.aloxideConfigPath);
   }
 
   generate() {

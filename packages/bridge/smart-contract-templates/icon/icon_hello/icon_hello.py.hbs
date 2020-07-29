@@ -23,7 +23,7 @@ class hello(IconScoreBase):
 
     {{#each tables}}
     @external
-    def get{{name}}(self{{#each fields}}{{#if @first}}{{name}}{{/if}}{{/each}}) -> str:
+    def get{{name}}(self, {{#each fields}}{{#if @first}}{{name}}: {{type}}{{/if}}{{/each}}) -> str:
         return self._{{name}}_table[{{#each fields}}{{#if @first}}{{name}}{{/if}}{{/each}}]
     {{/each}}
 

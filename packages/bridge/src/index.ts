@@ -1,5 +1,9 @@
-export type { EntityConfig } from './EntityConfig';
-export type { ContractAdapter } from './ContractAdapter';
+export type { Field } from './type-definition/Field';
+export type { Table } from './type-definition/Table';
+export type { Action } from './type-definition/Action';
+export type { EntityConfig } from './type-definition/EntityConfig';
+export { ContractAdapter } from './ContractAdapter';
 export { AbsContractAdapter } from './AbsContractAdapter';
-export { EOSContractAdapter } from './EOSContractAdapter';
-export { ICONContractAdapter } from './ICONContractAdapter';
+export { MultipleContractAdapter } from './MultipleContractAdapter';
+export { EOSContractAdapter } from './eos/EOSContractAdapter';
+export { ICONContractAdapter } from './icon/ICONContractAdapter';

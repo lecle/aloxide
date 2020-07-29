@@ -1,0 +1,21 @@
+{
+    "jsonrpc": "2.0",
+    "method": "icx_call",
+    "params": {
+        "nid": "0x3",
+        "to": "",
+        "dataType": "call",
+        "data": {
+            "method": "{{action}}",
+            "params": {
+                {{#each fields}}
+                {{#if @last}}
+                "{{name}}": ""
+                {{else}}
+                "{{name}}": "",
+                {{/if}}
+                {{/each}}           
+            }
+        }
+    }
+}

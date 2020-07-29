@@ -88,15 +88,23 @@ describe('test ICON contract addapter', () => {
       const spyGeneratePackage = jest.spyOn(adapter, 'generatePackage');
       spyGeneratePackage.mockImplementation(jest.fn());
 
-      const spyGenerateMainModule= jest.spyOn(adapter, 'generateMainModule');
-      spyGenerateMainModule.mockImplementation(jest.fn());
+      const spyGenerateMainPy= jest.spyOn(adapter, 'generateMainPy');
+      spyGenerateMainPy.mockImplementation(jest.fn());
+  
+      const spyGenerateCallAPI= jest.spyOn(adapter, 'generateCallAPI');
+      spyGenerateCallAPI.mockImplementation(jest.fn());
 
+      const spyGenerateTXAPI= jest.spyOn(adapter, 'generateTXAPI');
+      spyGenerateTXAPI.mockImplementation(jest.fn());
+      
       adapter.generateFromTemplate();
       expect(adapter.templatePath).toEqual(path.resolve(templatePath, blockchain));
 
       expect(spyGenerateInit).toBeCalledTimes(1);
       expect(spyGeneratePackage).toBeCalledTimes(1);
-      expect(spyGenerateMainModule).toBeCalledTimes(1);
+      expect(spyGenerateMainPy).toBeCalledTimes(1);
+      expect(spyGenerateCallAPI).toBeCalledTimes(1);
+      expect(spyGenerateTXAPI).toBeCalledTimes(1);
     });
   });
 });
