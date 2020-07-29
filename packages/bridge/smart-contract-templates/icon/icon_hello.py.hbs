@@ -1,0 +1,67 @@
+from iconservice import *
+
+TAG = 'hello'
+
+
+class hello(IconScoreBase):
+
+    def __init__(self, db: IconScoreDatabase) -> None:
+        super().__init__(db)
+    {{#each tables}}
+        self._{{name}}_table = DictDB('{{name}}tbl', db, value_type=str)
+    {{/each}}
+    def on_install(self) -> None:
+        super().on_install()
+
+    def on_update(self) -> None:
+        super().on_update()
+
+    @external(readonly=True)
+    def hi(self) -> str:
+        Logger.debug(f'Hello, world!' + str(self.msg.sender), TAG)
+        return "Hi"
+
+    {{#each tables}}
+    @external
+    def get{{name}}(self{{#each fields}}{{#if @first}}{{name}}{{/if}}{{/each}}) -> str:
+        return self._{{name}}_table[{{#each fields}}{{#if @first}}{{name}}{{/if}}{{/each}}]
+    {{/each}}
+
+    {{#each tables}}
+    @external
+    def crt{{name}}(self{{#each fields}}, {{name}}: {{type}}{{/each}}):
+        inputData = {}
+        {{#each fields}}
+        inputData["{{name}}"] = {{name}}
+        {{/each}}
+        if self._{{name}}_table[id] != "":
+            revert('id already exists')
+
+        self._{{name}}_table[id] = json_dumps(inputData)
+    {{/each}}
+
+    {{#each tables}}
+    @external
+    def upt{{name}}(self{{#each fields}}, {{name}}: {{type}}{{/each}}):
+        inputData = {}
+        {{#each fields}}
+        inputData["{{name}}"] = {{name}}
+        {{/each}}
+        if self._poll_table[id] == "":
+            revert('id does not exists')
+
+        self._{{name}}_table[id] = json_dumps(inputData)
+    {{/each}}
+
+    {{#each tables}}
+    @external
+    def rmv{{name}}(self, {{#each fields}}{{#if @first}}{{name}}: {{type}}{{/if}}{{/each}}):
+        inputData = {}
+        {{#each fields}}
+        inputData["{{name}}"] = {{name}}
+        {{/each}}
+        if self._poll_table[id] == "":
+            revert('id does not exists')
+
+        self._{{name}}_table[id] = json_dumps(inputData)
+    {{/each}}

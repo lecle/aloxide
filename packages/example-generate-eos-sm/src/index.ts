@@ -1,17 +1,29 @@
 import { ContractGenerator } from '@aloxide/abstraction';
-import { EOSContractAdapter } from '@aloxide/bridge';
+import { EOSContractAdapter, ICONContractAdapter } from '@aloxide/bridge';
 import { createLogger } from '@aloxide/logger';
 import path from 'path';
 
-const adapter = new EOSContractAdapter();
+const adapterEOS = new EOSContractAdapter();
 
-const contractGenerator = new ContractGenerator({
+const contractEOSGenerator = new ContractGenerator({
   aloxideConfigPath: path.resolve(__dirname, '../samples/aloxide.yml'),
   resultPath: path.resolve(__dirname, '../out'),
-  adapter,
+  adapter: adapterEOS,
   logger: createLogger({
     consoleLogger: true,
   }),
 });
 
-contractGenerator.generate();
+contractEOSGenerator.generate();
+
+const adapterICON = new ICONContractAdapter();
+const contractICONGenerator = new ContractGenerator({
+  aloxideConfigPath: path.resolve(__dirname, '../samples/aloxide.yml'),
+  resultPath: path.resolve(__dirname, '../out'),
+  adapter: adapterICON,
+  logger: createLogger({
+    consoleLogger: true,
+  }),
+});
+
+contractICONGenerator.generate();
