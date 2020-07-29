@@ -27,7 +27,6 @@ export class ICONContractAdapter extends AbsContractAdapter {
     //this.coder = new FileCoder(this.outputPath, new CplusplusPrettier(), this.logger);
 
     this.templatePath = path.resolve(this.templatePath, 'icon');
-    this.logger.info(`---- this.templatePath: ${this.templatePath}`);
 
     this.generateInit();
     this.generatePackage();
@@ -86,10 +85,8 @@ export class ICONContractAdapter extends AbsContractAdapter {
 
     this.entityConfigs ?.map(item => {
 
-      console.log(item);
       const actionName = "get" + item.name
       const outFileName = actionName + ".json";
-      console.log(outFileName);
       const outText = template({
         action: actionName.toLocaleLowerCase()
       });
