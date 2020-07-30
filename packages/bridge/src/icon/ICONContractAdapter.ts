@@ -3,26 +3,28 @@ import Handlebars from 'handlebars';
 import path from 'path';
 
 import { AbsContractAdapter } from '../AbsContractAdapter';
-import { FileCoder } from '../coder/FileCoder';
+import { ICONTypeInterpreter } from '../interpreter/ICONTypeInterpreter';
+import { FieldTypeEnum } from '../type-definition/FieldTypeEnum';
 import { JsPrettier } from '../prettier/JsPrettier';
 import { PythonPrettier } from '../prettier/PythonPrettier';
+import { FilePrinter } from '../printer/FilePrinter';
 
-import type { Coder } from '../coder/Coder';
-import mapType from '../mapType';
+import type { Printer } from '../printer/Printer';
 
 export class ICONContractAdapter extends AbsContractAdapter {
   folderName: string = 'icon_hello';
   folderTestName: string = 'tests';
-  pyFileCoder: Coder;
-  jsFileCoder: Coder;
+  pyFilePrinter: Printer;
+  jsFilePrinter: Printer;
 
   constructor() {
     super('icon');
+    this.typeInterpreter = new ICONTypeInterpreter();
   }
 
   generateFromTemplate() {
-    this.pyFileCoder = new FileCoder(this.outputPath, new PythonPrettier(), this.logger);
-    this.jsFileCoder = new FileCoder(this.outputPath, new JsPrettier(), this.logger);
+    this.pyFilePrinter = new FilePrinter(this.outputPath, new PythonPrettier(), this.logger);
+    this.jsFilePrinter = new FilePrinter(this.outputPath, new JsPrettier(), this.logger);
 
     //this.coder = new FileCoder(this.outputPath, new CplusplusPrettier(), this.logger);
 
@@ -43,7 +45,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
     const hbsTemplate = fs.readFileSync(path.resolve(this.templatePath, this.folderName, `${fileName}.hbs`), 'utf-8');
     const template = Handlebars.compile(hbsTemplate);
     const outText = template({});
-    this.jsFileCoder.code(fileName, outText, this.folderName);
+    this.jsFilePrinter.print(fileName, outText, this.folderName);
   }
 
   generatePackage() {
@@ -54,7 +56,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
     // translate
     const outText = template({});
 
-    this.jsFileCoder.code(fileName, outText, this.folderName);
+    this.jsFilePrinter.print(fileName, outText, this.folderName);
   }
 
 
@@ -63,19 +65,18 @@ export class ICONContractAdapter extends AbsContractAdapter {
     const hbsTemplate = fs.readFileSync(path.resolve(this.templatePath, this.folderName, `${fileName}.hbs`), 'utf-8');
     const template = Handlebars.compile(hbsTemplate);
 
-
     const outText = template({
       tables: this.entityConfigs ?.map(item => {
         return {
           name: item.name,
           fields: item.fields.map(({ name, type }) => ({
             name,
-            type: mapType(type, this.blockchainType),
+            type: this.typeInterpreter.interpret(type as FieldTypeEnum),
           })),
         };
       }),
     });
-    this.jsFileCoder.code(fileName, outText, this.folderName);
+    this.jsFilePrinter.print(fileName, outText, this.folderName);
   }
 
   generateCallAPI() {
@@ -84,14 +85,12 @@ export class ICONContractAdapter extends AbsContractAdapter {
     const template = Handlebars.compile(hbsTemplate);
 
     this.entityConfigs ?.map(item => {
-
       const actionName = "get" + item.name
       const outFileName = actionName + ".json";
       const outText = template({
         action: actionName.toLocaleLowerCase()
       });
-      this.jsFileCoder.code(outFileName, outText, this.folderName);
-
+      this.jsFilePrinter.print(outFileName, outText, this.folderName);
     });
   }
 
@@ -108,10 +107,10 @@ export class ICONContractAdapter extends AbsContractAdapter {
         action: crtActionName.toLocaleLowerCase(),
         fields: item.fields.map(({ name, type }) => ({
           name,
-          type: mapType(type, this.blockchainType),
+          type: this.typeInterpreter.interpret(type as FieldTypeEnum),
         })),
       });
-      this.jsFileCoder.code(crtFileName, crtText, this.folderName);
+      this.jsFilePrinter.print(crtFileName, crtText, this.folderName);
 
       // update data
       const udtActionName = "upt" + item.name
@@ -120,10 +119,10 @@ export class ICONContractAdapter extends AbsContractAdapter {
         action: udtActionName.toLocaleLowerCase(),
         fields: item.fields.map(({ name, type }) => ({
           name,
-          type: mapType(type, this.blockchainType),
+          type: this.typeInterpreter.interpret(type as FieldTypeEnum),
         })),
       });
-      this.jsFileCoder.code(uptFileName, uptText, this.folderName);
+      this.jsFilePrinter.print(uptFileName, uptText, this.folderName);
 
       // remove data
       const rmvActionName = "rmv" + item.name
@@ -132,7 +131,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
         action: rmvActionName.toLocaleLowerCase(),
         fields: [{"name": "id", "type": "int"}]
       });
-      this.jsFileCoder.code(rmvFileName, rmvText, this.folderName);
+      this.jsFilePrinter.print(rmvFileName, rmvText, this.folderName);
 
     });
   }
@@ -147,10 +146,10 @@ export class ICONContractAdapter extends AbsContractAdapter {
     // translate
     const outText = template({});
 
-    this.pyFileCoder.code(fileName, outText, path.join(this.folderName, this.folderTestName));
+    this.pyFilePrinter.print(fileName, outText, path.join(this.folderName, this.folderTestName));
 
     // copy __init__.py
-    this.pyFileCoder.code(
+    this.pyFilePrinter.print(
       '__init__.py',
       fs.readFileSync(path.resolve(this.templatePath, this.folderName, '__init__.py'), 'utf-8'),
       path.join(this.folderName, this.folderTestName),
@@ -168,6 +167,6 @@ export class ICONContractAdapter extends AbsContractAdapter {
     // translate
     const outText = template({});
 
-    this.pyFileCoder.code(fileName, outText, path.join(this.folderName, this.folderTestName));
+    this.pyFilePrinter.print(fileName, outText, path.join(this.folderName, this.folderTestName));
   }
 }

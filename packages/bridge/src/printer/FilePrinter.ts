@@ -2,17 +2,17 @@ import { Logger } from '@aloxide/logger';
 import fs from 'fs';
 import path from 'path';
 
-import { Coder } from './Coder';
+import { Printer } from './Printer';
 
 import type { Prettier } from '../prettier/Prettier';
 
 /**
  * Print output code to files
  */
-export class FileCoder implements Coder {
+export class FilePrinter implements Printer {
   constructor(private outputPath: string, public prettier: Prettier, private logger: Logger) {}
 
-  code(fileName: string, outputText: string, outputPath?: string) {
+  print(fileName: string, outputText: string, outputPath?: string) {
     if (outputPath) {
       outputPath = path.resolve(this.outputPath, outputPath);
     } else {
