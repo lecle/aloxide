@@ -4,12 +4,12 @@ import path from 'path';
 
 import { AbsContractAdapter } from '../AbsContractAdapter';
 import { ActionCreator } from '../ActionCreator';
-import { EOSTypeInterpreter } from '../interpreter/EOSTypeInterpreter';
 import { CplusplusPrettier } from '../prettier/CplusplusPrettier';
 import { FilePrinter } from '../printer/FilePrinter';
 import { FieldTypeEnum } from '../type-definition/FieldTypeEnum';
 import { EOSCreAction } from './EOSCreAction';
 import { EOSDelAction } from './EOSDelAction';
+import { EOSTypeInterpreter } from './EOSTypeInterpreter';
 import { EOSUpdAction } from './EOSUpdAction';
 
 import type { Printer } from '../printer/Printer';
