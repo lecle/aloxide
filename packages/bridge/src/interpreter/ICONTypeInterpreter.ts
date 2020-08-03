@@ -8,10 +8,10 @@ export class ICONTypeInterpreter extends AbsTypeInterpreter {
     switch (type) {
       case FieldTypeEnum.number:
       case FieldTypeEnum.uint64_t:
-        mappedType = 'number';
+        mappedType = 'int';
         break;
       case FieldTypeEnum.string:
-        mappedType = 'string';
+        mappedType = 'str';
         break;
       default:
         throw new Error(`unknow type ${type}`);
