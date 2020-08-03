@@ -20,7 +20,7 @@ export { AbsContractAdapter } from './AbsContractAdapter';
 export { MultipleContractAdapter } from './MultipleContractAdapter';
 
 export { EOSContractAdapter } from './eos/EOSContractAdapter';
-export { EOSTypeInterpreter } from './eos/EOSTypeInterpreter';
 
 export { ICONContractAdapter } from './icon/ICONContractAdapter';
-export { ICONTypeInterpreter } from './icon/ICONTypeInterpreter';
+
+export { ModelContractAdapter } from './sequelize/ModelAdapter';
