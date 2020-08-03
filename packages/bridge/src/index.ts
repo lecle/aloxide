@@ -6,18 +6,21 @@ export { CplusplusPrettier } from './prettier/CplusplusPrettier';
 export { JsPrettier } from './prettier/JsPrettier';
 export { PythonPrettier } from './prettier/PythonPrettier';
 
-export { FieldTypeEnum } from './type-definition/FieldTypeEnum';
 export { Interpreter } from './interpreter/Interpreter';
 export { AbsTypeInterpreter } from './interpreter/AbsTypeInterpreter';
-export { EOSTypeInterpreter } from './interpreter/EOSTypeInterpreter';
-export { ICONTypeInterpreter } from './interpreter/ICONTypeInterpreter';
 
+export { FieldTypeEnum } from './type-definition/FieldTypeEnum';
 export type { Field } from './type-definition/Field';
 export type { Table } from './type-definition/Table';
 export type { Action } from './type-definition/Action';
 export type { EntityConfig } from './type-definition/EntityConfig';
+
 export { ContractAdapter } from './ContractAdapter';
 export { AbsContractAdapter } from './AbsContractAdapter';
 export { MultipleContractAdapter } from './MultipleContractAdapter';
+
 export { EOSContractAdapter } from './eos/EOSContractAdapter';
+export { EOSTypeInterpreter } from './eos/EOSTypeInterpreter';
+
 export { ICONContractAdapter } from './icon/ICONContractAdapter';
+export { ICONTypeInterpreter } from './icon/ICONTypeInterpreter';
