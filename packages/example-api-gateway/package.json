@@ -11,7 +11,8 @@
   "types": "./dist/*.d.ts",
   "scripts": {
     "prepstart": "rimraf ./contracts */models/bcModelBuilder.ts",
-    "start": "nodemon dist/index.js",
+    "start": "echo '==========\n-- INSTRUCTION:\ncd packages/example-api-gateway and\nstart server: yarn start:server\nstart demux: yarn start:demux\n==========\n'",
+    "start:server": "nodemon dist/index.js",
     "start:demux": "nodemon dist/readBlockchain.js",
     "build": "yarn clean && yarn compile",
     "postbuild": "node ./dist/generate-sm.js",

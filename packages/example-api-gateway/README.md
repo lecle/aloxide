@@ -52,4 +52,8 @@ cleost push action helloworld12 crepoll '["helloworld12", 1005, "test-create-pol
 cleost push action helloworld12 updpoll '["helloworld12", 1005, "test-create-poll", "body of poll"]' -p helloworld12
 cleost push action helloworld12 delpoll '["helloworld12", 1005]' -p helloworld12
 
+cleost push action helloworld12 crevote '["helloworld12", 1005, 1, 2, 3]' -p helloworld12
+cleost push action helloworld12 updvote '["helloworld12", 1005, 1, 2, 5]' -p helloworld12
+cleost push action helloworld12 delvote '["helloworld12", 1005]' -p helloworld12
+
 ```
