@@ -3,11 +3,7 @@
 ```
 environment
 
-https://devnet.canfoundation.io
-Https://history.devnet.canfoundation.io
-
-http://state.devnet.canfoundation.io:8080/
-WebSocket Connection = Port 8080
+https://testnet.canfoundation.io
 ```
 
 ## Deploy smart contract
@@ -16,16 +12,16 @@ WebSocket Connection = Port 8080
 cd ./contracts
 
 # buid smart contract
-eosio-cpp hello.cpp -o hello.cpp
+eosio-cpp hello.cpp -o hello.wasm
 
-alias cleost="cleos -u https://devnet.canfoundation.io"
+alias cleost="cleos -u https://testnet.canfoundation.io"
 # create account
 cleost system newaccount\
-  canlab helloworld12 EOS7RzpySpvSH4BZ2jb5yZpEuueVwCb7sFF3MwHydbNKYEyv6Zhqf EOS7RzpySpvSH4BZ2jb5yZpEuueVwCb7sFF3MwHydbNKYEyv6Zhqf\
+  can helloworld12 EOS7RzpySpvSH4BZ2jb5yZpEuueVwCb7sFF3MwHydbNKYEyv6Zhqf EOS7RzpySpvSH4BZ2jb5yZpEuueVwCb7sFF3MwHydbNKYEyv6Zhqf\
   --stake-net '10.0000 CAT'\
   --stake-cpu '10.0000 CAT'\
   --buy-ram-kbytes 1024\
-  -p canlab@active
+  -p can@active
 
 cleos wallet import --private-key 5JXAphkEA3goZrkEoJsA1PyNRF8tHbZq5b9DMPhpBSf2LpvMSzT
 
@@ -42,6 +38,8 @@ cleost push action helloworld12 hi '["helloworld12"]' -p helloworld12
 
 ## Usage
 
+**Note**: remember to create `.env` file
+
 ```bash
 # start watching blockchain
 yarn start:demux
@@ -49,11 +47,11 @@ yarn start:demux
 # push action create POLL
 
 cleost push action helloworld12 crepoll '["helloworld12", 1005, "test-create-poll", "body of poll"]' -p helloworld12
-cleost push action helloworld12 updpoll '["helloworld12", 1005, "test-create-poll", "body of poll"]' -p helloworld12
+cleost push action helloworld12 updpoll '["helloworld12", 1005, "test-update-poll", "new body of poll"]' -p helloworld12
 cleost push action helloworld12 delpoll '["helloworld12", 1005]' -p helloworld12
 
 cleost push action helloworld12 crevote '["helloworld12", 1005, 1, 2, 3]' -p helloworld12
-cleost push action helloworld12 updvote '["helloworld12", 1005, 1, 2, 5]' -p helloworld12
+cleost push action helloworld12 updvote '["helloworld12", 1005, 10, 200, 5]' -p helloworld12
 cleost push action helloworld12 delvote '["helloworld12", 1005]' -p helloworld12
 
 ```

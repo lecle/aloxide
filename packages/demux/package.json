@@ -1,12 +1,11 @@
 {
-  "name": "@aloxide/api-gateway",
+  "name": "@aloxide/demux",
   "description": "Example of using jest with a TS monorepo",
   "version": "1.0.0",
   "license": "ISC",
   "main": "./dist/index",
   "files": [
-    "dist",
-    "hbs-template"
+    "dist"
   ],
   "types": "./dist/*.d.ts",
   "scripts": {
@@ -21,15 +20,8 @@
     "@aloxide/abstraction": "^1.0.0",
     "@aloxide/logger": "^1.0.0",
     "@aloxide/model": "^1.0.0",
-    "express": "^4.17.1",
-    "graphql": "^14.0.0",
-    "graphql-relay": "^0.6.0",
-    "handlebars": "^4.7.6",
-    "sequelize": "^6.3.3"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.7",
-    "@types/graphql-relay": "^0.6.0",
-    "@types/validator": "^13.1.0"
+    "demux": "^4.0.0",
+    "demux-eos": "^4.0.1",
+    "sequelize": "^6.3.4"
   }
 }

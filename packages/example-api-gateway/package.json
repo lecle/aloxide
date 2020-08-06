@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "license": "ISC",
   "private": true,
-  "main": "./dist/index",
   "files": [
     "dist"
   ],
@@ -15,7 +14,6 @@
     "start:server": "nodemon dist/index.js",
     "start:demux": "nodemon dist/readBlockchain.js",
     "build": "yarn clean && yarn compile",
-    "postbuild": "node ./dist/generate-sm.js",
     "clean": "rimraf -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn build",
@@ -33,15 +31,24 @@
   },
   "dependencies": {
     "@aloxide/api-gateway": "^1.0.0",
+    "@aloxide/demux": "^1.0.0",
     "@aloxide/logger": "^1.0.0",
+    "@aloxide/model": "^1.0.0",
     "demux": "^4.0.0",
     "demux-eos": "^4.0.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "graphql": "^14.0.0",
+    "graphql-relay": "^0.6.0",
+    "graphql-yoga": "^1.18.3",
+    "pg": "^8.3.0",
+    "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.3",
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.7",
+    "@types/graphql-relay": "^0.6.0",
     "nodemon": "^2.0.4"
   }
 }

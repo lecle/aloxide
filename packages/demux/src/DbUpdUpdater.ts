@@ -2,12 +2,13 @@ import { AbsDbUpdater } from './AbsDbUpdater';
 
 export class DbUpdUpdater extends AbsDbUpdater {
   handle(obj: any, user?: string): Promise<any> {
-    const uObj = Object.assign({}, obj);
-    delete uObj.id;
+    const [pk] = this.model.primaryKeyAttributes;
 
-    return this.model.update(uObj, {
+    this.logger?.debug(`-- update obj [${pk}]`, obj[pk], this.model.name);
+
+    return this.model.update(obj, {
       where: {
-        id: obj.id,
+        [pk]: obj[pk],
       },
     });
   }
