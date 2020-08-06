@@ -1,35 +1,49 @@
-import { createLogger } from '@aloxide/logger';
+import { createLogger, Logger } from '@aloxide/logger';
+import dotenv from 'dotenv';
 import path from 'path';
 import { Sequelize } from 'sequelize';
 
-const logger = createLogger({
-  consoleLogger: true,
-});
+dotenv.config();
+
+declare global {
+  var _gSequelize: Sequelize;
+  var logger: Logger;
+}
+
+if (!global.logger) {
+  global.logger = createLogger({
+    consoleLogger: true,
+  });
+}
 
 function connectDb() {
-  const sequelize = new Sequelize('sqlite::memory:');
+  if (!global._gSequelize) {
+    global._gSequelize = new Sequelize(
+      process.env.app_postgres_db,
+      process.env.app_postgres_user,
+      process.env.app_postgres_pw,
+      {
+        host: process.env.app_postgres_host,
+        port: parseInt(process.env.app_postgres_port, 10),
+        dialect: 'postgres',
+      },
+    );
 
-  sequelize
-    .authenticate()
-    .then(() => {
-      return sequelize.sync({ force: true });
-    })
-    .then(() => {
-      logger.debug('Connection has been established successfully.');
-    })
-    .catch(err => {
-      logger.error('Unable to connect to the database:', err);
-    });
+    global._gSequelize
+      .authenticate()
+      .then(() => {
+        logger.debug(`Connection to database has been established successfully.`);
+      })
+      .catch(err => {
+        logger.error(`Unable to connect to the database:`, err);
+      });
+  }
 
-  return sequelize;
+  return global._gSequelize;
 }
 
 export default {
   aloxideConfigPath: path.resolve(__dirname, '../config/aloxide.yml'),
-  resultPath: path.resolve(__dirname, '../contracts'),
-  adapter: null,
-  logger,
-  eosEnable: true,
-  modelPath: path.resolve(__dirname, './models/bcModelBuilder.js'),
+  logger: global.logger,
   sequelize: connectDb(),
 };

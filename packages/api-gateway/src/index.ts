@@ -1,10 +1,6 @@
-export { generateSmartContract } from './generateSmartContract';
-export { generateModelConfig } from './generateModelConfig';
+export type { CreateRouterConfig } from './express-router';
+export { createRouter } from './express-router';
 
-export { HandleRequest } from './handler/HandleRequest';
-export { AbsHandleRequest } from './handler/AbsHandleRequest';
-
-export type { Model } from './adapter/Model';
-export { ModelContractAdapter } from './adapter/ModelContractAdapter';
-export { appConfig as apiGatewayConfig } from './appConfig';
-export { app as apiGateway } from './app';
+export type { CreateGraphQlConfig, CreateGraphQlOutput } from './graphql-relay';
+export { createGraphQl } from './graphql-relay';
+export { GraphqlTypeInterpreter } from './GraphqlTypeInterpreter';

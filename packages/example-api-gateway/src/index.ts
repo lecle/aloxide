@@ -1,26 +1,57 @@
-import { apiGateway, apiGatewayConfig } from '@aloxide/api-gateway';
+import { createGraphQl, createRouter } from '@aloxide/api-gateway';
+import { GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { GraphQLServer, Options } from 'graphql-yoga';
 
 import config from './config';
-import { CreatePoll } from './handler/CreatePoll';
 
-const logger = config.logger;
+const port = process.env.app_port || 4000;
 
-const express = require('express');
-const app = express();
-const port = 4000;
-
-apiGatewayConfig.configure(config);
-const apiGatewayRouter = apiGateway.init();
-
-app.get('/', (req, res) => res.send('Hello World!'));
-app.use('/api-gateway', apiGatewayRouter);
-
-app.post('/poll', (req, res) => {
-  const h = new CreatePoll();
-  //@ts-ignore
-  h.handle(req, res);
+const graphqlFields = createGraphQl({
+  aloxideConfigPath: config.aloxideConfigPath,
+  sequelize: config.sequelize,
+  logger: config.logger,
 });
 
-app.listen(port, () => {
-  logger.log(`Example app listening at http://localhost:${port}`);
+const graphqlSchema = new GraphQLSchema({
+  types: graphqlFields.map(({ graphQLObjectType }) => graphQLObjectType),
+  query: new GraphQLObjectType({
+    name: 'Query',
+    fields: graphqlFields
+      .map(({ connectionQueryField }) => connectionQueryField)
+      .reduce(
+        (a, c) =>
+          Object.assign(a, {
+            [`query${c.name}`]: c,
+          }),
+        {},
+      ),
+  }),
+});
+
+// create graphql using graphql yoga
+const server = new GraphQLServer({
+  schema: graphqlSchema,
+});
+
+// sample of using router for express application
+const apiGatewayRouter = createRouter({
+  aloxideConfigPath: config.aloxideConfigPath,
+  sequelize: config.sequelize,
+  logger: config.logger,
+});
+
+const apiGatewayRoute = '/api-gateway';
+server.express.use(apiGatewayRoute, apiGatewayRouter);
+
+const serverOptions: Options = {
+  port,
+  endpoint: '/graphql',
+  playground: '/playground',
+};
+
+server.start(serverOptions, () => {
+  logger.info(`Server is running on http://localhost:${port}`);
+  logger.info(`GraphQL is served at: ${serverOptions.endpoint}`);
+  logger.info(`ResfullAPI is served at: http://localhost:${port}${apiGatewayRoute}`);
+  logger.info(`Playground http://localhost:${port}${serverOptions.playground}`);
 });

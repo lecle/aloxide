@@ -53,7 +53,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
       }));
 
       return {
-        name: item.name.substr(0, 12).toLocaleLowerCase(),
+        name: item.name.substr(0, 12).toLowerCase(),
         fields,
         primaryKeyField: fields.find(({ name }) => name == item.key),
       };
