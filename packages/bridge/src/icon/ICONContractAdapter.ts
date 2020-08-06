@@ -26,7 +26,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
     this.pyFilePrinter = new FilePrinter(this.outputPath, new PythonPrettier(), this.logger);
     this.jsFilePrinter = new FilePrinter(this.outputPath, new JsPrettier(), this.logger);
 
-    //this.coder = new FileCoder(this.outputPath, new CplusplusPrettier(), this.logger);
+    // this.coder = new FileCoder(this.outputPath, new CplusplusPrettier(), this.logger);
 
     this.templatePath = path.resolve(this.templatePath, 'icon');
 

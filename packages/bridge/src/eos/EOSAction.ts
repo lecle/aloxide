@@ -57,6 +57,6 @@ export abstract class EOSAction implements ActionCreator {
    * @param name name of the action; maybe a Entity Name
    */
   makeActionName(name: string): string {
-    return `${this.actionPrefix}${name.substr(0, 9).toLocaleLowerCase()}`;
+    return `${this.actionPrefix}${name.substr(0, 9).toLowerCase()}`;
   }
 }

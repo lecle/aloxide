@@ -1,6 +1,8 @@
 import type { Logger } from './Logger';
 export type { Logger } from './Logger';
 
+// tslint:disable:no-console
+
 export function createLogger(
   {
     consoleLogger,

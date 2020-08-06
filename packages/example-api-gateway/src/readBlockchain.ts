@@ -1,9 +1,19 @@
-import { apiGateway, apiGatewayConfig } from '@aloxide/api-gateway';
+import { createWatcher } from '@aloxide/demux';
 
 import config from './config';
-import { actionWatcher } from './demux';
 
-apiGatewayConfig.configure(config);
-apiGateway.init();
+const actionWatcher = createWatcher({
+  accountName: 'helloworld12',
+  modelBuilderConfig: {
+    aloxideConfigPath: config.aloxideConfigPath,
+    logger: config.logger,
+  },
+  sequelize: config.sequelize,
+  nodeActionReaderOptions: {
+    nodeosEndpoint: 'https://testnet.canfoundation.io',
+    onlyIrreversible: false,
+    startAtBlock: -1,
+  },
+});
 
 actionWatcher.watch();
