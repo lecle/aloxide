@@ -27,7 +27,7 @@ export interface CreateWatcherConfig {
   actionHandler?: AbstractActionHandler;
 }
 
-export function createWatcher(config: CreateWatcherConfig) {
+export async function createWatcher(config: CreateWatcherConfig): Promise<BaseActionWatcher> {
   const {
     accountName,
     versionName = 'v1',
@@ -87,6 +87,19 @@ export function createWatcher(config: CreateWatcherConfig) {
   }
 
   if (!actionReader) {
+    if (!nodeActionReaderOptions) {
+      throw new Error('nodeActionReaderOptions is required if actionReader is not provided');
+    }
+
+    if (nodeActionReaderOptions.startAtBlock == null) {
+      await actionHandler.initialize();
+      nodeActionReaderOptions.startAtBlock = actionHandler.lastProcessedBlockNumber;
+      logger?.debug(
+        '-- set nodeActionReaderOptions.startAtBlock to ',
+        nodeActionReaderOptions.startAtBlock,
+      );
+    }
+
     actionReader = new NodeosActionReader(nodeActionReaderOptions);
   }
 

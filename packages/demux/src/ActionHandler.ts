@@ -3,7 +3,6 @@ import { DataTypes, ModelCtor } from 'sequelize';
 
 import type { Model, Sequelize } from 'sequelize/types';
 import type { Logger } from '@aloxide/logger';
-
 const DemuxIndexState = 'DemuxIndexState';
 
 interface IndexStateModel extends IndexState, Model {
@@ -95,6 +94,11 @@ export class ActionHandler extends AbstractActionHandler {
   }
 
   protected async setup(): Promise<void> {
+    if (this.initialized) {
+      return;
+    }
+    this.initialized = true;
+
     /**
      * Table DemuxIndexState
      */
@@ -123,7 +127,7 @@ export class ActionHandler extends AbstractActionHandler {
     });
 
     return this.sequelize
-      .sync({ alter: true })
+      .sync({ alter: true, logging: false })
       .catch(err => {
         this.logger?.error('---- demux setup error:', err);
         throw err;
