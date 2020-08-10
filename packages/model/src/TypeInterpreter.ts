@@ -13,7 +13,7 @@ export class TypeInterpreter implements Interpreter<FieldTypeEnum, DataType> {
         type = DataTypes.INTEGER;
         break;
       case FieldTypeEnum.string:
-        type = DataTypes.STRING;
+        type = DataTypes.TEXT;
         break;
       default:
         throw new Error(`unknow type ${type}`);

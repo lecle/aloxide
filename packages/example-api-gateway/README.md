@@ -55,3 +55,24 @@ cleost push action helloworld12 updvote '["helloworld12", 1005, 10, 200, 5]' -p 
 cleost push action helloworld12 delvote '["helloworld12", 1005]' -p helloworld12
 
 ```
+
+## Start demo
+
+We can start demo if with defaul setting.
+
+1. change directory to `.../aloxide`
+2. start local posgres database using docker compose: `docker-compose up -d`
+3. change directory to `.../aloxide/packages/example-api-gateway`
+4. create `.env` file base on missing values in `.env.defaults`
+5. start watching blockchain network: `yarn start:demux`
+6. start server: `yarn start:server`, output may look like below
+7. open `play-ground` link or `api-gateway`
+
+Output of `yarn start:server`:
+
+```log
+Server is running on http://localhost:4000
+GraphQL is served at: /graphql
+ResfullAPI is served at: http://localhost:4000/api-gateway
+Playground http://localhost:4000/playground
+```

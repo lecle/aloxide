@@ -29,26 +29,22 @@ export abstract class AbsDbUpdater implements Updater {
   }
 
   apply: ActionCallback = (state, payload, blockInfo, context) => {
-    this.logger?.info('-- DbUpdater - begin:');
-    this.logger?.debug('state:', state);
-    this.logger?.debug('payload:', payload);
+    this.logger?.debug('-- DbUpdater - begin:');
     this.logger?.debug('blockInfo:', blockInfo);
-    this.logger?.debug('context:', context);
 
-    this.model = this.sequelize.models[this.modelName];
+    if (!this.model) this.model = this.sequelize.models[this.modelName];
 
     const obj = payload?.data;
     if (obj?.user) {
       delete obj.user;
     }
 
-    this.logger?.debug('-- handle obj:', obj, payload?.data?.user);
     this.handle(obj, payload?.data?.user)
       .catch(err => {
-        this.logger?.error('-- handle obj error:', err);
+        this.logger?.error('---- handle obj error:', err);
       })
       .finally(() => {
-        this.logger?.info('-- DbUpdater - end');
+        this.logger?.debug('-- DbUpdater - end');
       });
   };
 

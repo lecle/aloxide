@@ -22,6 +22,7 @@ This project requires node js with version >= 10. And you need install `yarn`
 
 ```bash
 npm i -g yarn
+npm i -g lerna
 ```
 
 ## Bootstrap the project
