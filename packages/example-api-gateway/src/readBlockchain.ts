@@ -10,8 +10,9 @@ createWatcher({
   },
   sequelize: config.sequelize,
   nodeActionReaderOptions: {
-    nodeosEndpoint: 'https://testnet.canfoundation.io',
+    nodeosEndpoint: process.env.app_nodeosEndpoint,
     onlyIrreversible: false,
+    startAtBlock: 9130000,
   },
 })
   .then(actionWatcher => {

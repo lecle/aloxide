@@ -8,5 +8,9 @@
     "api-gateway",
     "example-api-gateway",
     "example-generante-sm"
-  ]
+  ],
+  "files.associations": {
+    "__locale": "cpp",
+    "locale": "cpp"
+  }
 }

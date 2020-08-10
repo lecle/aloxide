@@ -1,19 +1,10 @@
-import { createLogger, Logger } from '@aloxide/logger';
-import dotenv from 'dotenv';
+import './loadEnv';
+
 import path from 'path';
 import { Sequelize } from 'sequelize';
 
-dotenv.config();
-
 declare global {
   var _gSequelize: Sequelize;
-  var logger: Logger;
-}
-
-if (!global.logger) {
-  global.logger = createLogger({
-    consoleLogger: true,
-  });
 }
 
 function connectDb() {

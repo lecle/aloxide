@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  postgre-db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: localhost-pw2020
+    ports:
+      - 5432:5432
+    volumes:
+      - ./.cache/postgres:/var/lib/postgresql/data
