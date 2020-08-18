@@ -15,7 +15,7 @@ const api = new Api({
   textEncoder: new TextEncoder(),
 });
 
-const eosAccountName = process.env.app_d_eos_account_name || 'helloworld12';
+const eosAccountName = process.env.app_d_eos_account_name;
 
 async function cleanUpEos() {
   const h = async (n: 'poll' | 'vote') => {

@@ -3,7 +3,7 @@ import { createWatcher } from '@aloxide/demux';
 import config from './config';
 
 createWatcher({
-  accountName: 'helloworld12',
+  accountName: process.env.app_d_eos_account_name,
   modelBuilderConfig: {
     aloxideConfigPath: config.aloxideConfigPath,
     logger: config.logger,
@@ -12,7 +12,7 @@ createWatcher({
   nodeActionReaderOptions: {
     nodeosEndpoint: process.env.app_nodeosEndpoint,
     onlyIrreversible: false,
-    startAtBlock: 9130000,
+    startAtBlock: parseInt(process.env.app_startAtBlock, 10),
   },
 })
   .then(actionWatcher => {
