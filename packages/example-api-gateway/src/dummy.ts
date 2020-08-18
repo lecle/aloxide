@@ -17,58 +17,6 @@ const api = new Api({
 
 const eosAccountName = process.env.app_d_eos_account_name;
 
-async function cleanUpEos() {
-  const h = async (n: 'poll' | 'vote') => {
-    while (true) {
-      const s = await rpc
-        .get_table_rows({
-          json: true,
-          code: eosAccountName,
-          scope: eosAccountName,
-          table: n,
-          limit: 100,
-        })
-        .then(res => {
-          const rows = res?.rows || [];
-          if (!rows.length) return 'stop';
-
-          for (const { id } of rows) {
-            api.transact(
-              {
-                actions: [
-                  {
-                    account: eosAccountName,
-                    name: `del${n}`,
-                    authorization: [
-                      {
-                        actor: eosAccountName,
-                        permission: 'active',
-                      },
-                    ],
-                    data: {
-                      user: eosAccountName,
-                      id,
-                    },
-                  },
-                ],
-              },
-              {
-                blocksBehind: 3,
-                expireSeconds: 30,
-              },
-            );
-          }
-          return 'continue';
-        });
-
-      if (s == 'stop') break;
-    }
-  };
-
-  await h('vote');
-  await h('poll');
-}
-
 async function dummy() {
   // create poll
   const N_POLL = 100;
