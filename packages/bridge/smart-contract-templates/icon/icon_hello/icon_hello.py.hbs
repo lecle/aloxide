@@ -34,10 +34,10 @@ class hello(IconScoreBase):
         {{#each fields}}
         inputData["{{name}}"] = {{name}}
         {{/each}}
-        if self._{{name}}_table[id] != "":
-            revert('id already exists')
+        if self._{{name}}_table[{{key.name}}] != "":
+            revert('{{key.name}} already exists')
 
-        self._{{name}}_table[id] = json_dumps(inputData)
+        self._{{name}}_table[{{key.name}}] = json_dumps(inputData)
     {{/each}}
 
     {{#each tables}}
@@ -47,21 +47,17 @@ class hello(IconScoreBase):
         {{#each fields}}
         inputData["{{name}}"] = {{name}}
         {{/each}}
-        if self._poll_table[id] == "":
-            revert('id does not exists')
+        if self._{{name}}_table[{{key.name}}] == "":
+            revert('{{key.name}} does not exists')
 
-        self._{{name}}_table[id] = json_dumps(inputData)
+        self._{{name}}_table[{{key.name}}] = json_dumps(inputData)
     {{/each}}
 
     {{#each tables}}
     @external
-    def rmv{{name}}(self, {{#each fields}}{{#if @first}}{{name}}: {{type}}{{/if}}{{/each}}):
-        inputData = {}
-        {{#each fields}}
-        inputData["{{name}}"] = {{name}}
-        {{/each}}
-        if self._poll_table[id] == "":
-            revert('id does not exists')
+    def rmv{{name}}(self, {{key.name}}: {{key.type}}):
+        if self._{{name}}_table[{{key.name}}] == "":
+            revert('{{key.name}} does not exists')
 
-        self._{{name}}_table[id] = json_dumps(inputData)
+        self._{{name}}_table.remove({{key.name}})
     {{/each}}
