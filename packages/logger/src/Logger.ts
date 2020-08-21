@@ -1,8 +1,8 @@
 type loggerF = (...p: any) => void;
 export interface Logger {
-  log?: loggerF;
-  info?: loggerF;
   debug?: loggerF;
+  info?: loggerF;
   warn?: loggerF;
   error?: loggerF;
+  success?: loggerF;
 }
