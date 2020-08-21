@@ -4,7 +4,7 @@ entities:
       - name: id
         type: uint64_t
       - name: name
-        type: string1
+        type: string
       - name: body
         type: string
     key: id
