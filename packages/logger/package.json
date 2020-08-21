@@ -16,5 +16,7 @@
     "lint": "tslint --project . --fix",
     "test": "jest -o"
   },
-  "dependencies": {}
+  "dependencies": {
+    "chalk": "^2.4.1"
+  }
 }
