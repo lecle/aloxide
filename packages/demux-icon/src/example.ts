@@ -1,4 +1,6 @@
-import Logger from 'bunyan';
+import { Logger } from '@aloxide/logger';
+import bunyan from 'bunyan';
+
 import {
   AbstractActionHandler,
   BaseActionWatcher,
@@ -16,7 +18,7 @@ declare global {
   var logger: Logger;
 }
 
-global.logger = Logger.createLogger({ name: 'example-demux-icon' });
+global.logger = bunyan.createLogger({ name: 'example-demux-icon' });
 
 // Initial state
 let state = {
@@ -131,7 +133,6 @@ const actionReader = new IconActionReader({
   nid: 3,
   jsonrpc: '2.0',
   logSource: 'IconActionReader',
-  logLevel: 'debug',
 });
 
 /* BaseActionWatcher
@@ -141,9 +142,6 @@ const actionReader = new IconActionReader({
  *
  * All that is left to run everything is to call `watch()`.
  */
-const actionWatcher = new BaseActionWatcher(actionReader, actionHandler, {
-  pollInterval: 6000,
-  velocitySampleSize: 1 /* default is 20 */,
-});
+const actionWatcher = new BaseActionWatcher(actionReader, actionHandler, { pollInterval: 2000 });
 
 actionWatcher.watch();
