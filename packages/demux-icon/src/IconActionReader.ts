@@ -1,6 +1,5 @@
-import { AbstractActionReader, Block, NotInitializedError } from 'demux';
+import { AbstractActionReader, NotInitializedError } from 'demux';
 import fetch from 'node-fetch';
-
 import { RetrieveBlockError, RetrieveHeadBlockError, RetrieveIrreversibleBlockError } from './errors';
 import { IconBlock } from './IconBlock';
 import { Jsonrpc20 } from './Jsonrpc20';
@@ -11,8 +10,6 @@ export class IconActionReader extends AbstractActionReader {
   protected endpoint: string;
   protected nid: number;
   protected jsonrpc: string;
-  protected numRetries: number;
-  protected waitTimeMs: number;
 
   constructor(options: IconActionReaderOptions = {}) {
     super(options);
@@ -22,8 +19,6 @@ export class IconActionReader extends AbstractActionReader {
     this.endpoint = endpoint.replace(/\/+$/g, ''); // Removes trailing slashes
     this.nid = options.nid || 3;
     this.jsonrpc = options.jsonrpc || '2.0';
-    this.numRetries = options.numRetries || 120;
-    this.waitTimeMs = options.waitTimeMs || 5000;
   }
 
   public post(data: { [key: string]: any }): Promise<Jsonrpc20<any>> {
@@ -47,15 +42,18 @@ export class IconActionReader extends AbstractActionReader {
   /**
    * Returns a promise for the head block number.
    */
-  protected async getHeadBlockNumber(): Promise<number> {
+  public async getHeadBlockNumber(
+    numRetries: number = 120,
+    waitTimeMs: number = 250,
+  ): Promise<number> {
     try {
       const blockNum = await retry(
         async () => {
           const blockInfo = await this.getLastBlock();
           return blockInfo.result.height;
         },
-        this.numRetries,
-        this.waitTimeMs,
+        numRetries,
+        waitTimeMs,
       );
       return blockNum;
     } catch (err) {
@@ -63,15 +61,18 @@ export class IconActionReader extends AbstractActionReader {
     }
   }
 
-  protected async getLastIrreversibleBlockNumber(): Promise<number> {
+  public async getLastIrreversibleBlockNumber(
+    numRetries: number = 120,
+    waitTimeMs: number = 250,
+  ): Promise<number> {
     try {
       const irreversibleBlockNum = await retry(
         async () => {
           const blockInfo = await this.getLastBlock();
           return blockInfo.result.height;
         },
-        this.numRetries,
-        this.waitTimeMs,
+        numRetries,
+        waitTimeMs,
       );
 
       return irreversibleBlockNum;
@@ -81,7 +82,14 @@ export class IconActionReader extends AbstractActionReader {
     }
   }
 
-  protected async getBlock(blockNumber: number): Promise<Block> {
+  /**
+   * Returns a promise for a `NodeosBlock`.
+   */
+  public async getBlock(
+    blockNumber: number,
+    numRetries: number = 120,
+    waitTimeMs: number = 250,
+  ): Promise<IconBlock> {
     try {
       const block = await retry(
         async () => {
@@ -95,8 +103,8 @@ export class IconActionReader extends AbstractActionReader {
           });
           return new IconBlock(rawBlock, this.log);
         },
-        this.numRetries,
-        this.waitTimeMs,
+        numRetries,
+        waitTimeMs,
       );
 
       return block;
