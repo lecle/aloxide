@@ -97,20 +97,19 @@ const updater: Updater = {
   actionType,
   apply: (state: any, payload: any, blockInfo: BlockInfo, context: any) => {
     // TODO update state
-    logger.info('---- update state', state);
-    logger.info('---- update payload', payload);
-    logger.info('---- update blockInfo', blockInfo);
-    logger.info('---- update context', context);
+    // logger.info('---- update state', state);
+    // logger.info('---- update payload', payload);
+    logger.info('---- update blockInfo', blockInfo.blockNumber);
+    // logger.info('---- update context', context);
   },
 };
 
 const effect: Effect = {
   actionType,
   run: (payload: any, blockInfo: BlockInfo, context: any) => {
-    // TODO update state
-    logger.info('---- effect payload', payload);
-    logger.info('---- effect blockInfo', blockInfo);
-    logger.info('---- effect context', context);
+    // logger.info('---- effect payload', payload);
+    // logger.info('---- effect blockInfo', blockInfo.blockNumber);
+    // logger.info('---- effect context', context);
   },
 };
 
@@ -133,6 +132,7 @@ const actionReader = new IconActionReader({
   nid: 3,
   jsonrpc: '2.0',
   logSource: 'IconActionReader',
+  logLevel: 'debug',
 });
 
 /* BaseActionWatcher
@@ -142,6 +142,9 @@ const actionReader = new IconActionReader({
  *
  * All that is left to run everything is to call `watch()`.
  */
-const actionWatcher = new BaseActionWatcher(actionReader, actionHandler, { pollInterval: 2000 });
+const actionWatcher = new BaseActionWatcher(actionReader, actionHandler, {
+  pollInterval: 6000,
+  velocitySampleSize: 1 /* default is 20 */,
+});
 
 actionWatcher.watch();
