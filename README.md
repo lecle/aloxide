@@ -14,18 +14,22 @@
 
 While there are a lot of blockchain softwares available and it's not uncommon to see a requirement to support various blockchains, it still requires a significant amount of time to learn how to write a smart contract just printing "Hello World" per blockchain. Aloxide provides a pragmatic abstraction for various blockchain softwares including CAN, EOS, ICON, and so on so that you can focus on business logic on smart contracts without ties to specific blockchain natures. Also based on the abstraction Aloxide offers useful tool-kits for dApp development such as API gateway and SDK.
 
-# Setting up
+# Getting started
 
-## Require environment
+Check out the [working example using Aloxide API gateway](https://github.com/lecle/aloxide/blob/master/packages/example-api-gateway/README.md).
 
-This project requires node js with version >= 10. And you need install `yarn`
+# How to build
+
+## Development Environment
+
+Aloxide project requires Node.js 10 and above and `yarn` and `lerna` as global depdencies.
 
 ```bash
 npm i -g yarn
 npm i -g lerna
 ```
 
-## Bootstrap the project
+## Bootstrap the Project
 
 ```bash
 npx lerna bootstrap
@@ -77,3 +81,8 @@ make directory: [PROJECT-DIRECTORY]/aloxide/packages/example-generate-sm/out/ico
 lerna success run Ran npm script 'start' in 1 package in 0.6s:
 lerna success - @aloxide/example-generate-sm
 ```
+
+# Links
+
+- [Medium](https://medium.com/@Aloxide)
+- [Google Groups](https://groups.google.com/my-groups?pli=1)
