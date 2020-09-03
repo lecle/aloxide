@@ -86,4 +86,4 @@ lerna success - @aloxide/example-generate-sm
 # Links
 
 - [Medium](https://medium.com/@Aloxide)
-- [Google Groups](https://groups.google.com/my-groups?pli=1)
+- [Google Groups](https://groups.google.com/g/aloxide)
