@@ -1,8 +1,13 @@
 {
   "name": "@aloxide/bridge",
   "description": "Example of using jest with a TS monorepo",
-  "version": "1.0.0",
-  "license": "ISC",
+  "version": "0.1.0",
+  "author": "Lecle",
+  "license": "Apache-2.0 License",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lecle/aloxide.git"
+  },
   "main": "./dist/index",
   "files": [
     "dist",
