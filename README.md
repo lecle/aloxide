@@ -1,12 +1,13 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 **Table of content**
 
 - [Aloxide](#aloxide)
-- [Setting up](#setting-up)
-  - [Require environment](#require-environment)
-  - [Bootstrap the project](#bootstrap-the-project)
+- [Getting started](#getting-started)
+- [How to build](#how-to-build)
+  - [Development Environment](#development-environment)
+  - [Bootstrap the Project](#bootstrap-the-project)
+- [Links](#links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
