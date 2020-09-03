@@ -10,6 +10,7 @@
       "create-release": "github"
     },
     "publish": {
+      "allowBranch": "master",
       "conventional-commits": true,
       "create-release": "github"
     }

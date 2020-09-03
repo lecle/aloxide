@@ -5,6 +5,9 @@
   "author": "Lecle",
   "license": "Apache-2.0 License",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:lecle/aloxide.git"
@@ -26,5 +29,6 @@
   "dependencies": {
     "@aloxide/logger": "^0.1.0",
     "handlebars": "^4.7.6"
-  }
+  },
+  "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a"
 }

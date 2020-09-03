@@ -5,6 +5,9 @@
   "author": "Lecle",
   "license": "Apache-2.0 License",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:lecle/aloxide.git"
@@ -29,5 +32,6 @@
     "demux": "^4.0.0",
     "demux-eos": "^4.0.1",
     "sequelize": "^6.3.4"
-  }
+  },
+  "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a"
 }
