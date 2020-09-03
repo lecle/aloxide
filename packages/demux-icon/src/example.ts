@@ -1,5 +1,4 @@
-import { Logger } from '@aloxide/logger';
-import bunyan from 'bunyan';
+import Logger from 'bunyan';
 import {
   AbstractActionHandler,
   BaseActionWatcher,
@@ -17,7 +16,7 @@ declare global {
   var logger: Logger;
 }
 
-global.logger = bunyan.createLogger({ name: 'example-demux-icon' });
+global.logger = Logger.createLogger({ name: 'example-demux-icon' });
 
 // Initial state
 let state = {

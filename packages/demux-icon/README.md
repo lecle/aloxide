@@ -25,5 +25,5 @@ const actionReader = new IconActionReader({
 ```
 node version: >= v10
 npm i -g yarn
-yarn start
+yarn dev
 ```
