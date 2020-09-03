@@ -32,10 +32,10 @@
     ]
   },
   "dependencies": {
-    "@aloxide/api-gateway": "^1.0.0",
-    "@aloxide/demux": "^1.0.0",
-    "@aloxide/logger": "^1.0.0",
-    "@aloxide/model": "^1.0.0",
+    "@aloxide/api-gateway": "^0.1.0",
+    "@aloxide/demux": "^0.1.0",
+    "@aloxide/logger": "^0.1.0",
+    "@aloxide/model": "^0.1.0",
     "demux": "^4.0.0",
     "demux-eos": "^4.0.1",
     "express": "^4.17.1",

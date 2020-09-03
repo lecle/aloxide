@@ -23,9 +23,9 @@
     "test": "jest -o"
   },
   "dependencies": {
-    "@aloxide/abstraction": "^1.0.0",
-    "@aloxide/logger": "^1.0.0",
-    "@aloxide/model": "^1.0.0",
+    "@aloxide/abstraction": "^0.1.0",
+    "@aloxide/logger": "^0.1.0",
+    "@aloxide/model": "^0.1.0",
     "express": "^4.17.1",
     "graphql": "^14.0.0",
     "graphql-relay": "^0.6.0",
