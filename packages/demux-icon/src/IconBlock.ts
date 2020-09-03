@@ -2,7 +2,7 @@ import { Block, BlockInfo } from 'demux';
 
 import { toNumber } from './toNumber';
 
-import type { Logger } from '@aloxide/logger';
+import type Logger from 'bunyan';
 import type { IconAction } from './IconAction';
 import type { Jsonrpc20 } from './Jsonrpc20';
 import type { IconRawBlock } from './IconRawBlock';
@@ -10,7 +10,7 @@ import type { IconTransaction } from './IconTransaction';
 export class IconBlock implements Block {
   public actions: IconAction[];
   public blockInfo: BlockInfo;
-  constructor(rawBlock: Jsonrpc20<IconRawBlock>, private log: Logger) {
+  constructor(rawBlock: Jsonrpc20<IconRawBlock>, protected log: Logger) {
     const { result } = rawBlock;
     this.blockInfo = {
       blockNumber: result.height,
