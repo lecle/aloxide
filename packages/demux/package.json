@@ -22,9 +22,9 @@
     "test": "jest -o"
   },
   "dependencies": {
-    "@aloxide/abstraction": "^1.0.0",
-    "@aloxide/logger": "^1.0.0",
-    "@aloxide/model": "^1.0.0",
+    "@aloxide/abstraction": "^0.1.0",
+    "@aloxide/logger": "^0.1.0",
+    "@aloxide/model": "^0.1.0",
     "demux": "^4.0.0",
     "demux-eos": "^4.0.1",
     "sequelize": "^6.3.4"

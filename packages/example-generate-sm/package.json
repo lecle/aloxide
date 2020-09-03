@@ -20,8 +20,8 @@
     "test": "jest -o"
   },
   "dependencies": {
-    "@aloxide/abstraction": "^1.0.0",
-    "@aloxide/bridge": "^1.0.0",
-    "@aloxide/logger": "^1.0.0"
+    "@aloxide/abstraction": "^0.1.0",
+    "@aloxide/bridge": "^0.1.0",
+    "@aloxide/logger": "^0.1.0"
   }
 }
