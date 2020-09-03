@@ -18,7 +18,8 @@
     "clean": "lerna run clean",
     "lint": "lerna run lint",
     "build": "lerna run build",
-    "pub": "lerna publish",
+    "pub": "lerna publish --conventional-commits",
+    "ver": "lerna version --conventional-commits --no-push",
     "test": "lerna run test"
   },
   "devDependencies": {

@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "author": "Lecle",
   "license": "Apache-2.0 License",
+  "private": false,
   "repository": {
     "type": "git",
     "url": "git@github.com:lecle/aloxide.git"
