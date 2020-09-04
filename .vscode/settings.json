@@ -8,7 +8,8 @@
     "api-gateway",
     "example-api-gateway",
     "example-generante-sm",
-    "demux-icon"
+    "demux-icon",
+    "demux"
   ],
   "files.associations": {
     "__locale": "cpp",
