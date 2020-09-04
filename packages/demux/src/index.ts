@@ -9,6 +9,42 @@ import { DbCreUpdater } from './DbCreUpdater';
 import { DbDelUpdater } from './DbDelUpdater';
 import { DbUpdUpdater } from './DbUpdUpdater';
 
+import type { EntityConfig } from '@aloxide/bridge';
+import type { Logger } from '@aloxide/logger';
+
+export function createDbUpdater(
+  accountName: string,
+  sequelize: Sequelize,
+  entities: EntityConfig[],
+  logger: Logger,
+): AbsDbUpdater[] {
+  return entities
+    .map<AbsDbUpdater[]>(({ name }) => {
+      const actionName = name.substr(0, 9).toLowerCase();
+      return [
+        new DbCreUpdater({
+          actionType: `${accountName}::cre${actionName}`,
+          modelName: name,
+          sequelize,
+          logger,
+        }),
+        new DbUpdUpdater({
+          actionType: `${accountName}::upd${actionName}`,
+          modelName: name,
+          sequelize,
+          logger,
+        }),
+        new DbDelUpdater({
+          actionType: `${accountName}::del${actionName}`,
+          modelName: name,
+          sequelize,
+          logger,
+        }),
+      ];
+    })
+    .reduce<AbsDbUpdater[]>((a, c) => a.concat(c), []);
+}
+
 export interface CreateWatcherConfig {
   accountName: string;
   modelBuilderConfig: ModelBuilderConfig;
@@ -48,31 +84,7 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
     if (!handlerVersion) {
       handlerVersion = new BaseHandlerVersion(
         versionName,
-        aloxideConfig.entities
-          .map<AbsDbUpdater[]>(({ name }) => {
-            const actionName = name.substr(0, 9).toLowerCase();
-            return [
-              new DbCreUpdater({
-                actionType: `${accountName}::cre${actionName}`,
-                modelName: name,
-                sequelize,
-                logger,
-              }),
-              new DbUpdUpdater({
-                actionType: `${accountName}::upd${actionName}`,
-                modelName: name,
-                sequelize,
-                logger,
-              }),
-              new DbDelUpdater({
-                actionType: `${accountName}::del${actionName}`,
-                modelName: name,
-                sequelize,
-                logger,
-              }),
-            ];
-          })
-          .reduce<AbsDbUpdater[]>((a, c) => a.concat(c), []),
+        createDbUpdater(accountName, sequelize, aloxideConfig.entities, logger),
         [],
       );
     }
