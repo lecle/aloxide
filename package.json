@@ -19,7 +19,6 @@
     "lint": "lerna run lint",
     "build": "lerna run build",
     "pub": "lerna publish",
-    "ver": "lerna version",
     "test": "lerna run test"
   },
   "devDependencies": {
