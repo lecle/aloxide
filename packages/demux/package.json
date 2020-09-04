@@ -30,7 +30,6 @@
     "@aloxide/logger": "^0.1.0",
     "@aloxide/model": "^0.1.0",
     "demux": "^4.0.0",
-    "demux-eos": "^4.0.1",
     "sequelize": "^6.3.4"
   },
   "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a"

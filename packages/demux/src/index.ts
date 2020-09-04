@@ -1,7 +1,5 @@
 import { ModelBuilder, ModelBuilderConfig } from '@aloxide/model';
 import { AbstractActionHandler, AbstractActionReader, BaseActionWatcher, HandlerVersion } from 'demux';
-import { NodeosActionReader } from 'demux-eos';
-import { NodeosActionReaderOptions } from 'demux-eos/dist/interfaces';
 import { Sequelize } from 'sequelize';
 
 import { AbsDbUpdater } from './AbsDbUpdater';
@@ -15,14 +13,10 @@ export interface CreateWatcherConfig {
   accountName: string;
   modelBuilderConfig: ModelBuilderConfig;
   sequelize: Sequelize;
+  actionReader: AbstractActionReader;
   pollInterval?: number;
   versionName?: string;
   modelBuilder?: ModelBuilder;
-  /**
-   * nodeActionReaderOptions is required if actionReader is null
-   */
-  nodeActionReaderOptions?: NodeosActionReaderOptions;
-  actionReader?: AbstractActionReader;
   handlerVersion?: HandlerVersion;
   actionHandler?: AbstractActionHandler;
 }
@@ -34,7 +28,6 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
     pollInterval = 2000,
     modelBuilderConfig: { aloxideConfigPath, logger },
     sequelize,
-    nodeActionReaderOptions,
   } = config;
 
   let { modelBuilder, actionReader, handlerVersion, actionHandler } = config;
@@ -84,23 +77,6 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
     }
 
     actionHandler = new ActionHandler(handlerVersion, sequelize, logger);
-  }
-
-  if (!actionReader) {
-    if (!nodeActionReaderOptions) {
-      throw new Error('nodeActionReaderOptions is required if actionReader is not provided');
-    }
-
-    if (nodeActionReaderOptions.startAtBlock == null) {
-      await actionHandler.initialize();
-      nodeActionReaderOptions.startAtBlock = actionHandler.lastProcessedBlockNumber;
-      logger?.debug(
-        '-- set nodeActionReaderOptions.startAtBlock to ',
-        nodeActionReaderOptions.startAtBlock,
-      );
-    }
-
-    actionReader = new NodeosActionReader(nodeActionReaderOptions);
   }
 
   return new BaseActionWatcher(actionReader, actionHandler, pollInterval);
