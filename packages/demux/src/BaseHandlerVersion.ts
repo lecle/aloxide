@@ -1,4 +1,4 @@
-import { Effect, HandlerVersion, Updater } from 'demux';
+import type { Effect, HandlerVersion, Updater } from 'demux';
 
 export class BaseHandlerVersion implements HandlerVersion {
   versionName: string;

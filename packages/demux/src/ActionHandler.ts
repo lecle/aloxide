@@ -1,8 +1,10 @@
-import { AbstractActionHandler, Block, HandlerVersion, IndexState } from 'demux';
+import { AbstractActionHandler } from 'demux';
 import { DataTypes, ModelCtor } from 'sequelize';
 
+import type { Block, HandlerVersion, IndexState } from 'demux';
 import type { Model, Sequelize } from 'sequelize/types';
 import type { Logger } from '@aloxide/logger';
+
 const DemuxIndexState = 'DemuxIndexState';
 
 interface IndexStateModel extends IndexState, Model {

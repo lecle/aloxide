@@ -28,9 +28,10 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
     pollInterval = 2000,
     modelBuilderConfig: { aloxideConfigPath, logger },
     sequelize,
+    actionReader,
   } = config;
 
-  let { modelBuilder, actionReader, handlerVersion, actionHandler } = config;
+  let { modelBuilder, handlerVersion, actionHandler } = config;
 
   if (!modelBuilder) {
     modelBuilder = new ModelBuilder({
