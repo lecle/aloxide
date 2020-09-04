@@ -1,4 +1,4 @@
-import { createLogger, Logger } from '@aloxide/logger';
+import Logger from 'bunyan';
 import dote from 'dotenv-extended';
 
 declare global {
@@ -27,8 +27,9 @@ declare global {
   process.env.dote_loaded = 'true';
 
   if (!global.logger) {
-    global.logger = createLogger({
-      consoleLogger: true,
+    global.logger = Logger.createLogger({
+      level: 'debug',
+      name: 'example-api-gateway',
     });
   }
 })();
