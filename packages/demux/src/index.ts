@@ -1,14 +1,15 @@
 import { ModelBuilder, ModelBuilderConfig } from '@aloxide/model';
-import { AbstractActionHandler, AbstractActionReader, BaseActionWatcher, HandlerVersion } from 'demux';
+import { BaseActionWatcher } from 'demux';
 import { Sequelize } from 'sequelize';
 
 import { AbsDbUpdater } from './AbsDbUpdater';
-import { ActionHandler } from './ActionHandler';
+import { AloxideActionHandler } from './AloxideActionHandler';
 import { BaseHandlerVersion } from './BaseHandlerVersion';
 import { DbCreUpdater } from './DbCreUpdater';
 import { DbDelUpdater } from './DbDelUpdater';
 import { DbUpdUpdater } from './DbUpdUpdater';
 
+import type { ActionReader, ActionHandler, HandlerVersion, ActionWatcherOptions } from 'demux';
 import type { EntityConfig } from '@aloxide/bridge';
 import type { Logger } from '@aloxide/logger';
 
@@ -49,22 +50,22 @@ export interface CreateWatcherConfig {
   accountName: string;
   modelBuilderConfig: ModelBuilderConfig;
   sequelize: Sequelize;
-  actionReader: AbstractActionReader;
-  pollInterval?: number;
+  actionReader: ActionReader;
   versionName?: string;
   modelBuilder?: ModelBuilder;
   handlerVersion?: HandlerVersion;
-  actionHandler?: AbstractActionHandler;
+  actionHandler?: ActionHandler;
+  actionWatcherOptions?: ActionWatcherOptions;
 }
 
 export async function createWatcher(config: CreateWatcherConfig): Promise<BaseActionWatcher> {
   const {
     accountName,
     versionName = 'v1',
-    pollInterval = 2000,
     modelBuilderConfig: { aloxideConfigPath, logger },
     sequelize,
     actionReader,
+    actionWatcherOptions,
   } = config;
 
   let { modelBuilder, handlerVersion, actionHandler } = config;
@@ -89,8 +90,8 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
       );
     }
 
-    actionHandler = new ActionHandler(handlerVersion, sequelize, logger);
+    actionHandler = new AloxideActionHandler(handlerVersion, sequelize, logger);
   }
 
-  return new BaseActionWatcher(actionReader, actionHandler, pollInterval);
+  return new BaseActionWatcher(actionReader, actionHandler, actionWatcherOptions);
 }

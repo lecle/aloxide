@@ -1,17 +1,17 @@
 import { AbstractActionHandler } from 'demux';
 import { DataTypes, ModelCtor } from 'sequelize';
 
-import type { Block, HandlerVersion, IndexState } from 'demux';
+import type { NextBlock, HandlerVersion, IndexState } from 'demux';
 import type { Model, Sequelize } from 'sequelize/types';
 import type { Logger } from '@aloxide/logger';
 
 const DemuxIndexState = 'DemuxIndexState';
 
 interface IndexStateModel extends IndexState, Model {
-  id: string;
+  id: number;
 }
 
-export class ActionHandler extends AbstractActionHandler {
+export class AloxideActionHandler extends AbstractActionHandler {
   state: any = {};
   stateHistory: any = {};
   stateHistoryMaxLength = 300;
@@ -25,13 +25,15 @@ export class ActionHandler extends AbstractActionHandler {
     super([handlerVersion]);
   }
 
-  protected async updateIndexState(
+  protected updateIndexState(
     state: any,
-    block: Block,
+    nextBlock: NextBlock,
     isReplay: boolean,
     handlerVersionName: string,
     context?: any,
   ): Promise<void> {
+    const block = nextBlock.block;
+
     this.indexStateModel.blockNumber = block.blockInfo.blockNumber;
     this.indexStateModel.blockHash = block.blockInfo.blockHash;
     this.indexStateModel.isReplay = isReplay;
@@ -96,11 +98,6 @@ export class ActionHandler extends AbstractActionHandler {
   }
 
   protected async setup(): Promise<void> {
-    if (this.initialized) {
-      return;
-    }
-    this.initialized = true;
-
     /**
      * Table DemuxIndexState
      */
