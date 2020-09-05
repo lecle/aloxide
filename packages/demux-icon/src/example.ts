@@ -19,7 +19,7 @@ declare global {
 global.logger = Logger.createLogger({ name: 'example-demux-icon' });
 
 // Initial state
-let state = {
+let stateObj = {
   volumeBySymbol: {},
   totalTransfers: 0,
   indexState: {
@@ -31,23 +31,23 @@ let state = {
   },
 };
 
-type State = typeof state;
+type State = typeof stateObj;
 
 const stateHistory = {};
 const stateHistoryMaxLength = 300;
 
 class ObjectActionHandler extends AbstractActionHandler {
   async handleWithState(handle: (state: State, context?: any) => void): Promise<void> {
-    await handle(state);
-    const { blockNumber } = state.indexState;
-    stateHistory[blockNumber] = JSON.parse(JSON.stringify(state));
+    await handle(stateObj);
+    const { blockNumber } = stateObj.indexState;
+    stateHistory[blockNumber] = JSON.parse(JSON.stringify(stateObj));
     if (blockNumber > stateHistoryMaxLength && stateHistory[blockNumber - stateHistoryMaxLength]) {
       delete stateHistory[blockNumber - stateHistoryMaxLength];
     }
   }
 
   async loadIndexState(): Promise<IndexState> {
-    return state.indexState;
+    return stateObj.indexState;
   }
 
   async updateIndexState(
@@ -64,14 +64,14 @@ class ObjectActionHandler extends AbstractActionHandler {
   }
 
   async rollbackTo(blockNumber: number): Promise<void> {
-    const latestBlockNumber = state.indexState.blockNumber;
+    const latestBlockNumber = stateObj.indexState.blockNumber;
     const toDelete = [...Array(latestBlockNumber - blockNumber).keys()].map(
       n => n + blockNumber + 1,
     );
     for (const n of toDelete) {
       delete stateHistory[n];
     }
-    state = stateHistory[blockNumber] as State;
+    stateObj = stateHistory[blockNumber] as State;
   }
 
   async setup() {}
