@@ -26,12 +26,7 @@ export class IconBlock implements Block {
     const { result } = rawBlock;
     return result.confirmed_transaction_list
       .map<IconAction>((transaction: IconTransaction) => {
-        const {
-          version,
-          dataType,
-          to,
-          data: { method },
-        } = transaction;
+        const { version, dataType, to, data: { method } = {} } = transaction;
 
         if (dataType != 'call') {
           // TODO handle other data type
