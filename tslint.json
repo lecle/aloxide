@@ -4,7 +4,8 @@
   "jsRules": {},
   "rules": {
     "no-empty": false,
-    "triple-equals": false
+    "triple-equals": false,
+    "forin": false
   },
   "rulesDirectory": []
 }

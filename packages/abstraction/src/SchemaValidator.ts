@@ -13,7 +13,7 @@ const logLevels = {
 
 export function validateSchema(targetObject, inputSchema = {}, logger?: Logger, logLevel = 3){
 
-  let isPath = typeof targetObject === 'string'
+  const isPath = typeof targetObject === 'string'
   if(isPath ? !fs.existsSync(targetObject) : typeof targetObject !== 'object')
     return logger?.error('Target must be either be an object or a valid filepath');
 
@@ -30,7 +30,7 @@ export function validateSchema(targetObject, inputSchema = {}, logger?: Logger, 
 }
 
 function validateExtraFields(targetObj, schemaObj){
-  let extras = []
+  const extras = []
 
   const leafNode = (obj) => {
     return obj && ([String, Number, Boolean].includes(obj.type) || typeof obj.required === 'boolean')
@@ -41,8 +41,8 @@ function validateExtraFields(targetObj, schemaObj){
       return
     }
 
-    for(let key in target) {
-      let schemaKey = target instanceof Array ? schema[0] : schema[key]
+    for(const key in target) {
+      const schemaKey = target instanceof Array ? schema[0] : schema[key]
       const nextLevel = parsedLevel ? `${parsedLevel}.${key}` : key
       if(!schemaKey || typeof target[key] !== 'object' && !leafNode(schemaKey)) {
         extras.push({ path: nextLevel, message: `${nextLevel} is not present in schema`})
@@ -58,11 +58,11 @@ function validateExtraFields(targetObj, schemaObj){
 
 
 function _getSchemaFromObj(object){
-  let keyValues = {}
-  for(let key in object) {
+  const keyValues = {}
+  for(const key in object) {
     if(typeof object[key] === 'object') {
       if(Array.isArray(object[key])) {
-        let first = object[key][0]
+        const first = object[key][0]
         keyValues[key] = [
           typeof first === 'object' ? _getSchemaFromObj(first) : {type: typeof first}  
         ]

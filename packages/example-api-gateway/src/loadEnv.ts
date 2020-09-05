@@ -5,7 +5,7 @@ declare global {
   var logger: Logger;
 }
 
-(function () {
+(() => {
   if (process.env.dote_loaded) {
     return;
   }

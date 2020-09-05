@@ -54,7 +54,7 @@ export class ContractGenerator {
       }
       ]
     }
-    let schemaErrors = validateSchema(this.aloxideConfig, requiredSchema, this.logger)
+    const schemaErrors = validateSchema(this.aloxideConfig, requiredSchema, this.logger)
 
     return schemaErrors.length < 1;
   }

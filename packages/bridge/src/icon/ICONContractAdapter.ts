@@ -75,7 +75,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
 
     const outText = template({
       tables: this.entityConfigs ?.map(item => {
-        let key= item.fields.find(({ name }) => name == item.key);
+        const key= item.fields.find(({ name }) => name == item.key);
         return {
           name: item.name.toLocaleLowerCase(),
           key: {
@@ -103,7 +103,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
     this.entityConfigs ?.map(item => {
       const actionName = "get" + item.name
       const outFileName = actionName + ".json";
-      let key= item.fields.find(({ name }) => name == item.key);
+      const key= item.fields.find(({ name }) => name == item.key);
       const outText = template({
         key: {
           name: key.name,
@@ -151,7 +151,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
       // remove data
       const rmvActionName = "rmv" + item.name
       const rmvFileName = rmvActionName + ".json";
-      var indexFields = item.fields.reduce((ids, field) => {
+      const indexFields = item.fields.reduce((ids, field) => {
         if (field.name === item.key) {
           ids.push(field);
         }
