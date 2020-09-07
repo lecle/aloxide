@@ -30,7 +30,7 @@ export class FilePrinter implements Printer {
 
     fs.writeFileSync(outFile, formatedOutputText);
 
-    this.logger.info(`---- success generating file: ${outFile}`);
+    this.logger.info(`---- success generating file: ${fileName}`);
   }
 
   ensureExistingFolder(folderPath: string) {
