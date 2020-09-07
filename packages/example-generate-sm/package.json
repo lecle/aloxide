@@ -12,16 +12,19 @@
   "scripts": {
     "build": "yarn clean && yarn compile",
     "prestart": "rimraf ./out",
-    "start": "node ./dist/index.js",
+    "start": "ts-node -P ./tsconfig.json src/index.ts | bunyan -o short",
     "clean": "rimraf -rf ./dist ./out",
     "compile": "tsc -p tsconfig.build.json",
-    "prepublishOnly": "yarn build",
     "lint": "tslint --project . --fix",
     "test": "jest -o"
   },
   "dependencies": {
     "@aloxide/abstraction": "^0.1.0",
     "@aloxide/bridge": "^0.1.0",
-    "@aloxide/logger": "^0.1.0"
+    "bunyan": "^1.8.14"
+  },
+  "devDependencies": {
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
   }
 }
