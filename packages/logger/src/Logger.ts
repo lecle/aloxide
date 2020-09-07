@@ -4,5 +4,4 @@ export interface Logger {
   info?: loggerF;
   warn?: loggerF;
   error?: loggerF;
-  success?: loggerF;
 }
