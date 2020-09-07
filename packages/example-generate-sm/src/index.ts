@@ -1,6 +1,6 @@
 import { ContractGenerator } from '@aloxide/abstraction';
 import { EOSContractAdapter, ICONContractAdapter, ModelContractAdapter, MultipleContractAdapter } from '@aloxide/bridge';
-import { createLogger } from '@aloxide/logger';
+import { createLogger } from 'bunyan';
 import path from 'path';
 
 const adapter = new MultipleContractAdapter();
@@ -16,7 +16,9 @@ const contractGenerator = new ContractGenerator({
   resultPath: path.resolve(__dirname, '../out'),
   adapter,
   logger: createLogger({
-    consoleLogger: true,
+    level: 'debug',
+    name: 'g' /* generator */,
+    src: false,
   }),
 });
 
