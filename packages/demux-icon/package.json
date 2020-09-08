@@ -9,7 +9,7 @@
   ],
   "types": "./dist/*.d.ts",
   "scripts": {
-    "dev": "ts-node -P ./tsconfig.json src/example.ts | bunyan",
+    "dev": "nodemon src/example.ts | bunyan",
     "build": "yarn clean && yarn compile",
     "clean": "rimraf -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
@@ -24,6 +24,8 @@
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "bunyan": "^1.8.14"
+    "@types/bunyan": "^1.8.6",
+    "bunyan": "^1.8.14",
+    "debug": "^4.1.1"
   }
 }

@@ -1,11 +1,14 @@
 import { AbstractActionReader, NotInitializedError } from 'demux';
 import fetch from 'node-fetch';
+import debug from 'debug';
 import { RetrieveBlockError, RetrieveHeadBlockError, RetrieveIrreversibleBlockError } from './errors';
 import { IconBlock } from './IconBlock';
 import { Jsonrpc20 } from './Jsonrpc20';
 import { retry } from './utils';
-
 import type { IconActionReaderOptions } from './IconActionReaderOptions';
+
+const debugLog = debug('reader');
+
 export class IconActionReader extends AbstractActionReader {
   protected endpoint: string;
   protected nid: number;
@@ -13,6 +16,7 @@ export class IconActionReader extends AbstractActionReader {
 
   constructor(options: IconActionReaderOptions = {}) {
     super(options);
+
     const endpoint = options.endpoint
       ? options.endpoint
       : 'https://bicon.net.solidwallet.io/api/v3';
@@ -21,21 +25,31 @@ export class IconActionReader extends AbstractActionReader {
     this.jsonrpc = options.jsonrpc || '2.0';
   }
 
-  public post(data: { [key: string]: any }): Promise<Jsonrpc20<any>> {
-    return fetch(this.endpoint, {
-      method: 'post',
+  public async post(data: { [key: string]: any }): Promise<Jsonrpc20<any>> {
+    const response = await fetch(this.endpoint, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
-    }).then(res => res.json());
+      body: JSON.stringify({
+        jsonrpc: this.jsonrpc,
+        id: this.nid,
+        ...data
+      })
+    });
+
+    const json = await response.json();
+    debugLog('%s response: %O', data.method, json);
+
+    if (response.ok)
+      return json;
+    else
+      throw new Error(`${json.error.code}: ${json.error.message}`);
   }
 
-  public getLastBlock(): Promise<Jsonrpc20<any>> {
-    return this.post({
-      jsonrpc: this.jsonrpc,
-      method: 'icx_getLastBlock',
-      id: this.nid,
+  public async getLastBlock(): Promise<Jsonrpc20<any>> {
+    return await this.post({
+      method: 'icx_getLastBlock'
     });
   }
 
@@ -94,13 +108,12 @@ export class IconActionReader extends AbstractActionReader {
       const block = await retry(
         async () => {
           const rawBlock = await this.post({
-            jsonrpc: this.jsonrpc,
             method: 'icx_getBlockByHeight',
-            id: this.nid,
             params: {
               height: `0x${blockNumber.toString(16)}`,
             },
           });
+
           return new IconBlock(rawBlock, this.log);
         },
         numRetries,

@@ -11,7 +11,7 @@ import {
   NextBlock,
   Updater,
 } from 'demux';
-
+import debug from 'debug';
 import { IconActionReader } from '.';
 
 declare global {
@@ -19,6 +19,8 @@ declare global {
 }
 
 global.logger = bunyan.createLogger({ name: 'example-demux-icon' });
+
+const debugLog = debug('example');
 
 // Initial state
 let state = {
@@ -97,20 +99,13 @@ const actionType = 'cx8eeac4eb7873a0dec7c1eec5d22c3ac925bc07f6::transfer';
 const updater: Updater = {
   actionType,
   apply: (state: any, payload: any, blockInfo: BlockInfo, context: any) => {
-    // TODO update state
-    // logger.info('---- update state', state);
-    // logger.info('---- update payload', payload);
-    logger.info('---- update blockInfo', blockInfo.blockNumber);
-    // logger.info('---- update context', context);
+    debugLog('block %d payload %O', blockInfo.blockNumber, payload);
   },
 };
 
 const effect: Effect = {
   actionType,
   run: (payload: any, blockInfo: BlockInfo, context: any) => {
-    // logger.info('---- effect payload', payload);
-    // logger.info('---- effect blockInfo', blockInfo.blockNumber);
-    // logger.info('---- effect context', context);
   },
 };
 
@@ -127,7 +122,7 @@ const handlerVersion: HandlerVersion = {
 const actionHandler = new ObjectActionHandler([handlerVersion]);
 
 const actionReader = new IconActionReader({
-  startAtBlock: 4194850,
+  startAtBlock: -1, // 4194850,
   onlyIrreversible: false,
   endpoint: 'https://bicon.net.solidwallet.io/api/v3',
   nid: 3,

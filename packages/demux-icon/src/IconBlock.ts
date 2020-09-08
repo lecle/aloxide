@@ -29,7 +29,7 @@ export class IconBlock implements Block {
           version,
           dataType,
           to,
-          data: { method },
+          data
         } = transaction;
 
         if (dataType != 'call') {
@@ -39,7 +39,7 @@ export class IconBlock implements Block {
         }
 
         const iconAction: IconAction = {
-          type: `${to}::${method}`,
+          type: `${to}::${data.method}`,
           payload: {
             ...transaction,
             version,
