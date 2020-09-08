@@ -8,6 +8,7 @@
   - [Development Environment](#development-environment)
   - [Bootstrap the Project](#bootstrap-the-project)
 - [Links](#links)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -87,3 +88,7 @@ lerna success - @aloxide/example-generate-sm
 
 - [Medium](https://medium.com/@Aloxide)
 - [Google Groups](https://groups.google.com/g/aloxide)
+
+# License
+
+[Apache License 2.0](./LICENSE)
