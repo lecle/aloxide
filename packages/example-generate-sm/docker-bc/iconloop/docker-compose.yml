@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  icon-mainet:
+    image: iconloop/tbears:mainnet
+    # ports:
+    #   - 9000:9000
+    volumes:
+      - '../../out/icon:/work/smart-contract'
+      - './:/work/entry'
+    entrypoint: ['bash', './entry/entry.sh']
