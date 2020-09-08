@@ -74,13 +74,13 @@ export class ICONContractAdapter extends AbsContractAdapter {
     const template = Handlebars.compile(hbsTemplate);
 
     const outText = template({
-      tables: this.entityConfigs ?.map(item => {
-        const key= item.fields.find(({ name }) => name == item.key);
+      tables: this.entityConfigs?.map(item => {
+        const key = item.fields.find(({ name }) => name == item.key);
         return {
           name: item.name.toLocaleLowerCase(),
           key: {
             name: key.name,
-            type: this.typeInterpreter.interpret(key.type as FieldTypeEnum)
+            type: this.typeInterpreter.interpret(key.type as FieldTypeEnum),
           },
           fields: item.fields.map(({ name, type }) => ({
             name,
@@ -99,17 +99,17 @@ export class ICONContractAdapter extends AbsContractAdapter {
       'utf-8',
     );
     const template = Handlebars.compile(hbsTemplate);
-    
-    this.entityConfigs ?.map(item => {
-      const actionName = "get" + item.name
-      const outFileName = actionName + ".json";
-      const key= item.fields.find(({ name }) => name == item.key);
+
+    this.entityConfigs?.map(item => {
+      const actionName = 'get' + item.name;
+      const outFileName = actionName + '.json';
+      const key = item.fields.find(({ name }) => name == item.key);
       const outText = template({
         key: {
           name: key.name,
-          type: this.typeInterpreter.interpret(key.type as FieldTypeEnum)
+          type: this.typeInterpreter.interpret(key.type as FieldTypeEnum),
         },
-        action: actionName.toLocaleLowerCase()
+        action: actionName.toLocaleLowerCase(),
       });
       this.jsFilePrinter.print(outFileName, outText, this.folderName);
     });
@@ -125,46 +125,46 @@ export class ICONContractAdapter extends AbsContractAdapter {
 
     this.entityConfigs?.map(item => {
       // create data
-      const crtActionName = 'crt' + item.name;
-      const crtFileName = crtActionName + '.json';
-      const crtText = template({
-        action: crtActionName.toLocaleLowerCase(),
+      const creActionName = 'cre' + item.name;
+      const creFileName = creActionName + '.json';
+      const creText = template({
+        action: creActionName.toLocaleLowerCase(),
         fields: item.fields.map(({ name, type }) => ({
           name,
           type: this.typeInterpreter.interpret(type as FieldTypeEnum),
         })),
       });
-      this.jsFilePrinter.print(crtFileName, crtText, this.folderName);
+      this.jsFilePrinter.print(creFileName, creText, this.folderName);
 
       // update data
-      const udtActionName = 'upt' + item.name;
-      const uptFileName = udtActionName + '.json';
-      const uptText = template({
+      const udtActionName = 'upd' + item.name;
+      const updFileName = udtActionName + '.json';
+      const updText = template({
         action: udtActionName.toLocaleLowerCase(),
         fields: item.fields.map(({ name, type }) => ({
           name,
           type: this.typeInterpreter.interpret(type as FieldTypeEnum),
         })),
       });
-      this.jsFilePrinter.print(uptFileName, uptText, this.folderName);
+      this.jsFilePrinter.print(updFileName, updText, this.folderName);
 
       // remove data
-      const rmvActionName = "rmv" + item.name
-      const rmvFileName = rmvActionName + ".json";
+      const delActionName = 'del' + item.name;
+      const delFileName = delActionName + '.json';
       const indexFields = item.fields.reduce((ids, field) => {
         if (field.name === item.key) {
           ids.push(field);
         }
         return ids;
       }, []);
-      const rmvText = template({
-        action: rmvActionName.toLocaleLowerCase(),
+      const delText = template({
+        action: delActionName.toLocaleLowerCase(),
         fields: indexFields.map(({ name, type }) => ({
           name,
           type: this.typeInterpreter.interpret(type as FieldTypeEnum),
         })),
       });
-      this.jsFilePrinter.print(rmvFileName, rmvText, this.folderName);
+      this.jsFilePrinter.print(delFileName, delText, this.folderName);
     });
   }
   generateUnitTestPy() {
