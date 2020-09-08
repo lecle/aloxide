@@ -1,5 +1,9 @@
 export interface Jsonrpc20<R> {
   jsonrpc: string;
-  result: R;
   id: number;
+  result?: R;
+  error?: {
+    code: number;
+    message: string;
+  }
 }

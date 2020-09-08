@@ -66,9 +66,9 @@ describe('test IconActionReader', () => {
       .getLastBlock()
       .then(res => {
         expect(fetch).toBeCalledWith('https://bicon.net.solidwallet.io/api/v3', {
-          body: '{"jsonrpc":"2.0","method":"icx_getLastBlock","id":3}',
+          body: '{"jsonrpc":"2.0","id":3,"method":"icx_getLastBlock"}',
           headers: { 'Content-Type': 'application/json' },
-          method: 'post',
+          method: 'POST',
         });
 
         expect(res).toEqual(

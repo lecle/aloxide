@@ -1,0 +1,15 @@
+{
+  "env": {
+    "DEBUG": "demux, reader, example",
+    "DEBUG_DEPTH": 5,
+    "NODE_ENV": "development"
+  },
+  "execMap": {
+    "ts": "ts-node"
+  },
+  "ext": "ts",
+  "ignore": [
+    "dist",
+    "test"
+  ]
+}

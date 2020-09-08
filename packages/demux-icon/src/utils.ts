@@ -14,6 +14,8 @@ async function retry<T>(
     try {
       return await func();
     } catch (err) {
+      // tslint:disable:no-console
+      // console.log(err);
       if (numAttempts - 1 === maxNumAttempts) {
         throw err;
       }
