@@ -16,9 +16,9 @@
   "scripts": {
     "prepstart": "rimraf ./contracts */models/bcModelBuilder.ts",
     "start": "echo '==========\n-- INSTRUCTION:\ncd packages/example-api-gateway and\nstart server: yarn start:server\nstart demux: yarn start:demux\n==========\n'",
-    "start:server": "ts-node --watch -P ./tsconfig.json scr/index.ts | bunyan",
-    "start:demux": "ts-node -P ./tsconfig.json src/readBlockchain.ts | bunyan",
-    "start:dummy": "ts-node -P ./tsconfig.json src/dummy.ts | bunyan",
+    "start:server": "ts-node --watch -P ./tsconfig.json scr/index.ts | bunyan -o short",
+    "start:demux": "ts-node -P ./tsconfig.json src/readBlockchain.ts | bunyan -o short",
+    "start:dummy": "ts-node -P ./tsconfig.json src/dummy.ts | bunyan -o short",
     "build": "yarn clean && yarn compile",
     "clean": "rimraf -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
@@ -35,6 +35,7 @@
   "dependencies": {
     "@aloxide/api-gateway": "^0.1.0",
     "@aloxide/demux": "^0.1.0",
+    "@aloxide/demux-icon": "^0.1.0",
     "@aloxide/model": "^0.1.0",
     "bunyan": "^1.8.14",
     "demux-eos": "^4.0.1",
