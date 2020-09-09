@@ -1,8 +1,9 @@
 {
   "name": "@aloxide/demux-icon",
-  "description": "Example of using jest with a TS monorepo",
-  "version": "1.0.0",
-  "license": "ISC",
+  "description": "demux for icon",
+  "version": "0.1.0",
+  "author": "Lecle",
+  "license": "Apache-2.0",
   "main": "./dist/index",
   "files": [
     "dist"
