@@ -97,6 +97,7 @@ export class IconActionReader extends AbstractActionReader {
         },
         this.numRetries,
         this.waitTimeMs,
+        this.log,
       );
 
       return block;

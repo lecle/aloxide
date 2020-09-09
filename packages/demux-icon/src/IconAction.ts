@@ -1,9 +1,9 @@
 import { Action } from 'demux';
 
 import { Hex } from './Hex';
-import { DataCall, IconTransaction } from './IconTransaction';
+import { IconTransaction } from './IconTransaction';
 
-export interface IconPayload<Param> extends IconTransaction<DataCall<Param>> {
+export interface IconPayload<Param> extends IconTransaction<Param> {
   version: Hex;
   producer: string;
   transactionId: string;

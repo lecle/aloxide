@@ -16,7 +16,7 @@
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn build",
     "lint": "tslint --project . --fix",
-    "test": "jest -o"
+    "test": "jest"
   },
   "dependencies": {
     "bignumber.js": "^9.0.0",
