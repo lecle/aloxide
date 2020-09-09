@@ -25,8 +25,8 @@ export class IconBlock implements Block {
   protected collectActionsFromBlock(rawBlock: Jsonrpc20<IconRawBlock>): IconAction[] {
     const { result } = rawBlock;
     return result.confirmed_transaction_list
-      .map<IconAction>((transaction: IconTransaction) => {
-        const { version, dataType, to, data: { method } = {} } = transaction;
+      .map<IconAction>((transaction: IconTransaction, actionIndex) => {
+        const { txHash, version, dataType, to, data: { method, params } = {} } = transaction;
 
         if (dataType != 'call') {
           // TODO handle other data type
@@ -38,6 +38,10 @@ export class IconBlock implements Block {
           type: `${to}::${method}`,
           payload: {
             ...transaction,
+            producer: result.peer_id,
+            transactionId: txHash,
+            actionIndex,
+            data: params,
             version,
           },
         };
