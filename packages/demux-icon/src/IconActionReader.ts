@@ -90,7 +90,7 @@ export class IconActionReader extends AbstractActionReader {
             method: 'icx_getBlockByHeight',
             id: this.nid,
             params: {
-              height: `0x${blockNumber.toString(16)}`,
+              height: `0x${blockNumber.toString(16)}`.toLowerCase(),
             },
           });
           return new IconBlock(rawBlock, this.log);
