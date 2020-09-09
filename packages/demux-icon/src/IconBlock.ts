@@ -1,5 +1,6 @@
 import { Block, BlockInfo } from 'demux';
 
+import { hexPropToNumber } from './hexToNumber';
 import { toNumber } from './toNumber';
 
 import type Logger from 'bunyan';
@@ -41,7 +42,7 @@ export class IconBlock implements Block {
             producer: result.peer_id,
             transactionId: txHash,
             actionIndex,
-            data: params,
+            data: hexPropToNumber(params),
             version,
           },
         };
