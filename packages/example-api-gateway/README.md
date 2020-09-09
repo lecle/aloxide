@@ -56,6 +56,15 @@ cleost push action helloworld12 delvote '["helloworld12", 1005]' -p helloworld12
 
 ```
 
+### Enable watcher on ICON loop
+
+Create `.env` file as below
+
+```text
+app_enable_eos=false
+app_enable_icon=true
+```
+
 ## Start demo
 
 We can start demo if with defaul setting.
