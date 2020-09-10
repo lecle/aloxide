@@ -26,7 +26,7 @@ createWatcher({
   .then(actionWatcher => {
     if (process.env.app_enable_eos == 'true') {
       logger.info('EOS enabled');
-      actionWatcher.watch();
+      actionWatcher.start();
     }
   })
   .catch(err => {
@@ -59,7 +59,7 @@ createWatcher({
   .then(actionWatcher => {
     if (process.env.app_enable_icon == 'true') {
       logger.info('ICON enabled');
-      actionWatcher.watch();
+      actionWatcher.start();
     }
   })
   .catch(err => {
