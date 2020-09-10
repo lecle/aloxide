@@ -146,4 +146,4 @@ const actionWatcher = new BaseActionWatcher(actionReader, actionHandler, {
   velocitySampleSize: 1 /* default is 20 */,
 });
 
-actionWatcher.watch();
+actionWatcher.start();
