@@ -15,7 +15,7 @@ export interface ContractGeneratorConfig {
   /**
    * Adapter of the blockchain
    */
-  adapter?: ContractAdapter;
+  adapters?: ContractAdapter[];
 
   logger?: Logger;
 

@@ -27,3 +27,11 @@ export function printErrors(errors, warnings, logger?: Logger, logLevel = 3) {
   }
   return errors.concat(warnings);
 }
+
+function getType(object) {
+  return Object.prototype.toString.call(object).slice(8, -1).toLowerCase();
+}
+
+export function isObject(object): Boolean {
+  return getType(object) === 'object';
+}

@@ -1,74 +1,107 @@
 import { createLogger, Logger } from '@aloxide/logger';
 
 import { readAloxideConfig } from './readAloxideConfig';
-import { validateSchema } from './SchemaValidator';
+import { validateEntity } from './SchemaValidator';
 
 import type { ContractGeneratorConfig } from './ContractGeneratorConfig';
 import type { AloxideConfig } from './AloxideConfig';
+import { ContractAdapter } from '@aloxide/bridge';
+
+import { isObject } from './lib/Utils';
 
 export class ContractGenerator {
   aloxideConfig: AloxideConfig;
   logger: Logger;
+  contractName: string; // Default Contract Name
+  public config: Omit<ContractGeneratorConfig, 'logger' | 'adapters' | 'contractName'>;
+  private adapters: ContractAdapter[] = [];
 
-  constructor(public config: ContractGeneratorConfig) {
+  constructor(config: ContractGeneratorConfig) {
     if (!config) {
-      throw new Error('missing configuration');
+      throw new Error('Missing configuration!');
     }
 
-    if (config.logger) {
-      this.logger = config.logger;
+    const { adapters, logger, contractName, ...rest } = config;
+    this.contractName = contractName || '';
+    this.config = rest;
+
+    // Define logger for the generator
+    if (logger) {
+      this.logger = logger;
     } else {
       this.logger = createLogger();
     }
     this.logger.debug('-- config.aloxideConfigPath', config.aloxideConfigPath);
     this.logger.debug('-- config.resultPath', config.resultPath);
 
-    this.aloxideConfig = readAloxideConfig(config.aloxideConfigPath);
-
-    if (this.config.adapter) {
-      this.config.adapter.logger = this.logger;
-      this.config.adapter.contractName = config.contractName || 'hello';
-      this.config.adapter.entityConfigs = this.aloxideConfig.entities;
+    // Check Input config
+    const aloxideConfig = readAloxideConfig(config.aloxideConfigPath);
+    if (!validateEntity(aloxideConfig, this.logger)) {
+      throw new Error('Input entities mismatch!');
     }
+    this.aloxideConfig = aloxideConfig;
+
+    // Check Output config
+    if (!rest.resultPath) {
+      throw new Error('Missing "resultPath"!');
+    }
+
+    // Initialize adapters
+    this.adapters = [];
+    this.addAdapters(adapters);
   }
 
-  validateEntity() {
+  /**
+   * Configure/override adapter configs to use some from the generator.
+   * This is a mutable function.
+   */
+  configureAdapter(adapter: ContractAdapter) {
+    // Get `logger` config from generator
+    adapter.logger = this.logger || adapter.logger;
 
-    const checkName = val => {
-      return /^[1-5a-zA-Z]+/.test(val)
+    // Get `contractName` config from generator
+    adapter.contractName = this.contractName || 'hello';
+
+    // Get `entities` config from generator
+    adapter.entityConfigs = this.aloxideConfig.entities || [];
+
+    return adapter;
+  }
+
+  /**
+   * Add adapters to Contract Generator so that we can communicate with the blockchain we want
+   * @param adapters
+   */
+  addAdapters(adapters: ContractAdapter | ContractAdapter[]) {
+    if (isObject(adapters)) {
+      // Add single adapter
+      this.adapters.push(this.configureAdapter(adapters as ContractAdapter));
+
+    } else if (Array.isArray(adapters)) {
+      // Add multiple adapters
+      this.adapters.push(
+          ...adapters.reduce((accumulator, adapter) => {
+          if (adapter) {
+            this.configureAdapter(adapter);
+
+            accumulator.push(adapter);
+          }
+
+          return accumulator;
+        }, [])
+      );
+
+    } else {
+      throw new Error('Invalid Contract Adapter');
     }
-
-    const checkType = val => {
-      const supportedType = ["uint64_t", "number", "string", "array", "bool"];
-      return supportedType.indexOf(val) !== -1
-    }
-
-    const requiredSchema = {
-      entities: [{
-        name: { type: String, required: true, length: { min: 1, max: 12 }, use: { checkName } },
-        fields: [{
-          name: { type: String, required: true, length: { min: 1, max: 12 }, use: { checkName } },
-          type: { type: String, required: true, use: { checkType } },
-        }],
-        key: { type: String, required: true, length: { min: 1, max: 12 }, use: { checkName } }
-      }
-      ]
-    }
-    const schemaErrors = validateSchema(this.aloxideConfig, requiredSchema, this.logger)
-
-    return schemaErrors.length < 1;
   }
 
   generate() {
-    if (!this.validateEntity()) {
-      throw new Error('input entities mismatch');
-    }
-    if (!this.config.resultPath) {
-      throw new Error('missing resultPath');
-    }
-
-    if (this.config.adapter) {
-      this.config.adapter.generate(this.config.resultPath);
+    // TODO: should support config Contract Name when generating smart contract
+    if (Array.isArray(this.adapters)) {
+      this.adapters.forEach(adapter => {
+        adapter.generate(this.config.resultPath);
+      });
     }
   }
 }
