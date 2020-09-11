@@ -10,7 +10,6 @@
     "url": "git@github.com:lecle/aloxide.git"
   },
   "scripts": {
-    "build": "yarn clean && yarn compile",
     "prestart": "rimraf ./out",
     "start": "ts-node -P ./tsconfig.json src/index.ts | bunyan -o short",
     "clean": "rimraf -rf ./dist ./out",
