@@ -1,4 +1,5 @@
-import { BaseActionWatcher, AbstractActionHandler, AbstractActionReader } from 'demux';
+import { BaseActionWatcher } from 'demux'
+import { ActionHandler, ActionReader, ActionWatcherOptions } from 'demux/dist/interfaces'
 
 /**
  * Allow to watch the blockchain once, just get only one block and stop.
@@ -6,10 +7,10 @@ import { BaseActionWatcher, AbstractActionHandler, AbstractActionReader } from '
  */
 export class AloxideActionWatcher extends BaseActionWatcher {
   constructor(
-    protected actionReader: AbstractActionReader,
-    protected actionHandler: AbstractActionHandler,
-    protected pollInterval: number) {
-    super(actionReader, actionHandler, pollInterval);
+    protected actionReader: ActionReader,
+    protected actionHandler: ActionHandler,
+    options: ActionWatcherOptions) {
+    super(actionReader, actionHandler, options);
   }
 
   public async watchOnce(isReplay: boolean = false) {
