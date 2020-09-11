@@ -1,6 +1,7 @@
 import { ContractGenerator } from '@aloxide/abstraction';
-import { EOSContractAdapter, ICONContractAdapter, ModelContractAdapter } from '@aloxide/bridge';
+import { EOSContractAdapter, ICONContractAdapter } from '@aloxide/bridge';
 import { createLogger } from 'bunyan';
+import { ModelContractAdapter } from './sequelize/ModelAdapter';
 import path from 'path';
 
 const contractGenerator = new ContractGenerator({
@@ -9,6 +10,7 @@ const contractGenerator = new ContractGenerator({
   adapters: [
     new EOSContractAdapter(),
     new ICONContractAdapter(),
+    // Custom Adapter
     new ModelContractAdapter(),
   ],
   logger: createLogger({

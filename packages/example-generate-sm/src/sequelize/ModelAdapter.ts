@@ -2,14 +2,15 @@ import fs from 'fs';
 import Handlebars from 'handlebars';
 import path from 'path';
 
-import { AbsContractAdapter } from '../AbsContractAdapter';
-import { JsPrettier } from '../prettier/JsPrettier';
-import { FilePrinter } from '../printer/FilePrinter';
-import { FieldTypeEnum } from '../type-definition/FieldTypeEnum';
+import {
+  AbsContractAdapter,
+  JsPrettier,
+  FilePrinter,
+  FieldTypeEnum,
+  Printer,
+} from '@aloxide/bridge';
 import { Model } from './Model';
 import { ModelTypeInterpreter } from './ModelTypeInterpreter';
-
-import type { Printer } from '../printer/Printer';
 
 export class ModelContractAdapter extends AbsContractAdapter {
   constructor() {

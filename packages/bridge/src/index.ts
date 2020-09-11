@@ -23,6 +23,3 @@ export { EOSTypeInterpreter } from './eos/EOSTypeInterpreter';
 
 export { ICONContractAdapter } from './icon/ICONContractAdapter';
 export { ICONTypeInterpreter } from './icon/ICONTypeInterpreter';
-
-export { ModelContractAdapter } from './sequelize/ModelAdapter';
-export { ModelTypeInterpreter } from './sequelize/ModelTypeInterpreter';

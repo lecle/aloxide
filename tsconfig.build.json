@@ -5,7 +5,11 @@
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types/"]
+    "typeRoots": ["./node_modules/@types/"],
+    "baseUrl": ".",
+    "paths": {
+      "@aloxide/*": ["packages/*/src"]
+    }
   },
 
   "exclude": ["node_modules", "dist"]

@@ -1,5 +1,4 @@
-import { AbsTypeInterpreter } from '../interpreter/AbsTypeInterpreter';
-import { FieldTypeEnum } from '../type-definition/FieldTypeEnum';
+import { AbsTypeInterpreter, FieldTypeEnum } from '@aloxide/bridge';
 
 export class ModelTypeInterpreter extends AbsTypeInterpreter {
   interpret(type: FieldTypeEnum): string {
