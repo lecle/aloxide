@@ -20,11 +20,11 @@
   },
   "dependencies": {
     "bignumber.js": "^9.0.0",
+    "bunyan": "^1.8.14",
     "demux": "5.0.2-581",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "@types/bunyan": "^1.8.6",
-    "bunyan": "^1.8.14"
+    "@types/bunyan": "^1.8.6"
   }
 }
