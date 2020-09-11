@@ -4,7 +4,7 @@ import {
   BlockInfo,
   HandlerVersion,
   IndexState,
-  Block,
+  NextBlock,
   Updater,
 } from 'demux';
 import { NodeosActionReader } from 'demux-eos';
@@ -62,11 +62,13 @@ class TestActionHandler extends AbstractActionHandler {
   // tslint:disable:no-shadowed-variable
   protected async updateIndexState(
     state: any,
-    block: Block,
+    nextBlock: NextBlock,
     isReplay: boolean,
     handlerVersionName: string,
     context?: any,
   ): Promise<void> {
+    const block = nextBlock.block;
+
     state.indexState.blockNumber = block.blockInfo.blockNumber;
     state.indexState.blockHash = block.blockInfo.blockHash;
     state.indexState.isReplay = isReplay;
@@ -102,7 +104,10 @@ const actionReader = new NodeosActionReader({
 });
 
 const actionHandler = new TestActionHandler([handlerVersion]);
-const actionWatcher = new AloxideActionWatcher(actionReader, actionHandler, 1000);
+const actionWatcher = new AloxideActionWatcher(actionReader, actionHandler, {
+  pollInterval: 1000,
+  logLevel: 'debug'
+});
 
 (async function () {
   await actionReader.initialize();
