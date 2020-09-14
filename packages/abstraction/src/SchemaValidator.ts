@@ -1,7 +1,7 @@
-import fs from 'fs'
-import Schema from 'validate'
-import SchemaBuilder from "./lib/SchemaBuilder"
-import { loadContent, printErrors } from './lib/Utils'
+import fs from 'fs';
+import Schema from 'validate';
+import SchemaBuilder from "./lib/SchemaBuilder";
+import { loadContent, printErrors } from './lib/Utils';
 import { Logger } from '@aloxide/Logger';
 
 const logLevels = {
@@ -9,6 +9,44 @@ const logLevels = {
   error: 1,
   warn: 2,
   verbose: 3
+}
+
+/**
+ * Validate Entity Schema
+ * @param entities
+ * @param logger
+ */
+export function validateEntity(entities, logger) {
+  const requiredSchema = {
+    entities: [{
+      name: { type: String, required: true, length: { min: 1, max: 12 }, use: { checkName } },
+      fields: [{
+        name: { type: String, required: true, length: { min: 1, max: 12 }, use: { checkName } },
+        type: { type: String, required: true, use: { checkType } },
+      }],
+      key: { type: String, required: true, length: { min: 1, max: 12 }, use: { checkName } }
+    }]
+  }
+  const schemaErrors = validateSchema(entities, requiredSchema, logger)
+
+  return schemaErrors.length < 1;
+}
+
+/**
+ * Strict Name validation, apply to all blockchains
+ * @param val
+ */
+function checkName(val) {
+  return /^[1-5a-zA-Z]+/.test(val);
+}
+
+/**
+ * Strict Type validation, apply to all blockchains
+ * @param val
+ */
+function checkType(val) {
+  const supportedType = ["uint64_t", "number", "string", "array", "bool"];
+  return supportedType.indexOf(val) !== -1
 }
 
 export function validateSchema(targetObject, inputSchema = {}, logger?: Logger, logLevel = 3){
@@ -41,9 +79,12 @@ function validateExtraFields(targetObj, schemaObj){
       return
     }
 
-    for(const key in target) {
+    const targetKeys = Object.keys(target);
+
+    for (const key of targetKeys) {
       const schemaKey = target instanceof Array ? schema[0] : schema[key]
       const nextLevel = parsedLevel ? `${parsedLevel}.${key}` : key
+
       if(!schemaKey || typeof target[key] !== 'object' && !leafNode(schemaKey)) {
         extras.push({ path: nextLevel, message: `${nextLevel} is not present in schema`})
       } else {
@@ -64,7 +105,7 @@ function _getSchemaFromObj(object){
       if(Array.isArray(object[key])) {
         const first = object[key][0]
         keyValues[key] = [
-          typeof first === 'object' ? _getSchemaFromObj(first) : {type: typeof first}  
+          typeof first === 'object' ? _getSchemaFromObj(first) : {type: typeof first}
         ]
       } else {
         keyValues[key] = _getSchemaFromObj(object[key])
