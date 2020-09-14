@@ -1,7 +1,7 @@
 import { ActionCallback, Updater } from 'demux';
 import { Model, ModelCtor, Sequelize } from 'sequelize/types';
 
-import type { Logger } from '@aloxide/logger';
+import type { Logger } from './Logger';
 
 interface DbUpdaterOptions {
   actionType: string;

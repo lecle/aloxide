@@ -3,7 +3,7 @@ import { DataTypes, ModelCtor } from 'sequelize';
 
 import type { NextBlock, HandlerVersion, IndexState } from 'demux';
 import type { Model, Sequelize } from 'sequelize/types';
-import type { Logger } from '@aloxide/logger';
+import type { Logger } from './Logger';
 
 const DemuxIndexState = 'DemuxIndexState';
 

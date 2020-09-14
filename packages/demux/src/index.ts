@@ -11,7 +11,7 @@ import { DbUpdUpdater } from './DbUpdUpdater';
 
 import type { ActionReader, ActionHandler, HandlerVersion, ActionWatcherOptions } from 'demux';
 import type { EntityConfig } from '@aloxide/bridge';
-import type { Logger } from '@aloxide/logger';
+import type { Logger } from './Logger';
 
 export function createDbUpdater(
   accountName: string,
