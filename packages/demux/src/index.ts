@@ -1,58 +1,56 @@
-import { ModelBuilder, ModelBuilderConfig } from '@aloxide/model';
 import { BaseActionWatcher } from 'demux';
-import { Sequelize } from 'sequelize';
 
-import { AbsDbUpdater } from './AbsDbUpdater';
 import { AloxideActionHandler } from './AloxideActionHandler';
 import { BaseHandlerVersion } from './BaseHandlerVersion';
-import { DbCreUpdater } from './DbCreUpdater';
-import { DbDelUpdater } from './DbDelUpdater';
-import { DbUpdUpdater } from './DbUpdUpdater';
+import { DbUpdater } from './DbUpdater';
 
 import type { ActionReader, ActionHandler, HandlerVersion, ActionWatcherOptions } from 'demux';
 import type { EntityConfig } from '@aloxide/bridge';
 import type { Logger } from './Logger';
+import type { DataAdapter } from './DataAdapter';
+import type { AloxideConfig } from '@aloxide/abstraction';
 
 export function createDbUpdater(
   accountName: string,
-  sequelize: Sequelize,
+  dataAdaper: DataAdapter<any, any>,
   entities: EntityConfig[],
   logger: Logger,
-): AbsDbUpdater[] {
+): DbUpdater<any, any>[] {
   return entities
-    .map<AbsDbUpdater[]>(({ name }) => {
-      const actionName = name.substr(0, 9).toLowerCase();
+    .map<DbUpdater<any, any>[]>(entity => {
+      const actionName = entity.name.substr(0, 9).toLowerCase();
+
       return [
-        new DbCreUpdater({
+        new DbUpdater({
           actionType: `${accountName}::cre${actionName}`,
-          modelName: name,
-          sequelize,
+          entity,
+          dataAdaper,
           logger,
         }),
-        new DbUpdUpdater({
+        new DbUpdater({
           actionType: `${accountName}::upd${actionName}`,
-          modelName: name,
-          sequelize,
+          entity,
+          dataAdaper,
           logger,
         }),
-        new DbDelUpdater({
+        new DbUpdater({
           actionType: `${accountName}::del${actionName}`,
-          modelName: name,
-          sequelize,
+          entity,
+          dataAdaper,
           logger,
         }),
       ];
     })
-    .reduce<AbsDbUpdater[]>((a, c) => a.concat(c), []);
+    .reduce<DbUpdater<any, any>[]>((a, c) => a.concat(c), []);
 }
 
 export interface CreateWatcherConfig {
   accountName: string;
-  modelBuilderConfig: ModelBuilderConfig;
-  sequelize: Sequelize;
   actionReader: ActionReader;
+  dataAdaper: DataAdapter<any, any>;
+  aloxideConfig: AloxideConfig;
+  logger: Logger;
   versionName?: string;
-  modelBuilder?: ModelBuilder;
   handlerVersion?: HandlerVersion;
   actionHandler?: ActionHandler;
   actionWatcherOptions?: ActionWatcherOptions;
@@ -62,35 +60,25 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
   const {
     accountName,
     versionName = 'v1',
-    modelBuilderConfig: { aloxideConfigPath, logger },
-    sequelize,
     actionReader,
     actionWatcherOptions,
+    dataAdaper,
+    aloxideConfig,
+    logger,
   } = config;
 
-  let { modelBuilder, handlerVersion, actionHandler } = config;
-
-  if (!modelBuilder) {
-    modelBuilder = new ModelBuilder({
-      aloxideConfigPath,
-      logger,
-    });
-  }
-
-  modelBuilder.build(sequelize);
-
-  const aloxideConfig = modelBuilder.aloxideConfig;
+  let { handlerVersion, actionHandler } = config;
 
   if (!actionHandler) {
     if (!handlerVersion) {
       handlerVersion = new BaseHandlerVersion(
         versionName,
-        createDbUpdater(accountName, sequelize, aloxideConfig.entities, logger),
+        createDbUpdater(accountName, dataAdaper, aloxideConfig.entities, logger),
         [],
       );
     }
 
-    actionHandler = new AloxideActionHandler(handlerVersion, sequelize, logger);
+    actionHandler = new AloxideActionHandler(handlerVersion, dataAdaper, logger);
   }
 
   return new BaseActionWatcher(actionReader, actionHandler, actionWatcherOptions);
