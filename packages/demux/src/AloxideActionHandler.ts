@@ -4,8 +4,6 @@ import type { NextBlock, HandlerVersion, IndexState, ActionHandlerOptions } from
 import type { DataAdapter } from './DataAdapter';
 import type { Logger } from './Logger';
 
-const DemuxIndexState = 'DemuxIndexState';
-
 interface IndexStateModel extends IndexState {
   id: number;
 }
@@ -17,11 +15,16 @@ export class AloxideActionHandler extends AbstractActionHandler {
   indexStateModel: IndexStateModel;
 
   constructor(
-    private dataAdapter: DataAdapter<any, any>,
+    protected bcName: string,
+    protected dataAdapter: DataAdapter<any, any>,
     handlerVersions: HandlerVersion[],
     options?: ActionHandlerOptions,
   ) {
     super(handlerVersions, options);
+  }
+
+  getIndexStateModelName() {
+    return `DemuxIndexState_${this.bcName.replace(/\W+/, '_')}`;
   }
 
   protected updateIndexState(
@@ -39,7 +42,7 @@ export class AloxideActionHandler extends AbstractActionHandler {
     this.indexStateModel.handlerVersionName = handlerVersionName;
 
     return this.dataAdapter
-      .update(DemuxIndexState, this.indexStateModel)
+      .update(this.getIndexStateModelName(), this.indexStateModel)
       .catch(err => {
         this.log.error('---- demux updateIndexState error:', err);
       })
@@ -48,6 +51,7 @@ export class AloxideActionHandler extends AbstractActionHandler {
 
   protected loadIndexState(): Promise<IndexState> {
     this.log.debug('-- demux loadIndexState - start');
+    const DemuxIndexState = this.getIndexStateModelName();
 
     return this.dataAdapter
       .find(DemuxIndexState, 1)
