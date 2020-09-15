@@ -1,0 +1,21 @@
+entities:
+  - name: Poll
+    fields:
+      - name: id
+        type: invalid_file_type
+      - name: name
+        type: invalid_file_type
+      - name: body
+        type: invalid_file_type
+    key: id
+  - name: Vote
+    fields:
+      - name: id
+        type: invalid_file_type
+      - name: pollId
+        type: invalid_file_type
+      - name: ownerId
+        type: invalid_file_type
+      - name: point
+        type: number
+    key: id

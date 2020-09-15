@@ -6,11 +6,15 @@ import { AbsTypeInterpreter } from './interpreter/AbsTypeInterpreter';
 import { EntityConfig } from './type-definition/EntityConfig';
 
 export abstract class AbsContractAdapter implements ContractAdapter {
+  contractName: string;
   entityConfigs: EntityConfig[];
   logger?: Logger = createLogger();
+
+  /**
+   * Additional configs for generating template
+   */
   templatePath: string;
   outputPath: string;
-  contractName: string;
   typeInterpreter: AbsTypeInterpreter;
 
   constructor(protected blockchainType: string) {}
@@ -25,7 +29,7 @@ export abstract class AbsContractAdapter implements ContractAdapter {
     );
 
     this.outputPath = path.resolve(outputPath, this.blockchainType);
-    
+
     this.generateFromTemplate();
   }
 
