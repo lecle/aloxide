@@ -61,7 +61,7 @@ export interface CreateWatcherConfig {
   aloxideConfig: AloxideConfig;
   logger: Logger;
   versionName?: string;
-  handlerVersion?: HandlerVersion;
+  handlerVersions?: HandlerVersion[];
   actionHandler?: ActionHandler;
   actionHandlerOptions?: ActionHandlerOptions;
   actionWatcherOptions?: ActionWatcherOptions;
@@ -80,21 +80,23 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
     logger,
   } = config;
 
-  let { handlerVersion, actionHandler } = config;
+  let { handlerVersions, actionHandler } = config;
 
   if (!actionHandler) {
-    if (!handlerVersion) {
-      handlerVersion = new BaseHandlerVersion(
-        versionName,
-        createDbUpdater(accountName, dataAdaper, aloxideConfig.entities, logger),
-        [],
-      );
+    if (!handlerVersions) {
+      handlerVersions = [
+        new BaseHandlerVersion(
+          versionName,
+          createDbUpdater(accountName, dataAdaper, aloxideConfig.entities, logger),
+          [],
+        ),
+      ];
     }
 
     actionHandler = new AloxideActionHandler(
       bcName,
       dataAdaper,
-      [handlerVersion],
+      handlerVersions,
       actionHandlerOptions,
     );
   }
