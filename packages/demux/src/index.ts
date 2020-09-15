@@ -103,3 +103,5 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
 
   return new BaseActionWatcher(actionReader, actionHandler, actionWatcherOptions);
 }
+
+export type { DataAdapter } from './DataAdapter';
