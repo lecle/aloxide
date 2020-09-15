@@ -1,6 +1,6 @@
 import { AbstractActionHandler } from 'demux';
 
-import type { NextBlock, HandlerVersion, IndexState } from 'demux';
+import type { NextBlock, HandlerVersion, IndexState, ActionHandlerOptions } from 'demux';
 import type { DataAdapter } from './DataAdapter';
 import type { Logger } from './Logger';
 
@@ -17,11 +17,11 @@ export class AloxideActionHandler extends AbstractActionHandler {
   indexStateModel: IndexStateModel;
 
   constructor(
-    handlerVersion: HandlerVersion,
     private dataAdapter: DataAdapter<any, any>,
-    private logger?: Logger,
+    handlerVersions: HandlerVersion[],
+    options?: ActionHandlerOptions,
   ) {
-    super([handlerVersion]);
+    super(handlerVersions, options);
   }
 
   protected updateIndexState(
@@ -41,20 +41,20 @@ export class AloxideActionHandler extends AbstractActionHandler {
     return this.dataAdapter
       .update(DemuxIndexState, this.indexStateModel)
       .catch(err => {
-        this.logger?.error('---- demux updateIndexState error:', err);
+        this.log.error('---- demux updateIndexState error:', err);
       })
       .then<void>(() => {});
   }
 
   protected loadIndexState(): Promise<IndexState> {
-    this.logger?.debug('-- demux loadIndexState - start');
+    this.log.debug('-- demux loadIndexState - start');
 
     return this.dataAdapter
       .find(DemuxIndexState, 1)
       .then(item => {
         if (item) return item;
         return this.dataAdapter.create(DemuxIndexState, { id: 1 }).then(createdItem => {
-          this.logger?.debug(
+          this.log.debug(
             '-- demux loadIndexState - create default item:',
             createdItem.getDataValue('blockNumber'),
           );
@@ -63,15 +63,15 @@ export class AloxideActionHandler extends AbstractActionHandler {
       })
       .then<IndexState>(item => {
         this.indexStateModel = item;
-        this.logger?.debug('-- demux loadIndexState - block:', item.getDataValue('blockNumber'));
+        this.log.debug('-- demux loadIndexState - block:', item.getDataValue('blockNumber'));
         return item;
       })
       .catch(err => {
-        this.logger?.error('---- demux loadIndexState error:', err);
+        this.log.error('---- demux loadIndexState error:', err);
         throw err;
       })
       .finally(() => {
-        this.logger?.debug('-- demux loadIndexState - end');
+        this.log.debug('-- demux loadIndexState - end');
       });
   }
 

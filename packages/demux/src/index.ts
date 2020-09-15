@@ -4,7 +4,13 @@ import { AloxideActionHandler } from './AloxideActionHandler';
 import { BaseHandlerVersion } from './BaseHandlerVersion';
 import { DbUpdater } from './DbUpdater';
 
-import type { ActionReader, ActionHandler, HandlerVersion, ActionWatcherOptions } from 'demux';
+import type {
+  ActionReader,
+  ActionHandler,
+  HandlerVersion,
+  ActionWatcherOptions,
+  ActionHandlerOptions,
+} from 'demux';
 import type { EntityConfig } from '@aloxide/bridge';
 import type { Logger } from './Logger';
 import type { DataAdapter } from './DataAdapter';
@@ -53,6 +59,7 @@ export interface CreateWatcherConfig {
   versionName?: string;
   handlerVersion?: HandlerVersion;
   actionHandler?: ActionHandler;
+  actionHandlerOptions?: ActionHandlerOptions;
   actionWatcherOptions?: ActionWatcherOptions;
 }
 
@@ -62,6 +69,7 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
     versionName = 'v1',
     actionReader,
     actionWatcherOptions,
+    actionHandlerOptions,
     dataAdaper,
     aloxideConfig,
     logger,
@@ -78,7 +86,7 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
       );
     }
 
-    actionHandler = new AloxideActionHandler(handlerVersion, dataAdaper, logger);
+    actionHandler = new AloxideActionHandler(dataAdaper, [handlerVersion], actionHandlerOptions);
   }
 
   return new BaseActionWatcher(actionReader, actionHandler, actionWatcherOptions);
