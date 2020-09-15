@@ -1,13 +1,12 @@
 import { AbstractActionHandler } from 'demux';
-import { DataTypes, ModelCtor } from 'sequelize';
 
 import type { NextBlock, HandlerVersion, IndexState } from 'demux';
-import type { Model, Sequelize } from 'sequelize/types';
+import type { DataAdapter } from './DataAdapter';
 import type { Logger } from './Logger';
 
 const DemuxIndexState = 'DemuxIndexState';
 
-interface IndexStateModel extends IndexState, Model {
+interface IndexStateModel extends IndexState {
   id: number;
 }
 
@@ -19,7 +18,7 @@ export class AloxideActionHandler extends AbstractActionHandler {
 
   constructor(
     handlerVersion: HandlerVersion,
-    private sequelize: Sequelize,
+    private dataAdapter: DataAdapter<any, any>,
     private logger?: Logger,
   ) {
     super([handlerVersion]);
@@ -39,10 +38,8 @@ export class AloxideActionHandler extends AbstractActionHandler {
     this.indexStateModel.isReplay = isReplay;
     this.indexStateModel.handlerVersionName = handlerVersionName;
 
-    return this.indexStateModel
-      .save({
-        logging: false,
-      })
+    return this.dataAdapter
+      .update(DemuxIndexState, this.indexStateModel)
       .catch(err => {
         this.logger?.error('---- demux updateIndexState error:', err);
       })
@@ -52,15 +49,11 @@ export class AloxideActionHandler extends AbstractActionHandler {
   protected loadIndexState(): Promise<IndexState> {
     this.logger?.debug('-- demux loadIndexState - start');
 
-    const model: ModelCtor<IndexStateModel> = this.sequelize.models[DemuxIndexState] as ModelCtor<
-      IndexStateModel
-    >;
-
-    return model
-      .findByPk(1)
+    return this.dataAdapter
+      .find(DemuxIndexState, 1)
       .then(item => {
         if (item) return item;
-        return model.create({}).then(createdItem => {
+        return this.dataAdapter.create(DemuxIndexState, { id: 1 }).then(createdItem => {
           this.logger?.debug(
             '-- demux loadIndexState - create default item:',
             createdItem.getDataValue('blockNumber'),
@@ -101,39 +94,9 @@ export class AloxideActionHandler extends AbstractActionHandler {
     /**
      * Table DemuxIndexState
      */
-    this.sequelize.define(DemuxIndexState, {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        defaultValue: 1,
-      },
-      blockNumber: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
-      blockHash: {
-        type: DataTypes.STRING,
-        defaultValue: '',
-      },
-      isReplay: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
-      handlerVersionName: {
-        type: DataTypes.STRING,
-        defaultValue: this.handlerVersionName,
-      },
-    });
-
-    return this.sequelize
-      .sync({ alter: true, logging: false })
-      .catch(err => {
-        this.logger?.error('---- demux setup error:', err);
-        throw err;
-      })
-      .then(() => {
-        this.logger?.debug('---- demux finish setup');
-      });
+    if (this.dataAdapter.setup) {
+      return this.dataAdapter.setup();
+    }
   }
 
   protected async rollbackTo(blockNumber: number): Promise<void> {
