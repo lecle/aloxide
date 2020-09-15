@@ -51,6 +51,10 @@ export function createDbUpdater(
 }
 
 export interface CreateWatcherConfig {
+  /**
+   * blockchain name
+   */
+  bcName: string;
   accountName: string;
   actionReader: ActionReader;
   dataAdaper: DataAdapter<any, any>;
@@ -65,6 +69,7 @@ export interface CreateWatcherConfig {
 
 export async function createWatcher(config: CreateWatcherConfig): Promise<BaseActionWatcher> {
   const {
+    bcName,
     accountName,
     versionName = 'v1',
     actionReader,
@@ -86,7 +91,12 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
       );
     }
 
-    actionHandler = new AloxideActionHandler(dataAdaper, [handlerVersion], actionHandlerOptions);
+    actionHandler = new AloxideActionHandler(
+      bcName,
+      dataAdaper,
+      [handlerVersion],
+      actionHandlerOptions,
+    );
   }
 
   return new BaseActionWatcher(actionReader, actionHandler, actionWatcherOptions);
