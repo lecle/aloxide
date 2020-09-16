@@ -29,7 +29,7 @@
     "@aloxide/abstraction": "^0.1.0",
     "@aloxide/logger": "^0.1.0",
     "@aloxide/model": "^0.1.0",
-    "demux": "5.0.2-581",
+    "demux": "https://github.com/lecle/demux-js.git#develop",
     "sequelize": "^6.3.4"
   },
   "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a"
