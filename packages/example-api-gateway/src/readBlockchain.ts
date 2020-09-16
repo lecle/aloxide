@@ -1,17 +1,29 @@
-import { createWatcher } from '@aloxide/demux';
+import { readAloxideConfig } from '@aloxide/abstraction';
+import { AloxideDataManager, createWatcher } from '@aloxide/demux';
 import { IconActionReader } from '@aloxide/demux-icon';
 import { NodeosActionReader } from 'demux-eos';
 
-import config, { connectDb } from './config';
+import config from './config';
+import { DemuxIndexState_eos, DemuxIndexState_icon, Poll, Vote } from './models';
 
+const aloxideConfig = readAloxideConfig(config.aloxideConfigPath);
+const dataAdapter: AloxideDataManager = new AloxideDataManager({
+  dataProviderMap: new Map(),
+});
+
+dataAdapter.dataProviderMap.set(Poll.name, Poll);
+dataAdapter.dataProviderMap.set(Vote.name, Vote);
+dataAdapter.dataProviderMap.set(DemuxIndexState_eos.name, DemuxIndexState_eos);
+dataAdapter.dataProviderMap.set(DemuxIndexState_icon.name, DemuxIndexState_icon);
+
+//
 // watch EOS
 createWatcher({
+  bcName: 'eos',
   accountName: process.env.app_d_eos_account_name,
-  modelBuilderConfig: {
-    aloxideConfigPath: config.aloxideConfigPath,
-    logger: config.logger,
-  },
-  sequelize: config.sequelize,
+  aloxideConfig,
+  dataAdapter,
+  logger: config.logger,
   actionReader: new NodeosActionReader({
     nodeosEndpoint: process.env.app_nodeosEndpoint,
     onlyIrreversible: false,
@@ -35,12 +47,11 @@ createWatcher({
 
 // watch ICON
 createWatcher({
+  bcName: 'icon',
   accountName: 'cxd1c341cba5d21f5c1ea36bade8369270a2fe065c',
-  modelBuilderConfig: {
-    aloxideConfigPath: config.aloxideConfigPath,
-    logger: config.logger,
-  },
-  sequelize: connectDb(process.env.app_postgres_db_icon),
+  aloxideConfig,
+  dataAdapter,
+  logger: config.logger,
   actionReader: new IconActionReader({
     endpoint: process.env.app_icon_endpoint,
     nid: parseInt(process.env.app_icon_nid, 10),
