@@ -1,8 +1,10 @@
 import { BaseActionWatcher } from 'demux';
 
 import { AloxideActionHandler } from './AloxideActionHandler';
+import { AloxideDataManager } from './AloxideDataManager';
 import { BaseHandlerVersion } from './BaseHandlerVersion';
 import { DbUpdater } from './DbUpdater';
+import { IndexStateSchema } from './IndexStateSchema';
 
 import type {
   ActionReader,
@@ -15,7 +17,6 @@ import type { EntityConfig } from '@aloxide/bridge';
 import type { Logger } from './Logger';
 import type { DataAdapter } from './DataAdapter';
 import type { AloxideConfig } from '@aloxide/abstraction';
-
 export function createDbUpdater(
   accountName: string,
   dataAdaper: DataAdapter<any, any>,
@@ -57,7 +58,7 @@ export interface CreateWatcherConfig {
   bcName: string;
   accountName: string;
   actionReader: ActionReader;
-  dataAdaper: DataAdapter<any, any>;
+  dataAdapter: AloxideDataManager;
   aloxideConfig: AloxideConfig;
   logger: Logger;
   versionName?: string;
@@ -75,7 +76,7 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
     actionReader,
     actionWatcherOptions,
     actionHandlerOptions,
-    dataAdaper,
+    dataAdapter,
     aloxideConfig,
     logger,
   } = config;
@@ -87,7 +88,7 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
       handlerVersions = [
         new BaseHandlerVersion(
           versionName,
-          createDbUpdater(accountName, dataAdaper, aloxideConfig.entities, logger),
+          createDbUpdater(accountName, dataAdapter, aloxideConfig.entities, logger),
           [],
         ),
       ];
@@ -95,9 +96,15 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
 
     actionHandler = new AloxideActionHandler(
       bcName,
-      dataAdaper,
+      dataAdapter,
       handlerVersions,
       actionHandlerOptions,
+    );
+
+    dataAdapter.verify(
+      aloxideConfig.entities
+        .map(({ name }) => name)
+        .concat((actionHandler as AloxideActionHandler).getIndexStateModelName()),
     );
   }
 
@@ -105,3 +112,6 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
 }
 
 export type { DataAdapter } from './DataAdapter';
+export type { DataProvider } from './DataProvider';
+export { AloxideDataManager } from './AloxideDataManager';
+export { IndexStateSchema } from './IndexStateSchema';

@@ -40,12 +40,17 @@ export class DbUpdater<ID, D> implements Updater {
       delete obj.user;
     }
 
+    const metaData = {
+      blockInfo,
+      entity: this.entity,
+    };
+
     if (this.actionType.indexOf('::cre') != -1) {
-      this.dataAdaper.create(this.entity.name, obj, blockInfo);
+      this.dataAdaper.create(this.entity.name, obj, metaData);
     } else if (this.actionType.indexOf('::upd') != -1) {
-      this.dataAdaper.update(this.entity.name, obj, blockInfo);
+      this.dataAdaper.update(this.entity.name, obj, metaData);
     } else if (this.actionType.indexOf('::del') != -1) {
-      this.dataAdaper.delete(this.entity.name, obj[this.entity.key], blockInfo);
+      this.dataAdaper.delete(this.entity.name, obj[this.entity.key], metaData);
     }
   };
 }

@@ -1,8 +1,10 @@
+import { EntityConfig } from '@aloxide/bridge/src';
 import { AbstractActionHandler } from 'demux';
+
+import { IndexStateSchema } from './IndexStateSchema';
 
 import type { NextBlock, HandlerVersion, IndexState, ActionHandlerOptions } from 'demux';
 import type { DataAdapter } from './DataAdapter';
-import type { Logger } from './Logger';
 
 interface IndexStateModel extends IndexState {
   id: number;
@@ -13,6 +15,7 @@ export class AloxideActionHandler extends AbstractActionHandler {
   stateHistory: any = {};
   stateHistoryMaxLength = 300;
   indexStateModel: IndexStateModel;
+  indexStateEntity: EntityConfig = new IndexStateSchema();
 
   constructor(
     protected bcName: string,
@@ -42,7 +45,9 @@ export class AloxideActionHandler extends AbstractActionHandler {
     this.indexStateModel.handlerVersionName = handlerVersionName;
 
     return this.dataAdapter
-      .update(this.getIndexStateModelName(), this.indexStateModel)
+      .update(this.getIndexStateModelName(), this.indexStateModel, {
+        entity: this.indexStateEntity,
+      })
       .catch(err => {
         this.log.error('---- demux updateIndexState error:', err);
       })
@@ -54,16 +59,27 @@ export class AloxideActionHandler extends AbstractActionHandler {
     const DemuxIndexState = this.getIndexStateModelName();
 
     return this.dataAdapter
-      .find(DemuxIndexState, 1)
+      .find(DemuxIndexState, 1, {
+        entity: this.indexStateEntity,
+      })
       .then(item => {
         if (item) return item;
-        return this.dataAdapter.create(DemuxIndexState, { id: 1 }).then(createdItem => {
-          this.log.debug(
-            '-- demux loadIndexState - create default item:',
-            createdItem.getDataValue('blockNumber'),
-          );
-          return createdItem;
-        });
+
+        return this.dataAdapter
+          .create(
+            DemuxIndexState,
+            { id: 1 },
+            {
+              entity: this.indexStateEntity,
+            },
+          )
+          .then(createdItem => {
+            this.log.debug(
+              '-- demux loadIndexState - create default item:',
+              createdItem.getDataValue('blockNumber'),
+            );
+            return createdItem;
+          });
       })
       .then<IndexState>(item => {
         this.indexStateModel = item;
@@ -99,7 +115,7 @@ export class AloxideActionHandler extends AbstractActionHandler {
      * Table DemuxIndexState
      */
     if (this.dataAdapter.setup) {
-      return this.dataAdapter.setup();
+      return this.dataAdapter.setup(this.getIndexStateModelName());
     }
   }
 
