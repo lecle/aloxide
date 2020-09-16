@@ -8,42 +8,42 @@ type modelName = string;
  *
  * Example: ID is string, and D is Poll type or Vote type
  */
-export interface DataAdapter<ID = any, D = any> {
+export interface DataProvider<ID = any, D = any> {
+  /**
+   * name of the entity
+   */
+  name: modelName;
+
   /**
    * initializing stuffs can be put here
-   * @param name name of entity
    */
-  setup?(name: modelName): Promise<void>;
+  setup?(): Promise<void>;
 
   /**
    * find by id
-   * @param name name of entity
    * @param id id of the object
    * @param meta metadata (to be updated)
    */
-  find(name: modelName, id: ID, meta: DMeta): Promise<D>;
+  find(id: ID, meta: DMeta): Promise<D>;
 
   /**
    * create or save object
-   * @param name name of entity
    * @param data object data
    * @param meta metadata (to be updated)
    */
-  create(name: modelName, data: D, meta: DMeta): Promise<D>;
+  create(data: D, meta: DMeta): Promise<D>;
 
   /**
    * update object
-   * @param name name of entity
    * @param data object data
    * @param meta metadata (to be updated)
    */
-  update(name: modelName, data: D, meta: DMeta): Promise<D>;
+  update(data: D, meta: DMeta): Promise<D>;
 
   /**
    * update object
-   * @param name name of entity
    * @param data object data
    * @param meta metadata (to be updated)
    */
-  delete(name: modelName, id: ID, meta: DMeta): Promise<boolean>;
+  delete(id: ID, meta: DMeta): Promise<boolean>;
 }
