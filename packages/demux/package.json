@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@aloxide/abstraction": "^0.1.0",
-    "@aloxide/model": "^0.1.0",
     "demux": "https://github.com/lecle/demux-js.git#develop"
   },
   "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a",
