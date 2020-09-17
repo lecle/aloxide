@@ -1,9 +1,25 @@
 import { DataProvider } from '@aloxide/demux';
 import { ModelBuilder } from '@aloxide/model';
 import Logger from 'bunyan';
-import { DataTypes } from 'sequelize';
+import { DataTypes, ModelAttributes, Sequelize } from 'sequelize';
 
 import config from './config';
+
+const indexStateSchema: ModelAttributes = {
+  blockNumber: {
+    type: DataTypes.INTEGER,
+  },
+  blockHash: {
+    type: DataTypes.STRING,
+  },
+  isReplay: {
+    type: DataTypes.BOOLEAN,
+  },
+  handlerVersionName: {
+    type: DataTypes.STRING,
+    primaryKey: true,
+  },
+};
 
 const modelBuilder = new ModelBuilder({
   aloxideConfigPath: config.aloxideConfigPath,
@@ -13,54 +29,44 @@ const modelBuilder = new ModelBuilder({
   }),
 });
 
-const sequelize = config.sequelize;
+export function createDataProvider(
+  sequelize: Sequelize,
+  name: string,
+  modelName: string,
+  isIndexState?: boolean,
+): DataProvider {
+  const models = modelBuilder.build(sequelize);
 
-const models = modelBuilder.build(sequelize);
+  if (isIndexState) {
+    models.push(sequelize.define(name, indexStateSchema));
+  }
 
-const indexStateSchema = {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    defaultValue: 1,
-  },
-  blockNumber: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-  },
-  blockHash: {
-    type: DataTypes.STRING,
-    defaultValue: '',
-  },
-  isReplay: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
-  handlerVersionName: {
-    type: DataTypes.STRING,
-    defaultValue: this.handlerVersionName,
-  },
-};
-
-models.push(sequelize.define('DemuxIndexState_eos', indexStateSchema));
-models.push(sequelize.define('DemuxIndexState_icon', indexStateSchema));
-
-function createDataProvider(name: string, modelName: string): DataProvider {
   const m = models.find(model => model.name == modelName);
+
+  if (!m) {
+    const errMsg = `Missing of entity name [${name}], modelName [${modelName}]`;
+    config.logger.error(errMsg);
+    throw new Error(errMsg);
+  }
 
   return {
     name,
     setup: async () => {
-      if (name.startsWith('DemuxIndexState_')) {
-        return sequelize.sync().then(() => {});
+      if (isIndexState) {
+        return sequelize
+          .sync({
+            logging: false,
+          })
+          .then(() => {});
       }
     },
 
     find(id: any, meta?: any): Promise<any> {
-      return m.findByPk(id);
+      return m.findByPk(id, { raw: true });
     },
 
     create(data: any, meta?: any): Promise<any> {
-      return m.create(data);
+      return m.create(data).then(() => data);
     },
 
     update(data: any, { entity: { key } }): Promise<any> {
@@ -68,6 +74,7 @@ function createDataProvider(name: string, modelName: string): DataProvider {
         where: {
           [key]: data[key],
         },
+        logging: !isIndexState,
       });
     },
 
@@ -76,14 +83,3 @@ function createDataProvider(name: string, modelName: string): DataProvider {
     },
   };
 }
-
-export const Poll: DataProvider = createDataProvider('Poll', 'Poll');
-export const Vote: DataProvider = createDataProvider('Vote', 'Voll');
-export const DemuxIndexState_eos: DataProvider = createDataProvider(
-  'DemuxIndexState_eos',
-  'DemuxIndexState_eos',
-);
-export const DemuxIndexState_icon: DataProvider = createDataProvider(
-  'DemuxIndexState_icon',
-  'DemuxIndexState_icon',
-);
