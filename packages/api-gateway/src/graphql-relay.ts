@@ -1,24 +1,18 @@
 import { FieldTypeEnum, Interpreter } from '@aloxide/bridge';
-import { ModelBuilder } from '@aloxide/model';
+import { AloxideDataManager } from '@aloxide/demux';
 import { GraphQLObjectType } from 'graphql';
-import {
-  connectionArgs,
-  connectionDefinitions,
-  connectionFromArray,
-  ConnectionConfigNodeType,
-} from 'graphql-relay';
+import { connectionArgs, ConnectionConfigNodeType, connectionDefinitions, connectionFromArray } from 'graphql-relay';
 
 import { GraphqlTypeInterpreter } from './GraphqlTypeInterpreter';
 
-import type { Logger } from '@aloxide/logger';
 import type { GraphQLFieldConfig, GraphQLScalarType, GraphQLNamedType } from 'graphql';
 import type { GraphQLConnectionDefinitions } from 'graphql-relay';
 import type { AloxideConfig } from '@aloxide/abstraction';
-import type { Sequelize } from 'sequelize/types';
+import type { Logger, DMeta, QueryInput } from '@aloxide/demux';
 
 export interface CreateGraphQlConfig {
-  aloxideConfigPath: string;
-  sequelize: Sequelize;
+  aloxideConfig: AloxideConfig;
+  dataAdapter: AloxideDataManager;
   typeInterpreter?: Interpreter<FieldTypeEnum, GraphQLScalarType>;
   logger?: Logger;
 }
@@ -33,23 +27,28 @@ export interface CreateGraphQlOutput {
 }
 
 export function createGraphQl(config: CreateGraphQlConfig): CreateGraphQlOutput[] {
-  const { aloxideConfigPath, sequelize, logger } = config;
+  const {
+    aloxideConfig: { entities },
+    dataAdapter,
+    logger,
+  } = config;
   let { typeInterpreter } = config;
 
-  const modelBuilder = new ModelBuilder({
-    aloxideConfigPath,
-    logger,
-  });
-
-  modelBuilder.build(sequelize);
-
-  const aloxideConfig: AloxideConfig = modelBuilder.aloxideConfig;
+  dataAdapter.verify(entities.map(({ name }) => name));
 
   if (!typeInterpreter) {
     typeInterpreter = new GraphqlTypeInterpreter();
   }
 
-  return aloxideConfig.entities.map(({ name, fields }) => {
+  return entities.map(entity => {
+    const { name, fields } = entity;
+
+    logger?.debug('create connection for entity:', name);
+
+    const metaData: DMeta = {
+      entity,
+    };
+
     const graphQLObjectType = new GraphQLObjectType({
       name,
       fields: fields
@@ -71,8 +70,11 @@ export function createGraphQl(config: CreateGraphQlConfig): CreateGraphQlOutput[
       type: connectionType,
       args: connectionArgs,
       resolve: (_, args) => {
+        const queryInput: QueryInput = args;
         // TODO fix find all
-        return sequelize.models[name].findAll().then(items => connectionFromArray(items, args));
+        return dataAdapter
+          .findAll(name, queryInput, metaData)
+          .then(items => connectionFromArray(items, args));
       },
     };
 

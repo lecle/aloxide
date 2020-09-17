@@ -1,63 +1,56 @@
-import { AloxideConfig } from '@aloxide/abstraction';
-import { ModelBuilder } from '@aloxide/model';
+import { AloxideDataManager } from '@aloxide/demux';
 import express from 'express';
-import { Op } from 'sequelize';
 
-import type { Logger } from '@aloxide/logger';
-import type { Sequelize } from 'sequelize/types';
-
+import type { AloxideConfig } from '@aloxide/abstraction';
+import type { Logger, DMeta, QueryInput } from '@aloxide/demux';
 export interface CreateRouterConfig {
-  aloxideConfigPath: string;
-  sequelize: Sequelize;
+  aloxideConfig: AloxideConfig;
+  dataAdapter: AloxideDataManager;
   logger?: Logger;
 }
 
 function createRouter(config: CreateRouterConfig) {
-  const { aloxideConfigPath, sequelize, logger } = config;
-
-  const modelBuilder = new ModelBuilder({
-    aloxideConfigPath,
+  const {
+    aloxideConfig: { entities },
+    dataAdapter,
     logger,
-  });
+  } = config;
 
-  modelBuilder.build(sequelize);
-
-  const aloxideConfig: AloxideConfig = modelBuilder.aloxideConfig;
+  dataAdapter.verify(entities.map(({ name }) => name));
 
   const expressRouter = express.Router();
 
-  aloxideConfig.entities.forEach(({ name }) => {
+  entities.forEach(entity => {
+    const { name } = entity;
+    logger?.debug('create route for entity:', name);
+
+    const metaData: DMeta = {
+      entity,
+    };
+
     // add pagination API
     expressRouter.get(`/${name.toLowerCase()}s`, (req, res) => {
-      const model = sequelize.models[name];
-      const [pk] = model.primaryKeyAttributes;
-      const { limit, after } = req.query;
+      const queryInput: QueryInput = {
+        limit: req.query.limit,
+        after: req.query.after as string,
+      };
+
       Promise.all<any>([
-        model.count(),
-        model.findAll({
-          limit: limit && parseInt(limit as string, 10),
-          where: after && {
-            [pk]: {
-              [Op.gt]: after,
-            },
-          },
-        }),
+        dataAdapter.count(name),
+        dataAdapter.findAll(name, queryInput, metaData),
       ]).then(pa => {
         const [total, items] = pa;
 
         res.send({
           total,
           items,
-          limit,
-          after,
         });
       });
     });
 
     // this is get by id
     expressRouter.get(`/${name.toLowerCase()}s/:id`, (req, res) => {
-      const model = sequelize.models[name];
-      model.findByPk(req.params.id).then(item => {
+      dataAdapter.find(name, req.params.id, metaData).then(item => {
         res.send({
           item,
         });
@@ -107,13 +100,13 @@ function createRouter(config: CreateRouterConfig) {
           },
         },
         basePath: '/api-gateway',
-        tags: aloxideConfig.entities.map(e => ({
+        tags: entities.map(e => ({
           name: e.name,
           // @ts-ignore
           description: e.description,
         })),
         schemes: ['http', 'https'],
-        paths: aloxideConfig.entities
+        paths: entities
           .map(e => {
             return {
               [`/${e.name.toLowerCase()}s`]: {
@@ -179,8 +172,6 @@ function createRouter(config: CreateRouterConfig) {
                               $ref: `#/definitions/${e.name}`,
                             },
                           },
-                          limit: { type: 'integer' },
-                          after: { type: e.fields.find(f => f.name === e.key)?.type },
                         },
                       },
                     },
@@ -194,7 +185,7 @@ function createRouter(config: CreateRouterConfig) {
           })
           .reduce((a, c) => Object.assign(a, c)),
 
-        definitions: aloxideConfig.entities
+        definitions: entities
           .map(e => {
             return {
               [e.name]: {
