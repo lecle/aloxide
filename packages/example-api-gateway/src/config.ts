@@ -16,6 +16,7 @@ export function connectDb(db?: string) {
       host: process.env.app_postgres_host,
       port: parseInt(process.env.app_postgres_port, 10),
       dialect: 'postgres',
+      logging: msg => global.logger.debug(msg),
     },
   );
 
