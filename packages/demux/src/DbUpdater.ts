@@ -7,7 +7,7 @@ import type { Logger } from './Logger';
 interface DbUpdaterOptions<ID, D> {
   actionType: string;
   entity: EntityConfig;
-  dataAdaper: DataAdapter<ID, D>;
+  dataAdapter: DataAdapter<ID, D>;
   logger?: Logger;
 }
 
@@ -27,7 +27,7 @@ export class DbUpdater<ID, D> implements Updater {
       this.actionType = options.actionType;
       this.entity = options.entity;
       this.logger = options.logger;
-      this.dataAdaper = options.dataAdaper;
+      this.dataAdaper = options.dataAdapter;
     }
   }
 
