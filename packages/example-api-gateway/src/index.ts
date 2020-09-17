@@ -1,14 +1,27 @@
+import { readAloxideConfig } from '@aloxide/abstraction';
 import { createGraphQl, createRouter } from '@aloxide/api-gateway';
+import { AloxideDataManager } from '@aloxide/demux';
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { GraphQLServer, Options } from 'graphql-yoga';
 
 import config from './config';
+import { createDataProvider } from './models';
 
 const port = process.env.app_port || 4000;
 
+const aloxideConfig = readAloxideConfig(config.aloxideConfigPath);
+
+const dataAdapter: AloxideDataManager = new AloxideDataManager({
+  dataProviderMap: new Map(),
+});
+
+const sequelize = config.sequelize;
+dataAdapter.dataProviderMap.set('Poll', createDataProvider(sequelize, 'Poll', 'Poll'));
+dataAdapter.dataProviderMap.set('Vote', createDataProvider(sequelize, 'Vote', 'Vote'));
+
 const graphqlFields = createGraphQl({
-  aloxideConfigPath: config.aloxideConfigPath,
-  sequelize: config.sequelize,
+  aloxideConfig,
+  dataAdapter,
   logger: config.logger,
 });
 
@@ -35,8 +48,8 @@ const server = new GraphQLServer({
 
 // sample of using router for express application
 const apiGatewayRouter = createRouter({
-  aloxideConfigPath: config.aloxideConfigPath,
-  sequelize: config.sequelize,
+  aloxideConfig,
+  dataAdapter,
   logger: config.logger,
 });
 
