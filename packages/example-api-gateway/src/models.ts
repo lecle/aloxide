@@ -1,7 +1,7 @@
 import { DataProvider } from '@aloxide/demux';
 import { ModelBuilder } from '@aloxide/model';
 import Logger from 'bunyan';
-import { DataTypes, ModelAttributes, Sequelize } from 'sequelize';
+import { DataTypes, ModelAttributes, Op, Sequelize } from 'sequelize';
 
 import config from './config';
 
@@ -59,6 +59,21 @@ export function createDataProvider(
           })
           .then(() => {});
       }
+    },
+
+    count(): Promise<number> {
+      return m.count();
+    },
+
+    findAll({ limit, after }, { entity: { key } }): Promise<any[]> {
+      return m.findAll({
+        limit: limit,
+        where: after && {
+          [key]: {
+            [Op.gt]: after,
+          },
+        },
+      });
     },
 
     find(id: any, meta?: any): Promise<any> {
