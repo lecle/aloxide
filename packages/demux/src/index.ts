@@ -4,19 +4,14 @@ import { AloxideActionHandler } from './AloxideActionHandler';
 import { AloxideDataManager } from './AloxideDataManager';
 import { BaseHandlerVersion } from './BaseHandlerVersion';
 import { DbUpdater } from './DbUpdater';
-import { IndexStateSchema } from './IndexStateSchema';
 
-import type {
-  ActionReader,
-  ActionHandler,
-  HandlerVersion,
-  ActionWatcherOptions,
-  ActionHandlerOptions,
-} from 'demux';
+import type { ActionReader, ActionHandler, HandlerVersion, ActionWatcherOptions } from 'demux';
+import type { AloxideActionHandlerOptions } from './AloxideActionHandler';
 import type { EntityConfig } from '@aloxide/bridge';
 import type { Logger } from './Logger';
 import type { DataAdapter } from './DataAdapter';
 import type { AloxideConfig } from '@aloxide/abstraction';
+
 export function createDbUpdater(
   accountName: string,
   dataAdaper: DataAdapter<any, any>,
@@ -64,7 +59,7 @@ export interface CreateWatcherConfig {
   versionName?: string;
   handlerVersions?: HandlerVersion[];
   actionHandler?: ActionHandler;
-  actionHandlerOptions?: ActionHandlerOptions;
+  actionHandlerOptions?: AloxideActionHandlerOptions;
   actionWatcherOptions?: ActionWatcherOptions;
 }
 
@@ -111,7 +106,8 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
   return new BaseActionWatcher(actionReader, actionHandler, actionWatcherOptions);
 }
 
+export type { AloxideActionHandlerOptions } from './AloxideActionHandler';
 export type { DataAdapter } from './DataAdapter';
 export type { DataProvider } from './DataProvider';
 export { AloxideDataManager } from './AloxideDataManager';
-export { IndexStateSchema } from './IndexStateSchema';
+export { indexStateSchema } from './indexStateSchema';

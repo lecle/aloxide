@@ -1,13 +1,18 @@
 import { EntityConfig } from '@aloxide/bridge/src';
 import { AbstractActionHandler } from 'demux';
 
-import { IndexStateSchema } from './IndexStateSchema';
+import { indexStateSchema } from './indexStateSchema';
 
 import type { NextBlock, HandlerVersion, IndexState, ActionHandlerOptions } from 'demux';
 import type { DataAdapter } from './DataAdapter';
+import type { DMeta } from './DMeta';
 
 interface IndexStateModel extends IndexState {
   id: number;
+}
+
+export interface AloxideActionHandlerOptions extends ActionHandlerOptions {
+  indexStateModelName?: string;
 }
 
 export class AloxideActionHandler extends AbstractActionHandler {
@@ -15,19 +20,24 @@ export class AloxideActionHandler extends AbstractActionHandler {
   stateHistory: any = {};
   stateHistoryMaxLength = 300;
   indexStateModel: IndexStateModel;
-  indexStateEntity: EntityConfig = new IndexStateSchema();
+  indexStateEntity: EntityConfig = indexStateSchema;
+
+  protected indexStateModelName: string;
 
   constructor(
     protected bcName: string,
     protected dataAdapter: DataAdapter<any, any>,
     handlerVersions: HandlerVersion[],
-    options?: ActionHandlerOptions,
+    options?: AloxideActionHandlerOptions,
   ) {
     super(handlerVersions, options);
+    if (options) {
+      this.indexStateModelName = options.indexStateModelName;
+    }
   }
 
   getIndexStateModelName() {
-    return `DemuxIndexState_${this.bcName.replace(/\W+/, '_')}`;
+    return this.indexStateModelName || `DemuxIndexState_${this.bcName.replace(/\W+/, '_')}`;
   }
 
   protected updateIndexState(
@@ -57,33 +67,39 @@ export class AloxideActionHandler extends AbstractActionHandler {
   protected loadIndexState(): Promise<IndexState> {
     this.log.debug('-- demux loadIndexState - start');
     const DemuxIndexState = this.getIndexStateModelName();
+    const blockNumber = 0;
+    const metaData: DMeta = {
+      entity: this.indexStateEntity,
+    };
 
     return this.dataAdapter
-      .find(DemuxIndexState, 1, {
-        entity: this.indexStateEntity,
-      })
+      .find(DemuxIndexState, this.handlerVersionName, metaData)
       .then(item => {
         if (item) return item;
 
         return this.dataAdapter
           .create(
             DemuxIndexState,
-            { id: 1 },
             {
-              entity: this.indexStateEntity,
+              handlerVersionName: this.handlerVersionName,
+              blockNumber,
+              blockHash: '',
+              isReplay: false,
             },
+            metaData,
           )
           .then(createdItem => {
-            this.log.debug(
-              '-- demux loadIndexState - create default item:',
-              createdItem.getDataValue('blockNumber'),
-            );
+            this.log.debug('-- demux loadIndexState - create default item:', blockNumber);
             return createdItem;
           });
       })
       .then<IndexState>(item => {
         this.indexStateModel = item;
-        this.log.debug('-- demux loadIndexState - block:', item.getDataValue('blockNumber'));
+        if (typeof this.indexStateModel.blockNumber == 'string') {
+          this.indexStateModel.blockNumber = parseInt(this.indexStateModel.blockNumber, 10);
+        }
+
+        this.log.debug('-- demux loadIndexState - block:', item.blockNumber);
         return item;
       })
       .catch(err => {
