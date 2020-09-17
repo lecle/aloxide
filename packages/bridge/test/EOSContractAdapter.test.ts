@@ -34,7 +34,6 @@ describe('test EOS contract addapter', () => {
       const adapter = new EOSContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
-        log: jest.fn(),
         info: jest.fn(),
         debug: jest.fn(),
       };
@@ -75,7 +74,6 @@ describe('test EOS contract addapter', () => {
       const adapter = new EOSContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
-        log: jest.fn(),
         info: jest.fn(),
         debug: jest.fn(),
       };

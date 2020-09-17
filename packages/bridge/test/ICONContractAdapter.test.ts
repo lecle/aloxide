@@ -34,7 +34,6 @@ describe('test ICON contract addapter', () => {
       const adapter = new ICONContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
-        log: jest.fn(),
         info: jest.fn(),
         debug: jest.fn(),
       };
@@ -75,7 +74,6 @@ describe('test ICON contract addapter', () => {
       const adapter = new ICONContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
-        log: jest.fn(),
         info: jest.fn(),
         debug: jest.fn(),
       };
@@ -90,13 +88,13 @@ describe('test ICON contract addapter', () => {
 
       const spyGenerateMainPy= jest.spyOn(adapter, 'generateMainPy');
       spyGenerateMainPy.mockImplementation(jest.fn());
-  
+
       const spyGenerateCallAPI= jest.spyOn(adapter, 'generateCallAPI');
       spyGenerateCallAPI.mockImplementation(jest.fn());
 
       const spyGenerateTXAPI= jest.spyOn(adapter, 'generateTXAPI');
       spyGenerateTXAPI.mockImplementation(jest.fn());
-      
+
       adapter.generateFromTemplate();
       expect(adapter.templatePath).toEqual(path.resolve(templatePath, blockchain));
 

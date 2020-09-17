@@ -33,6 +33,10 @@ export interface CreateGraphQlOutput {
 }
 
 export function createGraphQl(config: CreateGraphQlConfig): CreateGraphQlOutput[] {
+  if (!config || typeof config !== 'object') {
+    throw new Error('Missing config!');
+  }
+
   const { aloxideConfigPath, sequelize, logger } = config;
   let { typeInterpreter } = config;
 

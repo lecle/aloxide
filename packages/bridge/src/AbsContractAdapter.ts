@@ -25,7 +25,7 @@ export abstract class AbsContractAdapter implements ContractAdapter {
     );
 
     this.outputPath = path.resolve(outputPath, this.blockchainType);
-    
+
     this.generateFromTemplate();
   }
 
