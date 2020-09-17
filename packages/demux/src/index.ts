@@ -1,3 +1,5 @@
+export type { DMeta } from './DMeta';
+export type { QueryInput } from './QueryInput';
 export type { CreateWatcherConfig } from './createWatcher';
 export type { AloxideActionHandlerOptions } from './AloxideActionHandler';
 export type { DataAdapter } from './DataAdapter';

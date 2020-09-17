@@ -1,5 +1,7 @@
 import type { DataAdapter } from './DataAdapter';
 import type { DataProvider } from './DataProvider';
+import type { QueryInput } from './QueryInput';
+import type { DMeta } from './DMeta';
 
 export interface AloxideDataManagerOptions {
   dataProviderMap: Map<string, DataProvider>;
@@ -39,6 +41,14 @@ export class AloxideDataManager implements DataAdapter {
     if (typeof p.setup == 'function') {
       return this.getDataProvider(name).setup();
     }
+  }
+
+  count(name: string): Promise<number> {
+    return this.getDataProvider(name).count();
+  }
+
+  findAll(name: string, queryInput: QueryInput, meta: DMeta): Promise<any[]> {
+    return this.getDataProvider(name).findAll(queryInput, meta);
   }
 
   find(name: string, id: any, meta?: any): Promise<any> {

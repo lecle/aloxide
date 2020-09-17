@@ -1,5 +1,6 @@
-import type { DMeta } from './DMeta';
+import { QueryInput } from './QueryInput';
 
+import type { DMeta } from './DMeta';
 type modelName = string;
 
 /**
@@ -14,6 +15,19 @@ export interface DataAdapter<ID = any, D = any> {
    * @param name name of entity
    */
   setup?(name: modelName): Promise<void>;
+
+  /**
+   * count total items
+   * @param name name of entity
+   */
+  count(name: modelName): Promise<number>;
+
+  /**
+   * query items
+   * @param name name of entity
+   * @param queryInput input parameter
+   */
+  findAll(name: modelName, queryInput: QueryInput, meta: DMeta): Promise<D[]>;
 
   /**
    * find by id

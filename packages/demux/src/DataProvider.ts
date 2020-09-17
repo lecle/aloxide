@@ -1,5 +1,6 @@
-import type { DMeta } from './DMeta';
+import { QueryInput } from './QueryInput';
 
+import type { DMeta } from './DMeta';
 type modelName = string;
 
 /**
@@ -18,6 +19,19 @@ export interface DataProvider<ID = any, D = any> {
    * initializing stuffs can be put here
    */
   setup?(): Promise<void>;
+
+  /**
+   * count total items
+   * @param name name of entity
+   */
+  count(): Promise<number>;
+
+  /**
+   * query items
+   * @param name name of entity
+   * @param queryInput input parameter
+   */
+  findAll(queryInput: QueryInput, meta: DMeta): Promise<D[]>;
 
   /**
    * find by id
