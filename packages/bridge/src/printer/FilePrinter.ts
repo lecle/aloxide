@@ -1,7 +1,7 @@
-import { Logger } from '@aloxide/logger';
 import fs from 'fs';
 import path from 'path';
 
+import { Logger } from '../Logger';
 import { Printer } from './Printer';
 
 import type { Prettier } from '../prettier/Prettier';

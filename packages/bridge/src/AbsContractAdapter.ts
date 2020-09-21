@@ -1,14 +1,14 @@
-import { createLogger, Logger } from '@aloxide/logger';
 import path from 'path';
 
 import { ContractAdapter } from './ContractAdapter';
 import { AbsTypeInterpreter } from './interpreter/AbsTypeInterpreter';
+import { Logger } from './Logger';
 import { EntityConfig } from './type-definition/EntityConfig';
 
 export abstract class AbsContractAdapter implements ContractAdapter {
   contractName: string;
   entityConfigs: EntityConfig[];
-  logger?: Logger = createLogger();
+  logger?: Logger = console;
 
   /**
    * Additional configs for generating template
