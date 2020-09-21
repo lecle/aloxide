@@ -15,8 +15,9 @@ export type { Table } from './type-definition/Table';
 export type { Action } from './type-definition/Action';
 export type { EntityConfig } from './type-definition/EntityConfig';
 
-export { ContractAdapter } from './ContractAdapter';
+export type { ContractAdapter } from './ContractAdapter';
 export { AbsContractAdapter } from './AbsContractAdapter';
+export type { ContractAdapterConfig } from './type-definition/ContractAdapterConfig';
 
 export { EOSContractAdapter } from './eos/EOSContractAdapter';
 export { EOSTypeInterpreter } from './eos/EOSTypeInterpreter';

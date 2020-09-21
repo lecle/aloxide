@@ -10,6 +10,7 @@ import { FieldTypeEnum } from '../type-definition/FieldTypeEnum';
 import { ICONTypeInterpreter } from './ICONTypeInterpreter';
 
 import type { Printer } from '../printer/Printer';
+import type { ContractAdapterConfig } from '../type-definition/ContractAdapterConfig';
 
 export class ICONContractAdapter extends AbsContractAdapter {
   folderName: string = 'icon_hello';
@@ -17,8 +18,11 @@ export class ICONContractAdapter extends AbsContractAdapter {
   pyFilePrinter: Printer;
   jsFilePrinter: Printer;
 
-  constructor() {
-    super('icon');
+  constructor(config?: ContractAdapterConfig) {
+    super(config);
+    if (!this.blockchainType) {
+      this.blockchainType = 'icon';
+    }
     this.typeInterpreter = new ICONTypeInterpreter();
   }
 
@@ -28,7 +32,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
 
     // this.coder = new FileCoder(this.outputPath, new CplusplusPrettier(), this.logger);
 
-    this.templatePath = path.resolve(this.templatePath, 'icon');
+    this.templatePath = path.resolve(this.templatePath, this.blockchainType);
 
     this.generateInit();
     this.generatePackage();
