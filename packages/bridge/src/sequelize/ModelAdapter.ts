@@ -10,10 +10,14 @@ import { Model } from './Model';
 import { ModelTypeInterpreter } from './ModelTypeInterpreter';
 
 import type { Printer } from '../printer/Printer';
+import type { ContractAdapterConfig } from '../type-definition/ContractAdapterConfig';
 
 export class ModelContractAdapter extends AbsContractAdapter {
-  constructor() {
-    super('sequelize');
+  constructor(config?: ContractAdapterConfig) {
+    super(config);
+    if (!this.blockchainType) {
+      this.blockchainType = 'sequelize';
+    }
     this.typeInterpreter = new ModelTypeInterpreter();
   }
 

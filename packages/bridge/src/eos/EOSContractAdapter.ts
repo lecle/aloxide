@@ -15,19 +15,25 @@ import { EOSUpdAction } from './EOSUpdAction';
 import type { Printer } from '../printer/Printer';
 import type { Table } from '../type-definition/Table';
 import type { Action } from '../type-definition/Action';
+import type { ContractAdapterConfig } from '../type-definition/ContractAdapterConfig';
+
 export class EOSContractAdapter extends AbsContractAdapter {
   actions: Action[];
   tables: Table[];
   actionCreators: ActionCreator[];
   printer: Printer;
 
-  constructor(logDataOnly?: boolean) {
-    super('eos', logDataOnly);
+  constructor(config?: ContractAdapterConfig) {
+    super(config);
+    if (!this.blockchainType) {
+      this.blockchainType = 'eos';
+    }
+
     this.typeInterpreter = new EOSTypeInterpreter();
   }
 
   generateFromTemplate() {
-    this.templatePath = path.resolve(this.templatePath, 'eos');
+    this.templatePath = path.resolve(this.templatePath, this.blockchainType);
 
     this.actionCreators = [new EOSCreAction(), new EOSUpdAction(), new EOSDelAction()];
     this.actionCreators.forEach(ac => {
