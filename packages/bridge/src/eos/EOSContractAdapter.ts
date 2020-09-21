@@ -21,8 +21,8 @@ export class EOSContractAdapter extends AbsContractAdapter {
   actionCreators: ActionCreator[];
   printer: Printer;
 
-  constructor() {
-    super('eos');
+  constructor(logDataOnly?: boolean) {
+    super('eos', logDataOnly);
     this.typeInterpreter = new EOSTypeInterpreter();
   }
 
@@ -32,6 +32,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
     this.actionCreators = [new EOSCreAction(), new EOSUpdAction(), new EOSDelAction()];
     this.actionCreators.forEach(ac => {
       ac.templatePath = this.templatePath;
+      ac.logDataOnly = this.logDataOnly;
     });
 
     this.printer = new FilePrinter(this.outputPath, new CplusplusPrettier(), this.logger);
@@ -77,6 +78,9 @@ export class EOSContractAdapter extends AbsContractAdapter {
 
     // translate
     const outText = template({
+      _config: {
+        logDataOnly: this.logDataOnly,
+      },
       contractName: this.contractName,
       actions: this.actions,
     });

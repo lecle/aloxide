@@ -10,6 +10,9 @@ export class EOSCreAction extends EOSAction {
 
   implement(entity: Table): string {
     return this.template({
+      _config: {
+        logDataOnly: this.logDataOnly,
+      },
       tableName: entity.name,
       fields: entity.fields,
     });

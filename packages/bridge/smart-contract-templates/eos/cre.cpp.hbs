@@ -1,5 +1,5 @@
     require_auth(user);
-
+{{#unless @root._config.logDataOnly}}
     {{tableName}}_table _{{tableName}}(get_self(), get_self().value);
 
     _{{tableName}}.emplace(user, [&](auto &row) {
@@ -7,3 +7,4 @@
         row.{{name}} = {{name}};
         {{/each}}
     });
+{{/unless}}

@@ -9,6 +9,9 @@ export class EOSUpdAction extends EOSAction {
   }
   implement(entity: Table): string {
     return this.template({
+      _config: {
+        logDataOnly: this.logDataOnly,
+      },
       tableName: entity.name,
       primaryKeyField: entity.primaryKeyField,
       fields: entity.fields,

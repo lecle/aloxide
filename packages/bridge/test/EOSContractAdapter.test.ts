@@ -1,6 +1,10 @@
+import fs from 'fs';
+import Handlebars from 'handlebars';
 import path from 'path';
 
 import { EntityConfig, EOSContractAdapter } from '../src';
+
+jest.mock('../src/printer/FilePrinter');
 
 describe('test EOS contract addapter', () => {
   const blockchain = 'eos';
@@ -87,6 +91,66 @@ describe('test EOS contract addapter', () => {
       expect(createActions).toBeCalledTimes(1);
       expect(spyGenerateCpp).toBeCalledTimes(1);
       expect(spyGenerateHpp).toBeCalledTimes(1);
+    });
+
+    it('should pass config to the template handler', () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
+
+      const templatePath = 'test-path';
+      adapter.templatePath = templatePath;
+
+      const createTables = jest.spyOn(adapter, 'createTables');
+      createTables.mockImplementation(jest.fn());
+
+      const createActions = jest.spyOn(adapter, 'createActions');
+      createActions.mockImplementation(jest.fn());
+
+      const spyGenerateHpp = jest.spyOn(adapter, 'generateHpp');
+      spyGenerateHpp.mockImplementation(jest.fn());
+
+      const spyReadFileSync = jest.spyOn(fs, 'readFileSync');
+      spyReadFileSync.mockImplementation(jest.fn());
+
+      const template = jest.fn();
+      const spyCompile = jest.spyOn(Handlebars, 'compile');
+      spyCompile.mockReturnValue(template);
+
+      adapter.generateFromTemplate();
+      expect(adapter.templatePath).toEqual(path.resolve(templatePath, blockchain));
+
+      expect(createActions).toBeCalledTimes(1);
+      expect(createActions).toBeCalledTimes(1);
+      expect(spyGenerateHpp).toBeCalledTimes(1);
+
+      expect(spyCompile).toBeCalledTimes(1);
+      expect(template).toBeCalledWith({
+        _config: { logDataOnly: adapter.logDataOnly },
+        actions: undefined,
+        contractName: undefined,
+      });
+
+      adapter.logDataOnly = false;
+      adapter.generateFromTemplate();
+
+      expect(template).toBeCalledWith({
+        _config: { logDataOnly: adapter.logDataOnly },
+        actions: undefined,
+        contractName: undefined,
+      });
+
+      adapter.logDataOnly = true;
+      adapter.generateFromTemplate();
+
+      expect(template).toBeCalledWith({
+        _config: { logDataOnly: adapter.logDataOnly },
+        actions: undefined,
+        contractName: undefined,
+      });
     });
   });
 });

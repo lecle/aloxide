@@ -11,5 +11,14 @@ import { Table } from './type-definition/Table';
 export interface ActionCreator {
   actionPrefix: string;
   templatePath: string;
+
+  /**
+   * With this option enabled, the generated smart-contract will not store any data to state-data
+   * https://github.com/lecle/aloxide/issues/49
+   *
+   * Default is false
+   */
+  logDataOnly?: boolean;
+
   create(entity: Table): Action;
 }
