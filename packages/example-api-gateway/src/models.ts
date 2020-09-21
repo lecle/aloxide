@@ -67,7 +67,7 @@ export function createDataProvider(
 
     findAll({ limit, after }, { entity: { key } }): Promise<any[]> {
       return m.findAll({
-        limit: limit,
+        limit,
         where: after && {
           [key]: {
             [Op.gt]: after,
