@@ -1,18 +1,18 @@
 {
   "packages": ["packages/*"],
-  "version": "independent",
+  "version": "0.1.0",
   "useWorkspaces": true,
   "npmClient": "yarn",
   "command": {
     "version": {
       "allowBranch": "master",
-      "conventional-commits": true,
-      "create-release": "github"
+      "conventionalCommits": true,
+      "createRelease": "github"
     },
     "publish": {
       "allowBranch": "master",
-      "conventional-commits": true,
-      "create-release": "github"
+      "conventionalCommits": true,
+      "createRelease": "github"
     }
   }
 }
