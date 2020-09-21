@@ -1,14 +1,12 @@
-import { createLogger, Logger } from '@aloxide/logger';
+import { ContractAdapter } from '@aloxide/bridge';
 
+import { isObject } from './lib/isObject';
+import { Logger } from './Logger';
 import { readAloxideConfig } from './readAloxideConfig';
 import { validateEntity } from './SchemaValidator';
 
 import type { ContractGeneratorConfig } from './ContractGeneratorConfig';
 import type { AloxideConfig } from './AloxideConfig';
-import { ContractAdapter } from '@aloxide/bridge';
-
-import { isObject } from './lib/isObject';
-
 export class ContractGenerator {
   aloxideConfig: AloxideConfig;
   logger: Logger;
@@ -29,7 +27,7 @@ export class ContractGenerator {
     if (logger) {
       this.logger = logger;
     } else {
-      this.logger = createLogger();
+      this.logger = console;
     }
     this.logger.debug('-- config.aloxideConfigPath', config.aloxideConfigPath);
     this.logger.debug('-- config.resultPath', config.resultPath);
@@ -42,7 +40,7 @@ export class ContractGenerator {
       }
 
       this.aloxideConfig = aloxideConfig;
-    } catch(e) {
+    } catch (e) {
       throw new Error(`Invalid Aloxide config: ${e.message}`);
     }
 
@@ -85,19 +83,17 @@ export class ContractGenerator {
     if (isObject(adapters)) {
       // Add single adapter
       this.adapters.push(this.configureAdapter(adapters as ContractAdapter));
-
     } else if (Array.isArray(adapters)) {
       // Add multiple adapters
       this.adapters.push(
-          ...adapters.reduce((accumulator, adapter) => {
+        ...adapters.reduce((accumulator, adapter) => {
           if (adapter) {
             accumulator.push(this.configureAdapter(adapter));
           }
 
           return accumulator;
-        }, [])
+        }, []),
       );
-
     } else {
       throw new Error('Invalid Contract Adapter');
     }

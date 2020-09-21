@@ -1,5 +1,5 @@
 import type { ContractAdapter } from '@aloxide/bridge';
-import type { Logger } from '@aloxide/logger';
+import type { Logger } from './Logger';
 
 export interface ContractGeneratorConfig {
   /**

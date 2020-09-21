@@ -1,6 +1,7 @@
-import { Logger } from '@aloxide/logger';
 import fs = require('fs');
 import yaml = require('js-yaml');
+
+import { Logger } from '../Logger';
 
 export function loadContent(filePath) {
   if (!/json|yml|yaml$/.test(filePath)) {
