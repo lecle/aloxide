@@ -11,8 +11,9 @@ import type { Table } from '../type-definition/Table';
 export abstract class EOSAction implements ActionCreator {
   actionPrefix: string;
   templatePath: string;
+  logDataOnly?: boolean;
 
-  protected template: HandlebarsTemplateDelegate<any>;
+  template: HandlebarsTemplateDelegate<any>;
 
   constructor(actionPrefix: string) {
     this.actionPrefix = actionPrefix;

@@ -17,7 +17,7 @@ export abstract class AbsContractAdapter implements ContractAdapter {
   outputPath: string;
   typeInterpreter: AbsTypeInterpreter;
 
-  constructor(protected blockchainType: string) {}
+  constructor(protected blockchainType: string, public logDataOnly?: boolean) {}
 
   generate(outputPath: string) {
     this.logger.debug(`output path is: ${outputPath}, blockchain type: ${this.blockchainType}`);

@@ -4,9 +4,10 @@
     auto item = _{{tableName}}.find({{primaryKeyField.name}});
 
     check(item != _{{tableName}}.end(), "item does not exist");
-
+{{#unless @root._config.logDataOnly}}
     _{{tableName}}.modify(item, user, [&](auto &row) {
         {{#each fields}}
         row.{{name}} = {{name}};
         {{/each}}
     });
+{{/unless}}

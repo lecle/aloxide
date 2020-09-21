@@ -1,8 +1,9 @@
     require_auth(user);
-
+{{#unless @root._config.logDataOnly}}
     {{tableName}}_table _{{tableName}}(get_self(), get_self().value);
     auto item = _{{tableName}}.find({{primaryKeyField.name}});
 
     if (item != _{{tableName}}.end()) {
         _{{tableName}}.erase(item);
     }
+{{/unless}}
