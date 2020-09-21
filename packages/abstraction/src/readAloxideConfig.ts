@@ -1,6 +1,7 @@
-import { Logger } from '@aloxide/logger';
 import fs from 'fs';
 import yaml from 'js-yaml';
+
+import { Logger } from './Logger';
 
 import type { AloxideConfig } from './AloxideConfig';
 
