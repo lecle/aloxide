@@ -1,5 +1,4 @@
-import { Logger } from '@aloxide/logger';
-
+import { Logger } from './Logger';
 import { EntityConfig } from './type-definition/EntityConfig';
 
 export interface ContractAdapter {

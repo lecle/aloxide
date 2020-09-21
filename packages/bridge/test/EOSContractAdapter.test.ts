@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 
 import { EntityConfig, EOSContractAdapter } from '../src';
@@ -34,16 +33,9 @@ describe('test EOS contract addapter', () => {
       const adapter = new EOSContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
-        log: jest.fn(),
         info: jest.fn(),
         debug: jest.fn(),
       };
-
-      const spyExistsSync = jest.spyOn(fs, 'existsSync');
-      spyExistsSync.mockReturnValueOnce(false);
-
-      const spyMkdirSync = jest.spyOn(fs, 'mkdirSync');
-      spyMkdirSync.mockImplementation(jest.fn());
 
       const spyGenerateFromTemplate = jest.spyOn(adapter, 'generateFromTemplate');
       spyGenerateFromTemplate.mockImplementation(jest.fn());
@@ -62,11 +54,6 @@ describe('test EOS contract addapter', () => {
 
       expect(adapter.outputPath).toEqual(path.resolve(outputPath, blockchain));
 
-      expect(spyExistsSync).toBeCalledWith(adapter.outputPath);
-
-      expect(spyMkdirSync).toBeCalledWith(adapter.outputPath, { recursive: true });
-      expect(adapter.logger.debug).toBeCalledWith(`make directory: ${adapter.outputPath}`);
-
       expect(spyGenerateFromTemplate).toBeCalledTimes(1);
     });
   });
@@ -75,12 +62,17 @@ describe('test EOS contract addapter', () => {
       const adapter = new EOSContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
-        log: jest.fn(),
         info: jest.fn(),
         debug: jest.fn(),
       };
       const templatePath = 'test-path';
       adapter.templatePath = templatePath;
+
+      const createTables = jest.spyOn(adapter, 'createTables');
+      createTables.mockImplementation(jest.fn());
+
+      const createActions = jest.spyOn(adapter, 'createActions');
+      createActions.mockImplementation(jest.fn());
 
       const spyGenerateCpp = jest.spyOn(adapter, 'generateCpp');
       spyGenerateCpp.mockImplementation(jest.fn());
@@ -91,6 +83,8 @@ describe('test EOS contract addapter', () => {
       adapter.generateFromTemplate();
       expect(adapter.templatePath).toEqual(path.resolve(templatePath, blockchain));
 
+      expect(createActions).toBeCalledTimes(1);
+      expect(createActions).toBeCalledTimes(1);
       expect(spyGenerateCpp).toBeCalledTimes(1);
       expect(spyGenerateHpp).toBeCalledTimes(1);
     });

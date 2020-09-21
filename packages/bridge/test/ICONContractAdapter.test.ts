@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 
 import { EntityConfig, ICONContractAdapter } from '../src';
@@ -34,16 +33,9 @@ describe('test ICON contract addapter', () => {
       const adapter = new ICONContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
-        log: jest.fn(),
         info: jest.fn(),
         debug: jest.fn(),
       };
-
-      const spyExistsSync = jest.spyOn(fs, 'existsSync');
-      spyExistsSync.mockReturnValueOnce(false);
-
-      const spyMkdirSync = jest.spyOn(fs, 'mkdirSync');
-      spyMkdirSync.mockImplementation(jest.fn());
 
       const spyGenerateFromTemplate = jest.spyOn(adapter, 'generateFromTemplate');
       spyGenerateFromTemplate.mockImplementation(jest.fn());
@@ -62,11 +54,6 @@ describe('test ICON contract addapter', () => {
 
       expect(adapter.outputPath).toEqual(path.resolve(outputPath, blockchain));
 
-      expect(spyExistsSync).toBeCalledWith(adapter.outputPath);
-
-      expect(spyMkdirSync).toBeCalledWith(adapter.outputPath, { recursive: true });
-      expect(adapter.logger.debug).toBeCalledWith(`make directory: ${adapter.outputPath}`);
-
       expect(spyGenerateFromTemplate).toBeCalledTimes(1);
     });
   });
@@ -75,7 +62,6 @@ describe('test ICON contract addapter', () => {
       const adapter = new ICONContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
-        log: jest.fn(),
         info: jest.fn(),
         debug: jest.fn(),
       };
@@ -88,15 +74,15 @@ describe('test ICON contract addapter', () => {
       const spyGeneratePackage = jest.spyOn(adapter, 'generatePackage');
       spyGeneratePackage.mockImplementation(jest.fn());
 
-      const spyGenerateMainPy= jest.spyOn(adapter, 'generateMainPy');
+      const spyGenerateMainPy = jest.spyOn(adapter, 'generateMainPy');
       spyGenerateMainPy.mockImplementation(jest.fn());
-  
-      const spyGenerateCallAPI= jest.spyOn(adapter, 'generateCallAPI');
+
+      const spyGenerateCallAPI = jest.spyOn(adapter, 'generateCallAPI');
       spyGenerateCallAPI.mockImplementation(jest.fn());
 
-      const spyGenerateTXAPI= jest.spyOn(adapter, 'generateTXAPI');
+      const spyGenerateTXAPI = jest.spyOn(adapter, 'generateTXAPI');
       spyGenerateTXAPI.mockImplementation(jest.fn());
-      
+
       adapter.generateFromTemplate();
       expect(adapter.templatePath).toEqual(path.resolve(templatePath, blockchain));
 

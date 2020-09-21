@@ -27,7 +27,6 @@
     "test": "jest -o"
   },
   "dependencies": {
-    "@aloxide/logger": "^0.1.0",
     "handlebars": "^4.7.6"
   },
   "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a"
