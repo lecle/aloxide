@@ -23,4 +23,12 @@ export interface ContractGeneratorConfig {
    * name of the contract
    */
   contractName?: string;
+
+  /**
+   * With this option enabled, the generated smart-contract will not store any data to state-data
+   * https://github.com/lecle/aloxide/issues/49
+   *
+   * Default is false
+   */
+  logDataOnly?: boolean;
 }

@@ -71,6 +71,10 @@ export class ContractGenerator {
     // Get `entities` config from generator
     adapter.entityConfigs = this.aloxideConfig.entities || [];
 
+    if (adapter.logDataOnly == null) {
+      adapter.logDataOnly = this.config.logDataOnly || false;
+    }
+
     return adapter;
   }
 
