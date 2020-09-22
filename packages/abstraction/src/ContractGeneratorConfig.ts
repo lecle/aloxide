@@ -10,7 +10,7 @@ export interface ContractGeneratorConfig {
   /**
    * output path in where you want to put generated files
    */
-  resultPath: string;
+  outputPath: string;
 
   /**
    * Adapter of the blockchain
