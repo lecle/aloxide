@@ -42,7 +42,7 @@ describe('test ICON contract addapter', () => {
 
       adapter.generate(outputPath);
       expect(adapter.logger.debug).toBeCalledWith(
-        `output path is: ${outputPath}, blockchain type: ${blockchain}`,
+        `output path is: ${path.resolve(outputPath, blockchain)}, blockchain type: ${blockchain}`,
       );
 
       expect(adapter.templatePath).toEqual(

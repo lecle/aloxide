@@ -23,14 +23,19 @@
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn build",
     "lint": "tslint --project . --fix",
-    "test": "jest -o"
+    "test": "jest --colors",
+    "test:coverage": "yarn test --collectCoverage"
   },
   "dependencies": {
     "@aloxide/abstraction": "^0.1.0",
+    "@aloxide/bridge": "^0.1.0",
     "demux": "https://github.com/lecle/demux-js.git#develop"
   },
   "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a",
   "devDependencies": {
-    "@types/node": "^14.10.1"
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.10.1",
+    "jest": "26.4.2",
+    "ts-jest": "26.4.0"
   }
 }

@@ -6,9 +6,7 @@
     "paths": {
       "@aloxide/*": ["packages/*/src"]
     },
-    "jsx": "react",
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "types": ["node", "jest"]
+    "skipLibCheck": true
   }
 }

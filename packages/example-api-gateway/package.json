@@ -21,7 +21,8 @@
     "watchonce": "ts-node src/watchOnce.ts",
     "clean": "rimraf -rf ./dist",
     "lint": "tslint --project . --fix",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "yarn test --collectCoverage"
   },
   "nodemonConfig": {
     "delay": "3000",

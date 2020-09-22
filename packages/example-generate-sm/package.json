@@ -15,7 +15,8 @@
     "clean": "rimraf -rf ./dist ./out",
     "compile": "tsc -p tsconfig.build.json",
     "lint": "tslint --project . --fix",
-    "test": "jest -o"
+    "test": "jest --colors",
+    "test:coverage": "yarn test --collectCoverage"
   },
   "dependencies": {
     "@aloxide/abstraction": "^0.1.0",

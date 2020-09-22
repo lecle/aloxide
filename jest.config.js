@@ -1,26 +1,16 @@
-// For a detailed explanation regarding each configuration property, visit:
-// https://jestjs.io/docs/en/configuration.html
+const path = require('path');
+
+/* eslint-disable import/no-extraneous-dependencies */
+const { pathsToModuleNameMapper } = require('ts-jest/utils');
+
+// Load the config which holds the path aliases.
+const { compilerOptions } = require('./tsconfig.json');
 
 module.exports = {
-  clearMocks: true,
-  coverageDirectory: "coverage",
-  globals: {
-    "ts-jest": {
-      "tsConfig": "tsconfig.json",
-      "isolatedModules": true,
-    }
-  },
-  moduleFileExtensions: [
-    "ts",
-    "tsx",
-    "js"
-  ],
-  restoreMocks: true,
-  testEnvironment: "node",
-  testRegex: [
-    "\/test\/((?!\.local).)+\.test\.ts$",
-  ],
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest"
-  }
+  preset: 'ts-jest',
+  resolver: path.resolve(__dirname, './jest-resolver'),
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    // This has to match the baseUrl defined in tsconfig.json.
+    prefix: '<rootDir>/../../',
+  }),
 };

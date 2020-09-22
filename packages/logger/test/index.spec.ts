@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { createLogger } from '../src';
 
 const logger = createLogger({
@@ -10,7 +11,7 @@ describe('logger', () => {
     s.mockImplementation(() => {});
 
     logger.debug('hello');
-    expect(s).toBeCalledWith('hello');
+    expect(s).toBeCalledWith(chalk.blue('hello'));
   });
 
   it('should print a info', () => {
@@ -18,7 +19,7 @@ describe('logger', () => {
     s.mockImplementation(() => {});
 
     logger.info('hello');
-    expect(s).toBeCalledWith('hello');
+    expect(s).toBeCalledWith(chalk.green('hello'));
   });
 
   it('should print a warn', () => {
@@ -26,7 +27,7 @@ describe('logger', () => {
     s.mockImplementation(() => {});
 
     logger.warn('hello');
-    expect(s).toBeCalledWith('hello');
+    expect(s).toBeCalledWith(chalk.yellow('hello'));
   });
 
   it('should print an error', () => {
@@ -34,6 +35,6 @@ describe('logger', () => {
     s.mockImplementation(() => {});
 
     logger.error('hello');
-    expect(s).toBeCalledWith('hello');
+    expect(s).toBeCalledWith(chalk.red('hello'));
   });
 });

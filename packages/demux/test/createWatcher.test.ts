@@ -1,8 +1,9 @@
 import { FieldTypeEnum } from '@aloxide/bridge';
 import { BaseActionWatcher } from 'demux';
 
-import { AloxideDataManager, createWatcher, CreateWatcherConfig } from '../src';
-import loggerTest from './loggerTest';
+import { AloxideDataManager, createDbUpdater, createWatcher, CreateWatcherConfig } from '../src';
+import { BaseHandlerVersion } from '../src/BaseHandlerVersion';
+import createLoggerTest from './createLoggerTest';
 
 describe('test createWatcher', () => {
   const config: CreateWatcherConfig = {
@@ -24,7 +25,7 @@ describe('test createWatcher', () => {
     aloxideConfig: {
       entities: [],
     },
-    logger: loggerTest,
+    logger: createLoggerTest(),
   };
 
   it('throw error if missing of data provider', async () => {
@@ -39,6 +40,8 @@ describe('test createWatcher', () => {
 
   dataAdapter.dataProviderMap.set('DemuxIndexState_any', {
     name: 'DemuxIndexState_any',
+    count: jest.fn(),
+    findAll: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
@@ -47,6 +50,8 @@ describe('test createWatcher', () => {
 
   dataAdapter.dataProviderMap.set('e1', {
     name: 'e1',
+    count: jest.fn(),
+    findAll: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
@@ -71,8 +76,16 @@ describe('test createWatcher', () => {
   });
 
   it('return an watcher', async () => {
+    const logger = createLoggerTest();
+
     config.dataAdapter = dataAdapter;
-    config.handlerVersions = [];
+    config.handlerVersions = [
+      new BaseHandlerVersion(
+        'v1',
+        createDbUpdater(config.accountName, dataAdapter, config.aloxideConfig.entities, logger),
+        [],
+      ),
+    ];
 
     const watcher = await createWatcher(config);
     expect(watcher).toBeInstanceOf(BaseActionWatcher);
