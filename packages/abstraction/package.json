@@ -23,7 +23,8 @@
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn build",
     "lint": "tslint --project . --fix",
-    "test": "jest -o"
+    "test": "jest -o",
+    "test:coverage": "jest -i --detectOpenHandles --forceExit --colors --collectCoverage"
   },
   "dependencies": {
     "@aloxide/bridge": "^0.1.0",
