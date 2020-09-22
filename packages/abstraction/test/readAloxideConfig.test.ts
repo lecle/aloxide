@@ -2,13 +2,11 @@ import path from 'path';
 
 import { readAloxideConfig } from '../src';
 import { AloxideConfig } from '../src/AloxideConfig';
+import createLoggerTest from './createLoggerTest';
 
 describe('test ContractGenerator', () => {
   describe('test read aloxide configuration', () => {
-    const logger = {
-      info: jest.fn(),
-      debug: jest.fn(),
-    };
+    const logger = createLoggerTest();
 
     const sampleAloxideConfig: AloxideConfig = {
       entities: [
@@ -40,16 +38,16 @@ describe('test ContractGenerator', () => {
 
     it('should throw error when was given none existing path', () => {
       const aloxideConfigPath = path.resolve(__dirname, 'none-existing-aloxide.json');
-      expect(
-        () => readAloxideConfig(aloxideConfigPath)
-      ).toThrowError(`file [${aloxideConfigPath}] does not exist`);
+      expect(() => readAloxideConfig(aloxideConfigPath)).toThrowError(
+        `file [${aloxideConfigPath}] does not exist`,
+      );
     });
 
     it('should throw error when given file with unsupported extention', () => {
       const aloxideConfigPath = path.resolve(__dirname, './aloxide.jsonx');
-      expect(
-        () => readAloxideConfig(aloxideConfigPath)
-      ).toThrowError(`unknow file extention of file: [${aloxideConfigPath}]`);
+      expect(() => readAloxideConfig(aloxideConfigPath)).toThrowError(
+        `unknow file extention of file: [${aloxideConfigPath}]`,
+      );
     });
 
     it('should load aloxide.yml', () => {
