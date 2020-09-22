@@ -1,16 +1,10 @@
 import { createLogger } from '../src';
 
-const logger = createLogger();
+const logger = createLogger({
+  consoleLogger: true,
+});
 
 describe('logger', () => {
-  it('should print a log', () => {
-    const s = jest.spyOn(console, 'log');
-    s.mockImplementation(() => {});
-
-    logger.log('hello');
-    expect(s).toBeCalledWith('hello');
-  });
-
   it('should print a debug', () => {
     const s = jest.spyOn(console, 'debug');
     s.mockImplementation(() => {});
@@ -35,7 +29,7 @@ describe('logger', () => {
     expect(s).toBeCalledWith('hello');
   });
 
-  it('should print a error', () => {
+  it('should print an error', () => {
     const s = jest.spyOn(console, 'error');
     s.mockImplementation(() => {});
 
