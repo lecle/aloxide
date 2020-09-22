@@ -24,7 +24,8 @@
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn build",
     "lint": "tslint --project . --fix",
-    "test": "jest -o"
+    "test": "jest --colors",
+    "test:coverage": "yarn test --collectCoverage"
   },
   "dependencies": {
     "handlebars": "^4.7.6"

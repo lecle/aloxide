@@ -4,9 +4,8 @@
     "target": "es6",
     "sourceMap": true,
     "declaration": true,
-    "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types/"]
+    "esModuleInterop": true
   },
 
-  "exclude": ["**/node_modules", "**/dist", "**/__mocks__"]
+  "exclude": ["node_modules", "dist", "**/__mocks__"]
 }

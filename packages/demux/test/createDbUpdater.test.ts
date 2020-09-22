@@ -1,7 +1,7 @@
 import { EntityConfig, FieldTypeEnum } from '@aloxide/bridge';
 
 import { AloxideDataManager, createDbUpdater, DbUpdater } from '../src';
-import loggerTest from './loggerTest';
+import createLoggerTest from './createLoggerTest';
 
 describe('test createDbUpdater', () => {
   it('return an array of updaters', () => {
@@ -41,7 +41,7 @@ describe('test createDbUpdater', () => {
         key: 'f1',
       },
     ];
-    const loggers = loggerTest;
+    const loggers = createLoggerTest();
 
     const updaters = createDbUpdater(accountName, dataAdapter, entities, loggers);
 

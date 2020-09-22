@@ -1,12 +1,12 @@
 import { jest } from '@jest/globals';
 
-import { Logger } from '../src';
+import { Logger } from '../src/Logger';
 
-const logger: Logger = {
+const createLoggerTest = (): Logger => ({
   info: jest.fn(),
   debug: jest.fn(),
   warn: jest.fn(),
   error: jest.fn(),
-};
+});
 
-export default logger;
+export default createLoggerTest;
