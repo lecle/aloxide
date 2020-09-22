@@ -1,9 +1,10 @@
 import { IconBlock } from '../src';
+import createLoggerTest from './createLoggerTest';
 import { rawBlock } from './rawBlock';
-import { createLogger } from '@aloxide/logger';
 
 describe('test IconBlock', () => {
-  const logger = createLogger();
+  const logger = createLoggerTest();
+
   it('test icon block', () => {
     const iconBlock = new IconBlock(rawBlock, logger);
     expect(iconBlock.blockInfo).toEqual({
@@ -14,25 +15,24 @@ describe('test IconBlock', () => {
     });
 
     expect(iconBlock.actions).toEqual([
-      null,
       {
         payload: {
+          actionIndex: 1,
           data: {
-            method: 'bet_on_numbers',
-            params: {
-              numbers: '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20',
-              user_seed: '@tipiconbot',
-            },
+            numbers: '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20',
+            user_seed: '@tipiconbot',
           },
           dataType: 'call',
           from: 'hx930a0bedaff46c3afd3eddad4078d3f3d4d74735',
           nid: '0x1',
           nonce: '0x5',
+          producer: 'hxd6f20327d135cb0227230ab98792173a5c97b03e',
           signature:
             'XH2klvn8uKbFjEYNEnbThxAExiTP6UsKG7Jv/IG2SBB3SUPT4d+RLE2P5QP4OfPhajJWwz4WeSUdX0KkwvNORQA=',
           stepLimit: '0xc3500',
           timestamp: '0x5ae283068af0a',
           to: 'cx1b97c1abfd001d5cd0b5a3f93f22cccfea77e34e',
+          transactionId: '0xda9d2b65ff04009e85b2c9934f2206b3ae804781ce2ba6722fa9df9922f9b93d',
           txHash: '0xda9d2b65ff04009e85b2c9934f2206b3ae804781ce2ba6722fa9df9922f9b93d',
           value: '0x4563918244f40000',
           version: '0x3',
@@ -41,22 +41,22 @@ describe('test IconBlock', () => {
       },
       {
         payload: {
+          actionIndex: 2,
           data: {
-            method: 'bet_on_numbers',
-            params: {
-              numbers: '1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,19,20',
-              user_seed: '@tipiconbot',
-            },
+            numbers: '1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,19,20',
+            user_seed: '@tipiconbot',
           },
           dataType: 'call',
           from: 'hx8edc6f20440430ad00c28d398a63e1e7578c1e90',
           nid: '0x1',
           nonce: '0x5',
+          producer: 'hxd6f20327d135cb0227230ab98792173a5c97b03e',
           signature:
             'qW+I9/zdmf2ByUVQXdYhOb0RUAKAkg1ZAVDitv9MzDRxNo3468rGFPGgisjuSoWpUdkg0bqobRoR4wHxNoM0bgA=',
           stepLimit: '0xc3500',
           timestamp: '0x5ae2830692267',
           to: 'cx1b97c1abfd001d5cd0b5a3f93f22cccfea77e34e',
+          transactionId: '0x60eb281ecd589ab3e9a15a0974500c5da093afaa7903fd9f097d385b51cc3ead',
           txHash: '0x60eb281ecd589ab3e9a15a0974500c5da093afaa7903fd9f097d385b51cc3ead',
           value: '0x3782dace9d900000',
           version: '0x3',
