@@ -3,16 +3,16 @@ import { EOSContractAdapter, ICONContractAdapter, ModelContractAdapter } from '@
 import { createLogger } from 'bunyan';
 import path from 'path';
 
-const resultPath = path.resolve(__dirname, '../out');
+const outputPath = path.resolve(__dirname, '../out');
 
 const contractGenerator = new ContractGenerator({
   aloxideConfigPath: path.resolve(__dirname, '../samples/aloxide.yml'),
-  resultPath,
+  outputPath,
   adapters: [
     new EOSContractAdapter() /* generate smart contract for EOS network */,
     new EOSContractAdapter({
       logDataOnly: true,
-      outputPath: path.resolve(resultPath, 'eos-no-state'),
+      outputPath: path.resolve(outputPath, 'eos-no-state'),
     }) /* generate smart contract for EOS network */,
     new ICONContractAdapter(),
     new ModelContractAdapter(),

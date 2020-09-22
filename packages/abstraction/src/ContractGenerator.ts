@@ -1,17 +1,16 @@
 import { ContractAdapter } from '@aloxide/bridge';
 
-import { isObject } from './lib/isObject';
 import { Logger } from './Logger';
 import { readAloxideConfig } from './readAloxideConfig';
-import { validateEntity } from './SchemaValidator';
 
 import type { ContractGeneratorConfig } from './ContractGeneratorConfig';
 import type { AloxideConfig } from './AloxideConfig';
+
 export class ContractGenerator {
   aloxideConfig: AloxideConfig;
   logger: Logger;
   contractName: string; // Default Contract Name
-  public config: Omit<ContractGeneratorConfig, 'logger' | 'adapters' | 'contractName'>;
+  config: ContractGeneratorConfig;
   private adapters: ContractAdapter[] = [];
 
   constructor(config: ContractGeneratorConfig) {
@@ -19,9 +18,10 @@ export class ContractGenerator {
       throw new Error('Missing configuration!');
     }
 
-    const { logger, adapters, contractName, ...rest } = config;
+    this.config = config;
+
+    const { logger, adapters, contractName } = config;
     this.contractName = contractName || '';
-    this.config = rest;
 
     // Define logger for the generator
     if (logger) {
@@ -30,14 +30,11 @@ export class ContractGenerator {
       this.logger = console;
     }
     this.logger.debug('-- config.aloxideConfigPath', config.aloxideConfigPath);
-    this.logger.debug('-- config.resultPath', config.resultPath);
+    this.logger.debug('-- config.outputPath', config.outputPath);
 
     try {
       // Check Aloxide Input config
       const aloxideConfig = readAloxideConfig(config.aloxideConfigPath);
-      if (!validateEntity(aloxideConfig, this.logger)) {
-        throw new Error('Input entities mismatch!');
-      }
 
       this.aloxideConfig = aloxideConfig;
     } catch (e) {
@@ -45,12 +42,9 @@ export class ContractGenerator {
     }
 
     // Check Output config
-    if (!rest.resultPath) {
-      throw new Error('Missing "resultPath"!');
+    if (!config.outputPath) {
+      throw new Error('Missing "outputPath"!');
     }
-
-    // Initialize adapters
-    this.adapters = [];
 
     if (adapters) {
       this.addAdapters(adapters);
@@ -63,13 +57,13 @@ export class ContractGenerator {
    */
   configureAdapter(adapter: ContractAdapter) {
     // Get `logger` config from generator
-    adapter.logger = this.logger || adapter.logger;
+    adapter.logger = this.logger;
 
     // Get `contractName` config from generator
     adapter.contractName = this.contractName || 'hello';
 
     // Get `entities` config from generator
-    adapter.entityConfigs = this.aloxideConfig.entities || [];
+    adapter.entityConfigs = this.aloxideConfig.entities;
 
     if (adapter.logDataOnly == null) {
       adapter.logDataOnly = this.config.logDataOnly || false;
@@ -84,31 +78,22 @@ export class ContractGenerator {
    * @param adapters
    */
   addAdapters(adapters: ContractAdapter | ContractAdapter[]) {
-    if (isObject(adapters)) {
-      // Add single adapter
-      this.adapters.push(this.configureAdapter(adapters as ContractAdapter));
-    } else if (Array.isArray(adapters)) {
-      // Add multiple adapters
-      this.adapters.push(
-        ...adapters.reduce((accumulator, adapter) => {
-          if (adapter) {
-            accumulator.push(this.configureAdapter(adapter));
-          }
+    let _adapters: ContractAdapter[] = [];
 
-          return accumulator;
-        }, []),
-      );
+    if (Array.isArray(adapters)) {
+      _adapters = adapters;
     } else {
-      throw new Error('Invalid Contract Adapter');
+      _adapters.push(adapters as ContractAdapter);
     }
+
+    _adapters.forEach(adapter => {
+      this.adapters.push(this.configureAdapter(adapter));
+    });
   }
 
   generate() {
-    // TODO: should support config Contract Name when generating smart contract
-    if (Array.isArray(this.adapters)) {
-      this.adapters.forEach(adapter => {
-        adapter.generate(this.config.resultPath);
-      });
-    }
+    this.adapters.forEach(adapter => {
+      adapter.generate(this.config.outputPath);
+    });
   }
 }
