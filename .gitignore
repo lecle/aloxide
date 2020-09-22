@@ -112,6 +112,9 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+# IDE generated file
+.idea/
+
 # yarn v2
 .yarn/cache
 .yarn/unplugged
