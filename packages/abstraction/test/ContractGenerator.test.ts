@@ -120,5 +120,5 @@ describe('test ContractGenerator', () => {
         ]);
       }).not.toThrowError();
     });
-  })
+  });
 });

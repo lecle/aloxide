@@ -19,7 +19,8 @@
     "lint": "lerna run lint",
     "build": "lerna run build",
     "pub": "lerna publish",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "test:coverage": "lerna run test:coverage --stream"
   },
   "devDependencies": {
     "@types/jest": "^26.0.5",

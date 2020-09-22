@@ -12,11 +12,46 @@ const logLevels = {
 }
 
 /**
+ * Strict Name validation, apply to all blockchains
+ * @param val
+ */
+export function checkName(val) {
+  return /^[1-5a-zA-Z]+/.test(val);
+}
+
+/**
+ * Strict Type validation, apply to all blockchains
+ * @param val
+ */
+export function checkType(val) {
+  const supportedType = ["uint64_t", "number", "string", "array", "bool"];
+  return supportedType.indexOf(val) !== -1
+}
+
+export function validateSchema(targetObject, inputSchema = {}, logger?: Logger, logLevel = 3) {
+
+  const isPath = typeof targetObject === 'string'
+  if (isPath ? !fs.existsSync(targetObject) : typeof targetObject !== 'object')
+    return logger?.error('Target must be either be an object or a valid filepath');
+
+  try {
+    const schema = SchemaBuilder.getSchema(inputSchema)
+    const content = isPath ? loadContent(targetObject) : targetObject
+    const clone = JSON.parse(JSON.stringify(content))
+    const misMatches = new Schema(schema).validate(content).map(err => ({ path: err.path, message: err.message }))
+    const extraFiels = validateExtraFields(clone, schema)
+    return printErrors(misMatches, extraFiels, logger, logLevels[logLevel])
+  } catch (error) {
+    logger?.error(error)
+  }
+}
+
+/**
  * Validate Entity Schema
  * @param entities
  * @param logger
  */
-export function validateEntity(entities, logger) {
+export function validateEntity(entities, logger?) {
   const requiredSchema = {
     entities: [{
       name: { type: String, required: true, length: { min: 1, max: 12 }, use: { checkName } },
@@ -27,47 +62,12 @@ export function validateEntity(entities, logger) {
       key: { type: String, required: true, length: { min: 1, max: 12 }, use: { checkName } }
     }]
   }
-  const schemaErrors = validateSchema(entities, requiredSchema, logger)
+  const schemaErrors = this.validateSchema(entities, requiredSchema, logger)
 
   return schemaErrors.length < 1;
 }
 
-/**
- * Strict Name validation, apply to all blockchains
- * @param val
- */
-function checkName(val) {
-  return /^[1-5a-zA-Z]+/.test(val);
-}
-
-/**
- * Strict Type validation, apply to all blockchains
- * @param val
- */
-function checkType(val) {
-  const supportedType = ["uint64_t", "number", "string", "array", "bool"];
-  return supportedType.indexOf(val) !== -1
-}
-
-export function validateSchema(targetObject, inputSchema = {}, logger?: Logger, logLevel = 3){
-
-  const isPath = typeof targetObject === 'string'
-  if(isPath ? !fs.existsSync(targetObject) : typeof targetObject !== 'object')
-    return logger?.error('Target must be either be an object or a valid filepath');
-
-  try {
-    const schema = SchemaBuilder.getSchema(inputSchema)
-    const content = isPath ? loadContent(targetObject) : targetObject
-    const clone = JSON.parse(JSON.stringify(content))
-    const misMatches = new Schema(schema).validate(content).map(err => ({path: err.path, message: err.message}))
-    const extraFiels = validateExtraFields(clone, schema)
-    return printErrors(misMatches, extraFiels, logger, logLevels[logLevel])
-  } catch (error) {
-    logger?.error(error)
-  }
-}
-
-function validateExtraFields(targetObj, schemaObj){
+export function validateExtraFields(targetObj, schemaObj) {
   const extras = []
 
   const leafNode = (obj) => {
@@ -75,7 +75,7 @@ function validateExtraFields(targetObj, schemaObj){
   }
 
   const _parseTarget = (target, schema, parsedLevel = '') => {
-    if (typeof target !== 'object'){
+    if (typeof target !== 'object') {
       return
     }
 
@@ -85,8 +85,8 @@ function validateExtraFields(targetObj, schemaObj){
       const schemaKey = target instanceof Array ? schema[0] : schema[key]
       const nextLevel = parsedLevel ? `${parsedLevel}.${key}` : key
 
-      if(!schemaKey || typeof target[key] !== 'object' && !leafNode(schemaKey)) {
-        extras.push({ path: nextLevel, message: `${nextLevel} is not present in schema`})
+      if (!schemaKey || typeof target[key] !== 'object' && !leafNode(schemaKey)) {
+        extras.push({ path: nextLevel, message: `${nextLevel} is not present in schema` })
       } else {
         _parseTarget(target[key], schemaKey, nextLevel)
       }
@@ -95,25 +95,4 @@ function validateExtraFields(targetObj, schemaObj){
 
   _parseTarget(targetObj, schemaObj)
   return extras;
-}
-
-
-function _getSchemaFromObj(object){
-  const keyValues = {}
-  for(const key in object) {
-    if(typeof object[key] === 'object') {
-      if(Array.isArray(object[key])) {
-        const first = object[key][0]
-        keyValues[key] = [
-          typeof first === 'object' ? _getSchemaFromObj(first) : {type: typeof first}
-        ]
-      } else {
-        keyValues[key] = _getSchemaFromObj(object[key])
-      }
-    } else {
-      keyValues[key] = { required: true, type: typeof object[key]}
-    }
-  }
-
-  return keyValues
 }
