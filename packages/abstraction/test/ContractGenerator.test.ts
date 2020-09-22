@@ -1,7 +1,8 @@
-import { ContractGenerator } from '@aloxide/abstraction';
-import { EOSContractAdapter, ICONContractAdapter, ModelContractAdapter } from '@aloxide/bridge';
 import path from 'path';
 
+import { EOSContractAdapter, ICONContractAdapter, ModelContractAdapter } from '../../bridge/src';
+import { ContractGeneratorConfig } from '../src';
+import { ContractGenerator } from '../src/ContractGenerator';
 import createLoggerTest from './createLoggerTest';
 
 describe('test ContractGenerator', () => {
@@ -15,6 +16,17 @@ describe('test ContractGenerator', () => {
       }).toThrowError('Missing configuration!');
     });
 
+    it('should use console as default logger', () => {
+      jest.spyOn(console, 'debug').mockImplementation(jest.fn());
+
+      const c = new ContractGenerator({
+        adapters: new EOSContractAdapter(),
+        outputPath,
+        aloxideConfigPath: path.resolve(outputPath, './aloxide.yml'),
+      });
+      expect(c.logger).toEqual(console);
+    });
+
     it('should throw error if Aloxide config is missing', () => {
       const logger = createLoggerTest();
       expect(() => {
@@ -22,21 +34,9 @@ describe('test ContractGenerator', () => {
         return new ContractGenerator({
           logger,
           adapters: new EOSContractAdapter(),
-          resultPath: outputPath,
+          outputPath,
         });
       }).toThrowError('Invalid Aloxide config: missing aloxideConfigPath');
-    });
-
-    it('should throw error if Aloxide config is invalid', () => {
-      const logger = createLoggerTest();
-      expect(() => {
-        return new ContractGenerator({
-          logger,
-          adapters: new EOSContractAdapter(),
-          resultPath: outputPath,
-          aloxideConfigPath: path.resolve(outputPath, './invalid_aloxide.yml'),
-        });
-      }).toThrowError('Invalid Aloxide config: Input entities mismatch!');
     });
 
     it('should throw error when missing "resultPath" config', () => {
@@ -48,20 +48,7 @@ describe('test ContractGenerator', () => {
           adapters: new EOSContractAdapter(),
           aloxideConfigPath: path.resolve(outputPath, './aloxide.yml'),
         });
-      }).toThrowError('Missing "resultPath"!');
-    });
-
-    it('should throw error when adding invalid adapter', () => {
-      const logger = createLoggerTest();
-      expect(() => {
-        return new ContractGenerator({
-          resultPath: outputPath,
-          // @ts-ignore
-          adapters: 'invalid adapter config',
-          aloxideConfigPath: path.resolve(outputPath, './aloxide.yml'),
-          logger,
-        });
-      }).toThrowError('Invalid Contract Adapter');
+      }).toThrowError('Missing "outputPath"!');
     });
 
     it('should allow to add multi adapters on initialization', () => {
@@ -69,7 +56,7 @@ describe('test ContractGenerator', () => {
       expect(() => {
         return new ContractGenerator({
           logger,
-          resultPath: outputPath,
+          outputPath,
           adapters: [new EOSContractAdapter(), new ICONContractAdapter()],
           aloxideConfigPath: path.resolve(outputPath, './aloxide.yml'),
         });
@@ -90,7 +77,7 @@ describe('test ContractGenerator', () => {
       const generator = new ContractGenerator({
         logger,
         adapters: [adapter1, adapter2, adapter3],
-        resultPath: outputPath,
+        outputPath,
         aloxideConfigPath: path.resolve(__dirname, './aloxide.yml'),
       });
 
@@ -109,12 +96,16 @@ describe('test ContractGenerator', () => {
       const logger = createLoggerTest();
       const generator = new ContractGenerator({
         logger,
-        resultPath: outputPath,
+        outputPath,
         aloxideConfigPath: path.resolve(outputPath, './aloxide.yml'),
       });
 
       expect(() => {
         generator.addAdapters(new EOSContractAdapter());
+      }).not.toThrowError();
+
+      expect(() => {
+        generator.addAdapters([new EOSContractAdapter()]);
       }).not.toThrowError();
     });
 
@@ -122,13 +113,90 @@ describe('test ContractGenerator', () => {
       const logger = createLoggerTest();
       const generator = new ContractGenerator({
         logger,
-        resultPath: outputPath,
+        outputPath,
         aloxideConfigPath: path.resolve(outputPath, './aloxide.yml'),
       });
 
       expect(() => {
         generator.addAdapters([new EOSContractAdapter(), new ICONContractAdapter()]);
       }).not.toThrowError();
+    });
+  });
+
+  describe('configure adapter', () => {
+    const outputPath = __dirname;
+
+    beforeEach(() => {
+      jest.spyOn(console, 'debug').mockImplementation(jest.fn());
+    });
+
+    it('default value', () => {
+      const config: ContractGeneratorConfig = {
+        outputPath,
+        aloxideConfigPath: path.resolve(outputPath, './aloxide.yml'),
+      };
+
+      const generator = new ContractGenerator(config);
+      const adapter = new EOSContractAdapter();
+      const configuredAdapter = generator.configureAdapter(adapter);
+
+      expect(configuredAdapter.logger).toEqual(adapter.logger);
+      expect(configuredAdapter.contractName).toEqual('hello');
+      expect(configuredAdapter.entityConfigs).toEqual(generator.aloxideConfig.entities);
+      expect(configuredAdapter.logDataOnly).toEqual(false);
+    });
+
+    it('configure adapter with contract name', () => {
+      const config: ContractGeneratorConfig = {
+        outputPath,
+        aloxideConfigPath: path.resolve(outputPath, './aloxide.yml'),
+        contractName: 'ee1',
+      };
+
+      const generator = new ContractGenerator(config);
+      const adapter = new EOSContractAdapter();
+      const configuredAdapter = generator.configureAdapter(adapter);
+
+      expect(configuredAdapter.contractName).toEqual(config.contractName);
+    });
+
+    describe('config logDataOnly', () => {
+      const config: ContractGeneratorConfig = {
+        outputPath,
+        aloxideConfigPath: path.resolve(outputPath, './aloxide.yml'),
+      };
+
+      it('adapter.logDataOnly is not null', () => {
+        const generator = new ContractGenerator(config);
+        const adapter = new EOSContractAdapter();
+        adapter.logDataOnly = false;
+        const configuredAdapter = generator.configureAdapter(adapter);
+
+        expect(configuredAdapter.logDataOnly).toEqual(false);
+      });
+
+      it('adapter.logDataOnly is null and undefined logDataOnly', () => {
+        const generator = new ContractGenerator(config);
+        const adapter = new EOSContractAdapter();
+        const configuredAdapter = generator.configureAdapter(adapter);
+        expect(configuredAdapter.logDataOnly).toEqual(false);
+      });
+
+      it('adapter.logDataOnly is null and logDataOnly is false', () => {
+        config.logDataOnly = false;
+        const generator = new ContractGenerator(config);
+        const adapter = new EOSContractAdapter();
+        const configuredAdapter = generator.configureAdapter(adapter);
+        expect(configuredAdapter.logDataOnly).toEqual(config.logDataOnly);
+      });
+
+      it('adapter.logDataOnly is null and logDataOnly is true', () => {
+        config.logDataOnly = true;
+        const generator = new ContractGenerator(config);
+        const adapter = new EOSContractAdapter();
+        const configuredAdapter = generator.configureAdapter(adapter);
+        expect(configuredAdapter.logDataOnly).toEqual(config.logDataOnly);
+      });
     });
   });
 });

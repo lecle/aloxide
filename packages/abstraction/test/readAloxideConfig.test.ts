@@ -6,8 +6,6 @@ import createLoggerTest from './createLoggerTest';
 
 describe('test ContractGenerator', () => {
   describe('test read aloxide configuration', () => {
-    const logger = createLoggerTest();
-
     const sampleAloxideConfig: AloxideConfig = {
       entities: [
         {
@@ -52,6 +50,7 @@ describe('test ContractGenerator', () => {
 
     it('should load aloxide.yml', () => {
       const aloxideConfigPath = path.resolve(__dirname, './aloxide.yml');
+      const logger = createLoggerTest();
       const aloxideConfig = readAloxideConfig(aloxideConfigPath, logger);
       expect(logger.debug).toBeCalledWith('parsing aloxide config with YAML format');
       expect(aloxideConfig).toEqual(sampleAloxideConfig);
@@ -59,6 +58,7 @@ describe('test ContractGenerator', () => {
 
     it('should load aloxide.yaml', () => {
       const aloxideConfigPath = path.resolve(__dirname, './aloxide.yaml');
+      const logger = createLoggerTest();
       const aloxideConfig = readAloxideConfig(aloxideConfigPath, logger);
       expect(logger.debug).toBeCalledWith('parsing aloxide config with YAML format');
       expect(aloxideConfig).toEqual(sampleAloxideConfig);
@@ -66,8 +66,21 @@ describe('test ContractGenerator', () => {
 
     it('should load aloxide.json', () => {
       const aloxideConfigPath = path.resolve(__dirname, './aloxide.json');
+      const logger = createLoggerTest();
       const aloxideConfig = readAloxideConfig(aloxideConfigPath, logger);
       expect(logger.debug).toBeCalledWith('parsing aloxide config with JSON format');
+      expect(aloxideConfig).toEqual(sampleAloxideConfig);
+    });
+
+    it('should load aloxide.yaml - null logger', () => {
+      const aloxideConfigPath = path.resolve(__dirname, './aloxide.yaml');
+      const aloxideConfig = readAloxideConfig(aloxideConfigPath);
+      expect(aloxideConfig).toEqual(sampleAloxideConfig);
+    });
+
+    it('should load aloxide.json - null logger', () => {
+      const aloxideConfigPath = path.resolve(__dirname, './aloxide.json');
+      const aloxideConfig = readAloxideConfig(aloxideConfigPath);
       expect(aloxideConfig).toEqual(sampleAloxideConfig);
     });
   });
