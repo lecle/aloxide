@@ -8,7 +8,7 @@ import {
   ModelAttributes,
   ModelCtor,
   Sequelize,
-} from 'sequelize/types';
+} from 'sequelize';
 
 import { SequelizeTypeInterpreter } from './SequelizeTypeInterpreter';
 
