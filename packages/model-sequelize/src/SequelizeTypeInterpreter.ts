@@ -1,6 +1,7 @@
-import { FieldTypeEnum, Interpreter } from '@aloxide/bridge';
+import { FieldTypeEnum } from '@aloxide/bridge';
 import { DataTypes } from 'sequelize';
 
+import type { Interpreter } from '@aloxide/bridge';
 import type { DataType } from 'sequelize/types';
 
 export class SequelizeTypeInterpreter implements Interpreter<FieldTypeEnum, DataType> {

@@ -1,16 +1,19 @@
-import { AloxideConfig, readAloxideConfig } from '@aloxide/abstraction';
-import { EntityConfig, Field, FieldTypeEnum, Interpreter } from '@aloxide/bridge';
+import { readAloxideConfig } from '@aloxide/abstraction';
+import { FieldTypeEnum } from '@aloxide/bridge';
 
 import { SequelizeTypeInterpreter } from './SequelizeTypeInterpreter';
 
+import type { AloxideConfig } from '@aloxide/abstraction';
+import type { EntityConfig, Field, Interpreter } from '@aloxide/bridge';
 import type {
   Model,
   ModelCtor,
   Sequelize,
   DataType,
   ModelAttributeColumnOptions,
+  ModelAttributes,
 } from 'sequelize/types';
-import type { Logger } from '@aloxide/logger';
+import type { Logger } from './Logger';
 
 export interface ModelBuilderConfig {
   aloxideConfigPath: string;
@@ -34,15 +37,15 @@ export class ModelBuilder {
 
   build(sequelize: Sequelize): ModelCtor<Model>[] {
     return this.aloxideConfig.entities.map(entityConfig =>
-      ModelBuilder.makeModelFromEntityConfig(sequelize, entityConfig, this.typeInterpreter),
+      ModelBuilder.makeModelFromEntityConfig(sequelize, this.typeInterpreter, entityConfig),
     );
   }
 
   static makeModelFromEntityConfig(
     sequelize: Sequelize,
-    entityConfig: EntityConfig,
     typeInterpreter: Interpreter<FieldTypeEnum, DataType>,
-  ) {
+    entityConfig: EntityConfig,
+  ): ModelCtor<Model> {
     const { name, fields, key } = entityConfig;
     return sequelize.define(name, ModelBuilder.mapField(typeInterpreter, fields, key));
   }
@@ -51,7 +54,7 @@ export class ModelBuilder {
     typeInterpreter: Interpreter<FieldTypeEnum, DataType>,
     fields: Field[],
     key: string,
-  ) {
+  ): ModelAttributes {
     return fields.reduce((a, c) => {
       const field: ModelAttributeColumnOptions<Model> = {
         type: typeInterpreter.interpret(c.type as FieldTypeEnum),
