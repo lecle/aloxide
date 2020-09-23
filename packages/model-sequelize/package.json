@@ -1,5 +1,5 @@
 {
-  "name": "@aloxide/model",
+  "name": "@aloxide/model-sequelize",
   "description": "Example of using jest with a TS monorepo",
   "version": "0.1.0",
   "author": "Lecle",
