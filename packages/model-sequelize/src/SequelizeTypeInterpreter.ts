@@ -19,6 +19,8 @@ export class SequelizeTypeInterpreter implements Interpreter<FieldTypeEnum, Data
         type = DataTypes.BIGINT;
         break;
       case FieldTypeEnum.number:
+        type = DataTypes.NUMBER;
+        break;
       case FieldTypeEnum.double:
         type = DataTypes.DOUBLE;
         break;
@@ -26,8 +28,10 @@ export class SequelizeTypeInterpreter implements Interpreter<FieldTypeEnum, Data
         type = DataTypes.BOOLEAN;
         break;
       case FieldTypeEnum.account:
+        type = DataTypes.STRING;
+        break;
       case FieldTypeEnum.string:
-        type = DataTypes.TEXT;
+        type = DataTypes.STRING(1024);
         break;
       default:
         throw new Error(`unknow type ${input}`);
