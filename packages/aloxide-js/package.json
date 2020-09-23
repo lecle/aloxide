@@ -1,8 +1,8 @@
 {
-  "name": "@aloxide/aloxidesdk",
-  "description": "sdk",
+  "name": "@aloxide/aloxide-js",
+  "description": "Aloxide SDK for Javascript",
   "version": "0.1.0",
-  "author": "Quoc Le",
+  "author": "Lecle",
   "license": "Apache-2.0",
   "private": false,
   "publishConfig": {
