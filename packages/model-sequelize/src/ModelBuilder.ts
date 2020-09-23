@@ -1,18 +1,19 @@
 import { readAloxideConfig } from '@aloxide/abstraction';
 import { FieldTypeEnum } from '@aloxide/bridge';
+import {
+  DataType,
+  DataTypes,
+  Model,
+  ModelAttributeColumnOptions,
+  ModelAttributes,
+  ModelCtor,
+  Sequelize,
+} from 'sequelize/types';
 
 import { SequelizeTypeInterpreter } from './SequelizeTypeInterpreter';
 
 import type { AloxideConfig } from '@aloxide/abstraction';
 import type { EntityConfig, Field, Interpreter } from '@aloxide/bridge';
-import type {
-  Model,
-  ModelCtor,
-  Sequelize,
-  DataType,
-  ModelAttributeColumnOptions,
-  ModelAttributes,
-} from 'sequelize/types';
 import type { Logger } from './Logger';
 
 export interface ModelBuilderConfig {
@@ -62,7 +63,15 @@ export class ModelBuilder {
 
       if (c.name === key) {
         field.primaryKey = true;
-        field.autoIncrement = true;
+        switch (field.type) {
+          case DataTypes.SMALLINT:
+          case DataTypes.INTEGER:
+          case DataTypes.BIGINT:
+          case DataTypes.NUMBER:
+          case DataTypes.DOUBLE:
+            field.autoIncrement = true;
+            break;
+        }
       }
 
       return Object.assign(a, {
