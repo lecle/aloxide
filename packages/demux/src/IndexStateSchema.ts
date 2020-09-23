@@ -21,6 +21,22 @@ export const indexStateSchema: EntityConfig = {
       name: 'handlerVersionName',
       type: FieldTypeEnum.string,
     },
+    {
+      name: 'state',
+      type: FieldTypeEnum.string,
+    },
+    {
+      name: 'liBlockNumber',
+      type: FieldTypeEnum.number,
+    },
+    {
+      name: 'lpBlockHash',
+      type: FieldTypeEnum.string,
+    },
+    {
+      name: 'lpBlockNumber',
+      type: FieldTypeEnum.number,
+    },
   ],
   key: 'handlerVersionName',
 };
