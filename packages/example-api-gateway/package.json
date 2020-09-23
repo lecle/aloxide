@@ -34,7 +34,7 @@
     "@aloxide/api-gateway": "^0.1.0",
     "@aloxide/demux": "^0.1.0",
     "@aloxide/demux-icon": "^0.1.0",
-    "@aloxide/model": "^0.1.0",
+    "@aloxide/model-sequelize": "^0.1.0",
     "bunyan": "^1.8.14",
     "demux-eos": "^4.0.1",
     "express": "^4.17.1",

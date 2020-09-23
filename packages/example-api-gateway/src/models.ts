@@ -1,25 +1,9 @@
-import { DataProvider } from '@aloxide/demux';
-import { ModelBuilder } from '@aloxide/model';
+import { DataProvider, indexStateSchema } from '@aloxide/demux';
+import { ModelBuilder } from '@aloxide/model-sequelize';
 import Logger from 'bunyan';
-import { DataTypes, ModelAttributes, Op, Sequelize } from 'sequelize';
+import { ModelAttributes, Op, Sequelize } from 'sequelize';
 
 import config from './config';
-
-const indexStateSchema: ModelAttributes = {
-  blockNumber: {
-    type: DataTypes.INTEGER,
-  },
-  blockHash: {
-    type: DataTypes.STRING,
-  },
-  isReplay: {
-    type: DataTypes.BOOLEAN,
-  },
-  handlerVersionName: {
-    type: DataTypes.STRING,
-    primaryKey: true,
-  },
-};
 
 const modelBuilder = new ModelBuilder({
   aloxideConfigPath: config.aloxideConfigPath,
@@ -28,6 +12,12 @@ const modelBuilder = new ModelBuilder({
     name: 'models',
   }),
 });
+
+const indexStateSequelizeFields: ModelAttributes = ModelBuilder.mapField(
+  modelBuilder.typeInterpreter,
+  indexStateSchema.fields,
+  indexStateSchema.key,
+);
 
 export function createDataProvider(
   sequelize: Sequelize,
@@ -38,7 +28,7 @@ export function createDataProvider(
   const models = modelBuilder.build(sequelize);
 
   if (isIndexState) {
-    models.push(sequelize.define(name, indexStateSchema));
+    models.push(sequelize.define(name, indexStateSequelizeFields));
   }
 
   const m = models.find(model => model.name == modelName);
