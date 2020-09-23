@@ -8,17 +8,37 @@ declare global {
 }
 
 export function connectDb(db?: string) {
-  const gSequelize = new Sequelize(
-    db || process.env.app_postgres_db,
-    process.env.app_postgres_user,
-    process.env.app_postgres_pw,
-    {
-      host: process.env.app_postgres_host,
-      port: parseInt(process.env.app_postgres_port, 10),
-      dialect: 'postgres',
-      logging: msg => global.logger.debug(msg),
-    },
-  );
+  let gSequelize: Sequelize;
+
+  switch (process.env.app_database_type) {
+    case 'memory':
+      gSequelize = new Sequelize('sqlite::memory:', {
+        logging: msg => global.logger.debug(msg),
+      });
+      break;
+    case 'sqlite':
+      gSequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: path.resolve(__dirname, '../.cache/database.sqlite'),
+        logging: msg => global.logger.debug(msg),
+      });
+      break;
+    case 'postgres':
+      gSequelize = new Sequelize(
+        db || process.env.app_postgres_db,
+        process.env.app_postgres_user,
+        process.env.app_postgres_pw,
+        {
+          host: process.env.app_postgres_host,
+          port: parseInt(process.env.app_postgres_port, 10),
+          dialect: 'postgres',
+          logging: msg => global.logger.debug(msg),
+        },
+      );
+      break;
+    default:
+      throw new Error(`Unknown database type: ${process.env.app_database_type}`);
+  }
 
   gSequelize
     .authenticate()
