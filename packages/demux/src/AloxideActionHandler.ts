@@ -3,22 +3,26 @@ import { AbstractActionHandler } from 'demux';
 
 import { indexStateSchema } from './indexStateSchema';
 
-import type { NextBlock, HandlerVersion, IndexState, ActionHandlerOptions } from 'demux';
+import type {
+  NextBlock,
+  HandlerVersion,
+  IndexState,
+  ActionHandlerOptions,
+  HandlerInfo,
+} from 'demux';
 import type { DataAdapter } from './DataAdapter';
 import type { DMeta } from './DMeta';
-
-interface IndexStateModel extends IndexState {
-  id: number;
-}
+import type { IndexStateModel } from './IndexStateModel';
 
 export interface AloxideActionHandlerOptions extends ActionHandlerOptions {
   indexStateModelName?: string;
 }
 
+export interface AloxideActionHandlerContext {
+  info: HandlerInfo;
+}
+
 export class AloxideActionHandler extends AbstractActionHandler {
-  state: any = {};
-  stateHistory: any = {};
-  stateHistoryMaxLength = 300;
   indexStateModel: IndexStateModel;
   indexStateEntity: EntityConfig = indexStateSchema;
 
@@ -45,7 +49,7 @@ export class AloxideActionHandler extends AbstractActionHandler {
     nextBlock: NextBlock,
     isReplay: boolean,
     handlerVersionName: string,
-    context?: any,
+    context?: AloxideActionHandlerContext,
   ): Promise<void> {
     const block = nextBlock.block;
 
@@ -53,6 +57,16 @@ export class AloxideActionHandler extends AbstractActionHandler {
     this.indexStateModel.blockHash = block.blockInfo.blockHash;
     this.indexStateModel.isReplay = isReplay;
     this.indexStateModel.handlerVersionName = handlerVersionName;
+
+    if (state) {
+      this.indexStateModel.state = JSON.stringify(state);
+    }
+
+    if (context) {
+      this.indexStateModel.liBlockNumber = context.info.lastIrreversibleBlockNumber;
+      this.indexStateModel.lpBlockHash = context.info.lastProcessedBlockHash;
+      this.indexStateModel.lpBlockNumber = context.info.lastProcessedBlockNumber;
+    }
 
     return this.dataAdapter
       .update(this.getIndexStateModelName(), this.indexStateModel, {
@@ -112,18 +126,21 @@ export class AloxideActionHandler extends AbstractActionHandler {
   }
 
   protected async handleWithState(handle: (state: any, context?: any) => void): Promise<void> {
-    await handle(this.state);
+    const context: AloxideActionHandlerContext = {
+      info: this.info,
+    };
 
-    const { blockNumber } = this.indexStateModel;
-
-    this.stateHistory[blockNumber] = JSON.parse(JSON.stringify(this.state));
-
-    if (
-      blockNumber > this.stateHistoryMaxLength &&
-      this.stateHistory[blockNumber - this.stateHistoryMaxLength]
-    ) {
-      delete this.stateHistory[blockNumber - this.stateHistoryMaxLength];
+    const stateString = this.indexStateModel.state;
+    if (stateString) {
+      try {
+        const state = JSON.parse(stateString);
+        return handle(state, context);
+      } catch (err) {
+        this.log.warn(`-- can not deserialize state: ${stateString}`, err);
+      }
     }
+
+    return handle(null, context);
   }
 
   protected async setup(): Promise<void> {
@@ -136,16 +153,6 @@ export class AloxideActionHandler extends AbstractActionHandler {
   }
 
   protected async rollbackTo(blockNumber: number): Promise<void> {
-    const latestBlockNumber = this.indexStateModel.blockNumber;
-
-    const toDelete = [...Array(latestBlockNumber - blockNumber).keys()].map(
-      n => n + blockNumber + 1,
-    );
-
-    for (const n of toDelete) {
-      delete this.stateHistory[n];
-    }
-
-    this.state = this.stateHistory[blockNumber];
+    this.log.debug('-- roll back to block number:', blockNumber);
   }
 }
