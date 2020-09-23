@@ -7,7 +7,7 @@ export const indexStateSchema: EntityConfig = {
   fields: [
     {
       name: 'blockNumber',
-      type: FieldTypeEnum.number,
+      type: FieldTypeEnum.uint64_t,
     },
     {
       name: 'blockHash',
@@ -15,7 +15,7 @@ export const indexStateSchema: EntityConfig = {
     },
     {
       name: 'isReplay',
-      type: FieldTypeEnum.number,
+      type: FieldTypeEnum.uint64_t,
     },
     {
       name: 'handlerVersionName',
@@ -27,7 +27,7 @@ export const indexStateSchema: EntityConfig = {
     },
     {
       name: 'liBlockNumber',
-      type: FieldTypeEnum.number,
+      type: FieldTypeEnum.uint64_t,
     },
     {
       name: 'lpBlockHash',
@@ -35,7 +35,7 @@ export const indexStateSchema: EntityConfig = {
     },
     {
       name: 'lpBlockNumber',
-      type: FieldTypeEnum.number,
+      type: FieldTypeEnum.uint64_t,
     },
   ],
   key: 'handlerVersionName',
