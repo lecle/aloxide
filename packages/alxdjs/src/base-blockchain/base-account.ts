@@ -1,11 +1,9 @@
-const eosECC = require('eosjs').modules.ecc;
-
 export default class BaseAccount {
-    privateKey: String;
-    name: String;
+  privateKey: string;
+  name: string;
 
-    constructor (privateKey, name) {
-        this.privateKey = privateKey;
-        this.name = name;
-    }
+  constructor(privateKey, name) {
+    this.privateKey = privateKey;
+    this.name = name;
+  }
 }

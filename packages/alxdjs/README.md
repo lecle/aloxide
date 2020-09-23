@@ -1,8 +1,7 @@
 
-alxdjs.js
-============
+# aloxide-js
 
-## Version 0.0.1 
+## Basic Usage
 
 ```javascript
 
