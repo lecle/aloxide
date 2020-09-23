@@ -9,7 +9,8 @@
     "example-api-gateway",
     "example-generante-sm",
     "demux-icon",
-    "demux"
+    "demux",
+    "model-sequelize"
   ],
   "files.associations": {
     "__locale": "cpp",
