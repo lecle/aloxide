@@ -2,7 +2,10 @@ import fs from 'fs';
 import Handlebars from 'handlebars';
 import path from 'path';
 
-import { EntityConfig, EOSContractAdapter } from '../src';
+import { CplusplusPrettier, EntityConfig, EOSContractAdapter, FilePrinter } from '../src';
+import { EOSCreAction } from '../src/eos/EOSCreAction';
+import { EOSDelAction } from '../src/eos/EOSDelAction';
+import { EOSUpdAction } from '../src/eos/EOSUpdAction';
 
 jest.mock('../src/printer/FilePrinter');
 
@@ -69,7 +72,7 @@ describe('test EOS contract addapter', () => {
         info: jest.fn(),
         debug: jest.fn(),
       };
-      const templatePath = 'test-path';
+      const templatePath = path.resolve(__dirname, '../smart-contract-templates');
       adapter.templatePath = templatePath;
 
       const createTables = jest.spyOn(adapter, 'createTables');
@@ -151,6 +154,169 @@ describe('test EOS contract addapter', () => {
         actions: undefined,
         contractName: undefined,
       });
+    });
+  });
+
+  describe('test generateCpp', () => {
+    it('should generateCpp successful', () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
+      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      adapter.templatePath = templatePath;
+      adapter.contractName = 'contractName';
+      adapter.printer = new FilePrinter(
+        adapter.outputPath,
+        new CplusplusPrettier(),
+        adapter.logger,
+      );
+      const spyPrint = jest.spyOn(adapter.printer, 'print').mockResolvedValueOnce('');
+
+      adapter.generateCpp();
+      expect(spyPrint).toBeCalledTimes(1);
+    });
+  });
+  describe('test generateHpp', () => {
+    it('should generateHpp successful', () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
+      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      adapter.templatePath = templatePath;
+      adapter.contractName = 'contractName';
+      adapter.printer = new FilePrinter(
+        adapter.outputPath,
+        new CplusplusPrettier(),
+        adapter.logger,
+      );
+      const spyPrint = jest.spyOn(adapter.printer, 'print').mockResolvedValueOnce('');
+
+      adapter.generateHpp();
+      expect(spyPrint).toBeCalledTimes(1);
+    });
+  });
+
+  describe('test generateCpp', () => {
+    it('should generateCpp successful', () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
+      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      adapter.templatePath = templatePath;
+      adapter.contractName = 'contractName';
+      adapter.printer = new FilePrinter(
+        adapter.outputPath,
+        new CplusplusPrettier(),
+        adapter.logger,
+      );
+      const spyPrint = jest.spyOn(adapter.printer, 'print').mockResolvedValueOnce('');
+
+      adapter.generateCpp();
+      expect(spyPrint).toBeCalledTimes(1);
+    });
+  });
+  describe('test generateHpp', () => {
+    it('should generateHpp successful', () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
+      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      adapter.templatePath = templatePath;
+      adapter.contractName = 'contractName';
+      adapter.printer = new FilePrinter(
+        adapter.outputPath,
+        new CplusplusPrettier(),
+        adapter.logger,
+      );
+      const spyPrint = jest.spyOn(adapter.printer, 'print').mockResolvedValueOnce('');
+
+      adapter.generateHpp();
+      expect(spyPrint).toBeCalledTimes(1);
+    });
+  });
+
+  describe('test createTables', () => {
+    it('should createTables successful', () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
+      const table = [
+        {
+          name: 'poll',
+          fields: [
+            { name: 'id', type: 'uint64_t' },
+            { name: 'name', type: 'std::string' },
+            { name: 'body', type: 'std::string' },
+          ],
+          primaryKeyField: { name: 'id', type: 'uint64_t' },
+        },
+        {
+          name: 'vote',
+          fields: [
+            { name: 'id', type: 'uint64_t' },
+            { name: 'pollId', type: 'uint64_t' },
+            { name: 'ownerId', type: 'uint64_t' },
+            { name: 'point', type: 'double' },
+          ],
+          primaryKeyField: { name: 'id', type: 'uint64_t' },
+        },
+      ];
+
+      adapter.createTables();
+      expect(adapter.tables).toEqual(table);
+    });
+  });
+
+  describe('test createActions', () => {
+    it('should createActions successful', () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      const table = [
+        {
+          name: 'poll',
+          fields: [
+            { name: 'id', type: 'uint64_t' },
+            { name: 'name', type: 'std::string' },
+            { name: 'body', type: 'std::string' },
+          ],
+          primaryKeyField: { name: 'id', type: 'uint64_t' },
+        },
+        {
+          name: 'vote',
+          fields: [
+            { name: 'id', type: 'uint64_t' },
+            { name: 'pollId', type: 'uint64_t' },
+            { name: 'ownerId', type: 'uint64_t' },
+            { name: 'point', type: 'uint64_t' },
+          ],
+          primaryKeyField: { name: 'id', type: 'uint64_t' },
+        },
+      ];
+      adapter.tables = table;
+      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      adapter.templatePath = templatePath;
+      adapter.actionCreators = [new EOSCreAction(), new EOSUpdAction(), new EOSDelAction()];
+      adapter.actionCreators.forEach(ac => {
+        ac.templatePath = adapter.templatePath;
+        ac.logDataOnly = adapter.logDataOnly;
+      });
+      adapter.createActions();
+      expect(adapter.actions).toBeDefined();
     });
   });
 });
