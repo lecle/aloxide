@@ -6,6 +6,8 @@ export type { IndexStateModel } from './IndexStateModel';
 export type { DataAdapter } from './DataAdapter';
 export type { DataProvider } from './DataProvider';
 export type { Logger } from './Logger';
+export type { DbUpdaterOptions } from './DbUpdater';
+export type { DbUpdaterActionPayload } from './DbUpdater';
 
 export { AloxideActionHandler } from './AloxideActionHandler';
 export { DbUpdater } from './DbUpdater';
