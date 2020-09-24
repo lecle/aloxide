@@ -19,8 +19,6 @@ export class SequelizeTypeInterpreter implements Interpreter<FieldTypeEnum, Data
         type = DataTypes.BIGINT;
         break;
       case FieldTypeEnum.number:
-        type = DataTypes.NUMBER;
-        break;
       case FieldTypeEnum.double:
         type = DataTypes.DOUBLE;
         break;
