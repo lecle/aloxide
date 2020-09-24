@@ -15,7 +15,7 @@ export const indexStateSchema: EntityConfig = {
     },
     {
       name: 'isReplay',
-      type: FieldTypeEnum.uint64_t,
+      type: FieldTypeEnum.bool,
     },
     {
       name: 'handlerVersionName',
