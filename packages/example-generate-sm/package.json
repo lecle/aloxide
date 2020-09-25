@@ -1,7 +1,7 @@
 {
   "name": "@aloxide/example-generate-sm",
   "description": "Example of using jest with a TS monorepo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Lecle",
   "license": "Apache-2.0",
   "private": "true",
@@ -19,8 +19,8 @@
     "test:coverage": "yarn test --collectCoverage"
   },
   "dependencies": {
-    "@aloxide/abstraction": "^0.1.0",
-    "@aloxide/bridge": "^0.1.0",
+    "@aloxide/abstraction": "^0.2.0",
+    "@aloxide/bridge": "^0.2.0",
     "bunyan": "^1.8.14"
   },
   "devDependencies": {

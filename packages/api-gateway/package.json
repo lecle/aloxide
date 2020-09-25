@@ -1,7 +1,7 @@
 {
   "name": "@aloxide/api-gateway",
   "description": "Example of using jest with a TS monorepo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Lecle",
   "license": "Apache-2.0",
   "private": false,
@@ -27,8 +27,8 @@
     "test:coverage": "yarn test --collectCoverage"
   },
   "dependencies": {
-    "@aloxide/abstraction": "^0.1.0",
-    "@aloxide/demux": "^0.1.0",
+    "@aloxide/abstraction": "^0.2.0",
+    "@aloxide/demux": "^0.2.0",
     "express": "^4.17.1",
     "graphql": "^14.0.0",
     "graphql-relay": "^0.6.0"

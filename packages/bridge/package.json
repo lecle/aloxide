@@ -1,7 +1,7 @@
 {
   "name": "@aloxide/bridge",
   "description": "Example of using jest with a TS monorepo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Lecle",
   "license": "Apache-2.0",
   "private": false,
