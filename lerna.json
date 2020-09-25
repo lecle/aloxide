@@ -1,20 +1,16 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "version": "0.2.0",
   "useWorkspaces": true,
   "npmClient": "yarn",
   "command": {
     "version": {
       "allowBranch": "master",
-      "conventionalCommits": true,
-      "createRelease": "github"
+      "conventionalCommits": true
     },
     "publish": {
       "allowBranch": "master",
-      "conventionalCommits": true,
-      "createRelease": "github"
+      "conventionalCommits": true
     }
   }
 }
