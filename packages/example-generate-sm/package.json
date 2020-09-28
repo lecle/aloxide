@@ -7,7 +7,7 @@
   "private": "true",
   "repository": {
     "type": "git",
-    "url": "git@github.com:lecle/aloxide.git"
+    "url": "https://github.com/lecle/aloxide"
   },
   "scripts": {
     "prestart": "rimraf ./out",

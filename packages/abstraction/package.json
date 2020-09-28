@@ -1,6 +1,6 @@
 {
   "name": "@aloxide/abstraction",
-  "description": "Example of using jest with a TS monorepo",
+  "description": "Provide tool for generating smart-contract",
   "version": "0.2.0",
   "author": "Lecle",
   "license": "Apache-2.0",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:lecle/aloxide.git"
+    "url": "https://github.com/lecle/aloxide"
   },
   "main": "./dist/index",
   "files": [

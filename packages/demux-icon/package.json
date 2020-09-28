@@ -1,12 +1,16 @@
 {
   "name": "@aloxide/demux-icon",
-  "description": "demux for icon",
+  "description": "Implement of demux pattern for ICON",
   "version": "0.2.0",
   "author": "Lecle",
   "license": "Apache-2.0",
   "private": false,
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lecle/aloxide"
   },
   "main": "./dist/index",
   "files": [
