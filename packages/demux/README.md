@@ -1,6 +1,20 @@
-# demux
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+**Table of content**
+
+- [Package `@aloxide/demux`](#package-aloxidedemux)
+  - [Usage](#usage)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Package `@aloxide/demux`
+
+Implement demux pattern for sync data from blockchain to a centralized database.
 
 ## Usage
+
+[real samples](../example-api-gateway/src/readBlockchain.ts)
 
 [**`ExpressActionWatcher`**](https://github.com/EOSIO/demux-js/blob/develop/src/ExpressActionWatcher.ts): Exposes the API methods from the `BaseActionWatcher` through an Express server.
 
@@ -9,7 +23,7 @@ const expressWatcher = new ExpressActionWatcher(
   actionReader,
   actionHandler,
   pollInterval,
-  portNumber
+  portNumber,
 );
 
 expressWatcher.listen();

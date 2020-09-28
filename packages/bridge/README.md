@@ -3,15 +3,15 @@
 
 **Table of content**
 
-- [Package `@aloxide/api-gateway`](#package-aloxideapi-gateway)
+- [Package `@aloxide/bridge`](#package-aloxidebridge)
   - [Usage](#usage)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Package `@aloxide/api-gateway`
+# Package `@aloxide/bridge`
 
-Provide an API template for the back-end side.
+Provide adapter for integrating with blockchain
 
 ## Usage
 
-[sample](../example-api-gateway/src/index.ts)
+[sample](../example-generate-sm/src/index.ts)

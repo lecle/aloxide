@@ -1,4 +1,15 @@
-# `demux-icon`
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+**Table of content**
+
+- [Package `@aloxide/demux-icon`](#package-aloxidedemux-icon)
+  - [Usage](#usage)
+  - [Example](#example)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Package `@aloxide/demux-icon`
 
 `demux-icon` is an implementation of [demux](https://www.npmjs.com/package/demux) for ICON network
 
