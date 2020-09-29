@@ -1,0 +1,35 @@
+{
+  "name": "@aloxide/model-knex",
+  "description": "A model builder for Knex.js",
+  "version": "0.2.0",
+  "author": "Lecle",
+  "license": "Apache-2.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lecle/aloxide"
+  },
+  "main": "./dist/index",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/*.d.ts",
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "clean": "rimraf -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "yarn build",
+    "lint": "tslint --project . --fix",
+    "test": "jest --colors",
+    "test:coverage": "yarn test --collectCoverage"
+  },
+  "dependencies": {
+    "@aloxide/abstraction": "^0.2.0",
+    "@aloxide/bridge": "^0.2.0",
+    "knex": "^0.21.6"
+  },
+  "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a"
+}
