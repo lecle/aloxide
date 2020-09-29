@@ -6,15 +6,7 @@ entities:
       - name: name
         type: string
       - name: body
-        type: string
-      - name: isActive
-        type: bool
-      - name: pollNumber
-        type: uint16_t
-      - name: pollQuantity
-        type: uint32_t
-      - name: address
-        type: account
+        type: int
     key: id
   - name: Vote
     fields:
