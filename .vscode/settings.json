@@ -10,7 +10,8 @@
     "example-generante-sm",
     "demux-icon",
     "demux",
-    "model-sequelize"
+    "model-sequelize",
+    "model-knex"
   ],
   "files.associations": {
     "__locale": "cpp",
