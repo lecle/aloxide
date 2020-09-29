@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  postgre-db:
+    image: postgres
+    environment:
+      POSTGRES_USER: aloxide
+      POSTGRES_PASSWORD: localhost-pw2020
+    ports:
+      - 5432:5432
+  mysql-db:
+    image: mysql
+    environment:
+      MYSQL_USER: aloxide
+      MYSQL_ROOT_PASSWORD: localhost-pw2020
+    ports:
+      - 3306:3306
+  mongo-db:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=aloxide
+      - MONGO_INITDB_ROOT_PASSWORD=localhost-pw2020
+  dynamo-db:
+    image: amazon/dynamodb-local
+    command:
+      - -Djava.library.path=./DynamoDBLocal_lib
+      - -jar
+      - DynamoDBLocal.jar
+      - -dbPath
+      - /tmp
+      - -cors
+      - '*'
+      - -sharedDb
+    ports:
+      - 8000:8000
