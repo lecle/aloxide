@@ -17,6 +17,10 @@ describe('model', () => {
           { name: 'id', type: 'uint64_t' },
           { name: 'name', type: 'string' },
           { name: 'body', type: 'string' },
+          { name: 'isActive', type: 'bool' },
+          { name: 'pollNumber', type: 'uint16_t' },
+          { name: 'pollQuantity', type: 'uint32_t' },
+          { name: 'address', type: 'account' },
         ],
         key: 'id',
         name: 'Poll',
@@ -34,7 +38,7 @@ describe('model', () => {
     ],
   };
 
-  it('shoudl build model', () => {
+  it('should build model', () => {
     const aloxideConfigPath = path.resolve(__dirname, './aloxide.yml');
     const modelBuilder = new ModelBuilder({
       aloxideConfigPath,
@@ -48,5 +52,16 @@ describe('model', () => {
     expect(models.length).toEqual(2);
     expect(sequelize.models.Poll).toBeTruthy();
     expect(sequelize.models.Vote).toBeTruthy();
+  });
+
+  it('should build model is failed', () => {
+    const aloxideConfigPath = path.resolve(__dirname, './wrong-aloxide.yml');
+    const modelBuilder = new ModelBuilder({
+      aloxideConfigPath,
+      logger,
+    });
+
+    const sequelize = new Sequelize('sqlite::memory:');
+    expect(() => modelBuilder.build(sequelize)).toThrowError('unknow type int');
   });
 });
