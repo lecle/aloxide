@@ -4,6 +4,7 @@
 **Table of content**
 
 - [Change Log](#change-log)
+  - [0.2.1 (2020-09-29)](#021-2020-09-29)
 - [0.2.0 (2020-09-25)](#020-2020-09-25)
   - [Bug Fixes](#bug-fixes)
 - [0.1.0 (2020-09-03)](#010-2020-09-03)
@@ -16,6 +17,10 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [0.2.1](https://github.com/lecle/aloxide/compare/v0.2.0...v0.2.1) (2020-09-29)
+
+**Note:** Version bump only for package @aloxide/model-sequelize
 
 # 0.2.0 (2020-09-25)
 

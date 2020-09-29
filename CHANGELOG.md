@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/lecle/aloxide/compare/v0.2.0...v0.2.1) (2020-09-29)
+
+### Bug Fixes
+
+- **abstraction:** :fire: remove `validate` since we don't need it ([fe0ca77](https://github.com/lecle/aloxide/commit/fe0ca77880c312f7cc080441bf50e19f1c6aa05f))
+- **bridge:** add clean mock ([d23e7c6](https://github.com/lecle/aloxide/commit/d23e7c64bd8d96e0ce96ae896c3db8bdb3d0fccc))
+- **demux:** :white_check_mark: fix unit test of DbUpdater.ts ([c37b003](https://github.com/lecle/aloxide/commit/c37b003c0b130b8a33d7e2d9cfddf92330b82df3))
+- **setup:** :bug: fix publish script ([9cba1f9](https://github.com/lecle/aloxide/commit/9cba1f94c6b79662037c7faaadd08bdb22799a92))
+
+### Features
+
+- **demux:** :sparkles: [#89](https://github.com/lecle/aloxide/issues/89) add the payload to metadata so that we can get ([b6b399f](https://github.com/lecle/aloxide/commit/b6b399ffb35eebb5ed6b0d3ad2618f2427003cf8))
+- **demux:** :sparkles: export BaseHandlerVersion ([e0c52c0](https://github.com/lecle/aloxide/commit/e0c52c04bbb909ab1c7fe72c3e91137d9b46cebe))
+
 # 0.2.0 (2020-09-25)
 
 ### Bug Fixes

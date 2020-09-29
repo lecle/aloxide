@@ -4,12 +4,14 @@
 **Table of content**
 
 - [Change Log](#change-log)
+  - [0.2.1 (2020-09-29)](#021-2020-09-29)
+    - [Bug Fixes](#bug-fixes)
 - [0.2.0 (2020-09-25)](#020-2020-09-25)
-  - [Bug Fixes](#bug-fixes)
+  - [Bug Fixes](#bug-fixes-1)
   - [Features](#features)
   - [BREAKING CHANGES](#breaking-changes)
 - [0.1.0 (2020-09-03)](#010-2020-09-03)
-  - [Bug Fixes](#bug-fixes-1)
+  - [Bug Fixes](#bug-fixes-2)
   - [Features](#features-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -18,6 +20,12 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [0.2.1](https://github.com/lecle/aloxide/compare/v0.2.0...v0.2.1) (2020-09-29)
+
+### Bug Fixes
+
+- **abstraction:** :fire: remove `validate` since we don't need it ([fe0ca77](https://github.com/lecle/aloxide/commit/fe0ca77880c312f7cc080441bf50e19f1c6aa05f))
 
 # 0.2.0 (2020-09-25)
 

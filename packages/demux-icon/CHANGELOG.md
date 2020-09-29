@@ -4,8 +4,10 @@
 **Table of content**
 
 - [Change Log](#change-log)
+  - [0.2.1 (2020-09-29)](#021-2020-09-29)
+    - [Bug Fixes](#bug-fixes)
 - [0.2.0 (2020-09-25)](#020-2020-09-25)
-  - [Bug Fixes](#bug-fixes)
+  - [Bug Fixes](#bug-fixes-1)
   - [Features](#features)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -14,6 +16,12 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [0.2.1](https://github.com/lecle/aloxide/compare/v0.2.0...v0.2.1) (2020-09-29)
+
+### Bug Fixes
+
+- **setup:** :bug: fix publish script ([9cba1f9](https://github.com/lecle/aloxide/commit/9cba1f94c6b79662037c7faaadd08bdb22799a92))
 
 # 0.2.0 (2020-09-25)
 
