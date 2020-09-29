@@ -63,6 +63,9 @@ describe('test DbUpdater', () => {
             blockInfo,
             context,
             entity,
+            payload: {
+              data: {},
+            },
           },
         );
       });
@@ -90,6 +93,9 @@ describe('test DbUpdater', () => {
             blockInfo,
             context,
             entity,
+            payload: {
+              data: {},
+            },
           },
         );
       });
@@ -114,6 +120,11 @@ describe('test DbUpdater', () => {
           blockInfo,
           context,
           entity,
+          payload: {
+            data: {
+              'key-field': 5,
+            },
+          },
         });
       });
     });
@@ -154,6 +165,12 @@ describe('test DbUpdater', () => {
           blockInfo,
           context,
           entity,
+          payload: {
+            data: {
+              e: 1,
+              user: '5',
+            },
+          },
         });
       });
 
