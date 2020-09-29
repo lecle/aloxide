@@ -11,7 +11,8 @@
     "demux-icon",
     "demux",
     "model-sequelize",
-    "model-knex"
+    "model-knex",
+    "example-demux"
   ],
   "files.associations": {
     "__locale": "cpp",

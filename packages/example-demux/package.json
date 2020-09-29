@@ -1,0 +1,44 @@
+{
+  "name": "@aloxide/example-demux",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Example of `@aloxide/demux`",
+  "keywords": [
+    "aloxide",
+    "ICON",
+    "EOS",
+    "smart-contract",
+    "smart contract",
+    "contract"
+  ],
+  "author": "Lecle",
+  "license": "Apache-2.0",
+  "main": "src/index.js",
+  "directories": {
+    "src": "src",
+    "test": "test"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lecle/aloxide.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/lecle/aloxide/issues"
+  },
+  "homepage": "https://github.com/lecle/aloxide#readme",
+  "dependencies": {
+    "@aloxide/abstraction": "^0.2.0",
+    "@aloxide/bridge": "^0.2.0",
+    "@aloxide/demux": "^0.2.0",
+    "@aloxide/model-knex": "^0.2.0",
+    "mysql": "^2.18.1",
+    "pg": "^8.3.3",
+    "sqlite3": "^5.0.0"
+  }
+}
