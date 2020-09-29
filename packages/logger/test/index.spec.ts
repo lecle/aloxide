@@ -1,11 +1,12 @@
 import chalk from 'chalk';
-import { createLogger } from '../src';
 
-const logger = createLogger({
-  consoleLogger: true,
-});
+import { createLogger, Logger } from '../src';
 
 describe('logger', () => {
+  const logger: Logger = createLogger({
+    consoleLogger: true,
+  });
+
   it('should print a debug', () => {
     const s = jest.spyOn(console, 'debug');
     s.mockImplementation(() => {});
@@ -36,5 +37,19 @@ describe('logger', () => {
 
     logger.error('hello');
     expect(s).toBeCalledWith(chalk.red('hello'));
+  });
+});
+
+describe('create a null logger', () => {
+  it('creat a null logger', () => {
+    const logger: Logger = createLogger({
+      consoleLogger: false,
+    });
+    expect(logger.debug).toEqual(expect.any(Function));
+  });
+
+  it('creat a null logger when no param is passed', () => {
+    const logger: Logger = createLogger();
+    expect(logger.debug).toEqual(expect.any(Function));
   });
 });
