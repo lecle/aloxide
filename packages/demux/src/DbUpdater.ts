@@ -13,6 +13,9 @@ export interface DbUpdaterOptions<ID, D> {
 
 export interface DbUpdaterActionPayload {
   data: any;
+  producer?: string;
+  transactionId?: string;
+  actionIndex?: number;
   [key: string]: any;
 }
 
@@ -57,6 +60,7 @@ export class DbUpdater<ID, D> implements Updater {
       blockInfo,
       entity: this.entity,
       context,
+      payload,
     };
 
     if (this.actionType.indexOf('::cre') != -1) {
