@@ -1,8 +1,13 @@
 import { FieldTypeEnum } from '@aloxide/bridge';
 import { BaseActionWatcher } from 'demux';
 
-import { AloxideDataManager, createDbUpdater, createWatcher, CreateWatcherConfig } from '../src';
-import { BaseHandlerVersion } from '../src/BaseHandlerVersion';
+import {
+  AloxideDataManager,
+  BaseHandlerVersion,
+  createDbUpdater,
+  createWatcher,
+  CreateWatcherConfig,
+} from '../src';
 import createLoggerTest from './createLoggerTest';
 
 describe('test createWatcher', () => {

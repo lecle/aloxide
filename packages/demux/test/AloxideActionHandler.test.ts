@@ -3,14 +3,14 @@ import { HandlerVersion, NextBlock } from 'demux';
 
 import {
   AloxideActionHandler,
+  AloxideActionHandlerContext,
   AloxideDataManager,
+  BaseHandlerVersion,
   DataProvider,
   DbUpdater,
   IndexStateModel,
   indexStateSchema,
 } from '../src';
-import { AloxideActionHandlerContext } from '../src/AloxideActionHandler';
-import { BaseHandlerVersion } from '../src/BaseHandlerVersion';
 import createLoggerTest from './createLoggerTest';
 
 class TestAloxideActionHandler extends AloxideActionHandler {

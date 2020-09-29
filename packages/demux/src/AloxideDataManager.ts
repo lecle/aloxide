@@ -39,8 +39,9 @@ export class AloxideDataManager implements DataAdapter {
     const p = this.getDataProvider(name);
 
     if (typeof p.setup == 'function') {
-      return this.getDataProvider(name).setup();
+      return p.setup();
     }
+    return Promise.resolve();
   }
 
   count(name: string): Promise<number> {

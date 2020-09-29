@@ -2,6 +2,7 @@ export type { DMeta } from './DMeta';
 export type { QueryInput } from './QueryInput';
 export type { CreateWatcherConfig } from './createWatcher';
 export type { AloxideActionHandlerOptions } from './AloxideActionHandler';
+export type { AloxideActionHandlerContext } from './AloxideActionHandler';
 export type { IndexStateModel } from './IndexStateModel';
 export type { DataAdapter } from './DataAdapter';
 export type { DataProvider } from './DataProvider';

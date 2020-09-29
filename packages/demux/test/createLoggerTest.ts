@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 
-import { Logger } from '../src/Logger';
+import { Logger } from '../src';
 
 const createLoggerTest = (): Logger => ({
   info: jest.fn(),
