@@ -7,8 +7,12 @@
   "private": "true",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lecle/aloxide"
+    "url": "git+https://github.com/lecle/aloxide.git"
   },
+  "bugs": {
+    "url": "https://github.com/lecle/aloxide/issues"
+  },
+  "homepage": "https://github.com/lecle/aloxide#readme",
   "scripts": {
     "prestart": "rimraf ./out",
     "start": "ts-node -P ./tsconfig.json src/index.ts | bunyan -o short",
