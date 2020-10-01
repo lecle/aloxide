@@ -1,8 +1,12 @@
+import { validateNetworkConfig } from '../helpers/validate-network-config';
 import { BlockchainService } from './BlockchainService';
 import { NetworkConfig, BlockchainTypes } from './TypeDefinitions';
 
 export class Aloxide {
   static async createService(networkConfig: NetworkConfig): Promise<BlockchainService> {
+    // Validate config
+    validateNetworkConfig(networkConfig);
+
     try {
       switch (networkConfig.type) {
         case BlockchainTypes.EOS:
