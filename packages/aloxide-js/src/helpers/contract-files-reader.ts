@@ -1,10 +1,9 @@
 import fs from 'fs';
-import path from 'path';
 import isInvalidPath from 'is-invalid-path';
 
 export default class ContractFilesReader {
   static readABIFromFile(abiPath) {
-    return JSON.parse(fs.readFileSync(path.resolve(abiPath), 'utf8'));
+    return fs.readFileSync(abiPath);
   }
 
   static readWASMFromFile(wasmPath) {
