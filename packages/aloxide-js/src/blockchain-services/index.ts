@@ -1,6 +1,6 @@
 import { validateNetworkConfig } from '../helpers/validate-network-config';
 import { BlockchainService } from './BlockchainService';
-import { NetworkConfig, BlockchainTypes } from './TypeDefinitions';
+import { NetworkConfig, BlockchainTypes, ContractPath } from './TypeDefinitions';
 
 export class Aloxide {
   static async createService(networkConfig: NetworkConfig): Promise<BlockchainService> {
@@ -34,4 +34,5 @@ export {
   NetworkConfig,
   BlockchainTypes,
   BlockchainService,
+  ContractPath,
 }
