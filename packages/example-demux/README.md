@@ -1,5 +1,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 **Table of content**
 
 - [Package `example-demux`](#package-example-demux)
@@ -14,14 +15,14 @@
 
 Example of `@aloxide/demux`.
 
-## Explain
-
 1. Test on 3 blockchains: EOS, CAN, and ICON
    1. Use Aloxide to generate a smart-contract for those blockchains using the same Aloxide configuration.
    2. Generate a bunch of sample data and push to those smart-contract.
 2. Sync data from those blockchains to centralized databases
    1. There will be 4 database systems used: Postgres, MySql, MongoDb, DynamoDb
    2. Setup demux pattern so that smart-contract data will be simultaneously indexed to those 4 databases
+
+## Explain
 
 ### Smart-contract
 
@@ -31,7 +32,7 @@ Smart-contract which is generatedd is a simple poll which include three tables:
 2. `Option` table holds available options of a poll: `optionId`, `name` (description), `pollId`
 3. `Vote` talbe holds votes from users: `voteId`, `point`, `message` (optional message), `ownerId`, `optionId`
 
-To generate smart-contract from above design. We need to contruct an Aloxide configuration:
+To generate smart-contract from above design. We need to contruct an [Aloxide configuration](./aloxide.yml):
 
 ```yaml
 entities:
@@ -71,6 +72,8 @@ entities:
         type: uint64_t
     key: voteId
 ```
+
+- [Build and deploy smart-contract guide](./docs/build-and-deploy-smart-contract.md)
 
 ### Sample data
 
