@@ -1,1 +1,4 @@
-module.exports = require('../../jest.config');
+module.exports = {
+  ...require('../../jest.config'),
+  collectCoverageFrom: ['src/**/*.{t,j}s?(x)', 'bin/**/*.js'],
+};
