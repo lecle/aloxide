@@ -6,7 +6,7 @@ import { JsSignatureProvider, PrivateKey } from 'eosjs/dist/eosjs-jssig';
 import { BlockchainService } from '../BlockchainService';
 import { ContractPath, NetworkConfig } from '../TypeDefinitions';
 import ContractFilesReader from '../../helpers/contract-files-reader';
-import BaseAccount from '../BaseAccount';
+import { BlockchainAccount } from '../BlockchainAccount';
 
 export class EosBlockchainService extends BlockchainService {
   client: Api
@@ -26,7 +26,7 @@ export class EosBlockchainService extends BlockchainService {
     this.signatureProvider = signatureProvider;
   }
 
-  async deployContract(contractPath: ContractPath, account: BaseAccount) {
+  async deployContract(contractPath: ContractPath, account: BlockchainAccount) {
     const { abiPath, wasmPath } = contractPath;
     const { name: accountName, privateKey: privKey } = account;
 

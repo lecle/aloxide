@@ -1,6 +1,6 @@
 import { NetworkConfig, BlockchainTypes } from '../blockchain-services';
 
-const defaultIconTestnetConfig: NetworkConfig = {
+export const iconTestnetConfig: NetworkConfig = {
   name: 'ICON Testnet',
   type: BlockchainTypes.ICON,
   chainId: '',
@@ -9,5 +9,3 @@ const defaultIconTestnetConfig: NetworkConfig = {
   protocol: 'https',
   coreToken: 'ICX',
 };
-
-export default defaultIconTestnetConfig;
