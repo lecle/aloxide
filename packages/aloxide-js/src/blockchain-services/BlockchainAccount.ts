@@ -1,4 +1,4 @@
-export default class BaseAccount {
+export class BlockchainAccount {
   name: string;
   privateKey: string;
 

@@ -1,6 +1,6 @@
 import type { Api as EosApi } from 'eosjs';
 import type IconService from 'icon-sdk-js';
-import BaseAccount from './BaseAccount';
+import { BlockchainAccount } from './BlockchainAccount';
 import { ContractPath, NetworkConfig } from './TypeDefinitions';
 
 export abstract class BlockchainService {
@@ -27,7 +27,7 @@ export abstract class BlockchainService {
     return (`${config.type}:` + (config.chainId.length ? `chain:${config.chainId}` : `${config.host}:${config.port}`)).toLowerCase();
   }
 
-  abstract async deployContract(contractPath: ContractPath, account: BaseAccount, opts?: any);
+  abstract async deployContract(contractPath: ContractPath, account: BlockchainAccount, opts?: any);
 
   abstract async getBalance(account: string, code?: string, symbol?: string);
 }
