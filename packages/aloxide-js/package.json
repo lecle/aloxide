@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "crypto-js": "3.1.9-1",
-    "eosjs": "16.0.9",
-    "icon-sdk-js": "^0.0.10",
+    "eosjs": "^21.0.3",
+    "icon-sdk-js": "^0.0.18",
     "is-invalid-path": "1.0.2",
     "jszip": "^3.5.0"
   }
