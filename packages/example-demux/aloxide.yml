@@ -1,0 +1,36 @@
+entities:
+  - name: Poll
+    fields:
+      - name: pollId
+        type: uint64_t
+      - name: name
+        type: string
+      - name: body
+        type: string
+      - name: start
+        type: uint64_t
+      - name: end
+        type: uint64_t
+    key: pollId
+  - name: Option
+    fields:
+      - name: optionId
+        type: uint64_t
+      - name: name
+        type: string
+      - name: pollId
+        type: uint64_t
+    key: optionId
+  - name: Vote
+    fields:
+      - name: voteId
+        type: uint64_t
+      - name: point
+        type: number
+      - name: message
+        type: string
+      - name: ownerId
+        type: uint64_t
+      - name: optionId
+        type: uint64_t
+    key: voteId
