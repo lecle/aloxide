@@ -1,8 +1,8 @@
 import IconService, { HttpProvider, IconBuilder, SignedTransaction, Wallet } from 'icon-sdk-js';
-import BaseAccount from '../BaseAccount';
-import ContractFilesReader from '../../helpers/contract-files-reader';
-import { BlockchainService } from '../BlockchainService';
 import { ContractPath, NetworkConfig } from '../TypeDefinitions';
+import { BlockchainAccount } from '../BlockchainAccount';
+import { BlockchainService } from '../BlockchainService';
+import ContractFilesReader from '../../helpers/contract-files-reader';
 
 const { DeployTransactionBuilder } = IconBuilder
 
@@ -15,13 +15,13 @@ export class IconBlockchainService extends BlockchainService {
     this.client = new IconService(new HttpProvider(this.url()));
   }
 
-  deployContract(contractPath: ContractPath, account: BaseAccount, key: string, opts: { params: object } = { params: {} }) {
+  deployContract(contractPath: ContractPath, account: BlockchainAccount, key: string, opts: { params: object } = { params: {} }) {
     const { pyPath } = contractPath;
     const pyContent = ContractFilesReader.readPSFromFile(pyPath).toString('hex');
     return this.processDeployment(pyContent, account, opts.params);
   }
 
-  private async processDeployment(contractContent: any, account: BaseAccount, params: object) {
+  private async processDeployment(contractContent: any, account: BlockchainAccount, params: object) {
     const wallet = IconService.IconWallet.loadPrivateKey(account.privateKey);
     const transaction = await this.buildDeployTransaction(contractContent, params, wallet.getAddress());
     const signedTransaction = await this.signedTransaction(transaction, wallet);

@@ -1,4 +1,5 @@
 import { validateNetworkConfig } from '../helpers/validate-network-config';
+import { BlockchainAccount } from './BlockchainAccount';
 import { BlockchainService } from './BlockchainService';
 import { NetworkConfig, BlockchainTypes, ContractPath } from './TypeDefinitions';
 
@@ -35,4 +36,5 @@ export {
   BlockchainTypes,
   BlockchainService,
   ContractPath,
+  BlockchainAccount,
 }
