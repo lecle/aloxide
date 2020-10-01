@@ -1,6 +1,6 @@
 {
   "name": "@aloxide/example-demux",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "Example of `@aloxide/demux`",
   "keywords": [
@@ -33,10 +33,10 @@
   },
   "homepage": "https://github.com/lecle/aloxide#readme",
   "dependencies": {
-    "@aloxide/abstraction": "^0.2.0",
-    "@aloxide/bridge": "^0.2.0",
-    "@aloxide/demux": "^0.2.0",
-    "@aloxide/model-knex": "^0.2.0",
+    "@aloxide/abstraction": "^0.2.1",
+    "@aloxide/bridge": "^0.2.1",
+    "@aloxide/demux": "^0.2.1",
+    "@aloxide/model-knex": "^0.2.1",
     "mysql": "^2.18.1",
     "pg": "^8.3.3",
     "sqlite3": "^5.0.0"
