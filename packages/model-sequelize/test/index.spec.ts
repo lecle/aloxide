@@ -1,8 +1,8 @@
 import { AloxideConfig } from '@aloxide/abstraction';
-import path from 'path';
+import { Field, FieldTypeEnum } from '@aloxide/bridge';
 import { Sequelize } from 'sequelize';
 
-import { ModelBuilder } from '../src/ModelBuilder';
+import { ModelBuilder, SequelizeTypeInterpreter } from '../src';
 
 describe('model', () => {
   const logger = {
@@ -10,9 +10,10 @@ describe('model', () => {
     info: jest.fn(),
   };
 
-  const sampleAloxideConfig: AloxideConfig = {
+  const aloxideConfig: AloxideConfig = {
     entities: [
       {
+        name: 'Poll',
         fields: [
           { name: 'id', type: 'uint64_t' },
           { name: 'name', type: 'string' },
@@ -23,45 +24,105 @@ describe('model', () => {
           { name: 'address', type: 'account' },
         ],
         key: 'id',
-        name: 'Poll',
       },
       {
-        fields: [
-          { name: 'id', type: 'uint64_t' },
-          { name: 'pollId', type: 'uint64_t' },
-          { name: 'ownerId', type: 'uint64_t' },
-          { name: 'point', type: 'number' },
-        ],
-        key: 'id',
         name: 'Vote',
+        fields: [
+          { name: 'f1', type: 'string' },
+          { name: 'f2', type: 'number' },
+          { name: 'f3', type: 'uint16_t' },
+          { name: 'f4', type: 'uint32_t' },
+          { name: 'f5', type: 'uint64_t' },
+          { name: 'f6', type: 'bool' },
+          { name: 'f7', type: 'account' },
+          { name: 'f8', type: 'double' },
+        ],
+        key: 'f1',
       },
     ],
   };
 
-  it('should build model', () => {
-    const aloxideConfigPath = path.resolve(__dirname, './aloxide.yml');
-    const modelBuilder = new ModelBuilder({
-      aloxideConfigPath,
-      logger,
+  describe('test constructor', () => {
+    it('create default intepreter', () => {
+      const modelBuilder = new ModelBuilder({
+        aloxideConfig,
+        logger,
+      });
+
+      expect(modelBuilder.aloxideConfig).toEqual(aloxideConfig);
+      expect(modelBuilder.typeInterpreter).toBeTruthy();
     });
 
-    expect(modelBuilder.aloxideConfig).toEqual(sampleAloxideConfig);
+    it('set intepreter', () => {
+      const typeInterpreter = new SequelizeTypeInterpreter();
+      const modelBuilder = new ModelBuilder({
+        aloxideConfig,
+        typeInterpreter,
+        logger,
+      });
 
-    const sequelize = new Sequelize('sqlite::memory:');
-    const models = modelBuilder.build(sequelize);
-    expect(models.length).toEqual(2);
-    expect(sequelize.models.Poll).toBeTruthy();
-    expect(sequelize.models.Vote).toBeTruthy();
+      expect(modelBuilder.aloxideConfig).toEqual(aloxideConfig);
+      expect(modelBuilder.typeInterpreter).toEqual(typeInterpreter);
+    });
   });
 
-  it('should build model is failed', () => {
-    const aloxideConfigPath = path.resolve(__dirname, './wrong-aloxide.yml');
+  it('shoudl build model', () => {
     const modelBuilder = new ModelBuilder({
-      aloxideConfigPath,
+      aloxideConfig,
       logger,
     });
 
+    expect(modelBuilder.aloxideConfig).toEqual(aloxideConfig);
+
     const sequelize = new Sequelize('sqlite::memory:');
-    expect(() => modelBuilder.build(sequelize)).toThrowError('unknow type int');
+    const spyDefine = jest.spyOn(sequelize, 'define');
+    // @ts-ignore
+    const models = modelBuilder.build(sequelize);
+
+    expect(models.length).toEqual(2);
+    expect(spyDefine).toBeCalledTimes(2);
+    expect(spyDefine).toHaveBeenNthCalledWith(1, 'Poll', expect.anything());
+    expect(spyDefine).toHaveBeenNthCalledWith(2, 'Vote', expect.anything());
+  });
+
+  it('throw error if type is unknown', () => {
+    const typeInterpreter = new SequelizeTypeInterpreter();
+    const input = 'fake-type';
+    // @ts-ignore
+    expect(() => typeInterpreter.interpret(input)).toThrow(`unknow type ${input}`);
+  });
+
+  describe('mapField', () => {
+    const typeInterpreter = new SequelizeTypeInterpreter();
+    const fields: Field[] = [
+      ...aloxideConfig.entities[0].fields,
+      {
+        name: 'id-field',
+        type: FieldTypeEnum.uint16_t,
+      },
+      {
+        name: 'id-field',
+        type: FieldTypeEnum.uint32_t,
+      },
+      {
+        name: 'id-field',
+        type: FieldTypeEnum.uint64_t,
+      },
+      {
+        name: 'id-field',
+        type: FieldTypeEnum.double,
+      },
+      {
+        name: 'id-field',
+        type: FieldTypeEnum.number,
+      },
+    ];
+    const spyInterpret = jest.spyOn(typeInterpreter, 'interpret');
+
+    ModelBuilder.mapField(typeInterpreter, fields, 'id-field');
+
+    fields.forEach((f, i) => {
+      expect(spyInterpret).toHaveBeenNthCalledWith(i + 1, f.type);
+    });
   });
 });

@@ -1,4 +1,3 @@
-import { readAloxideConfig } from '@aloxide/abstraction';
 import { FieldTypeEnum } from '@aloxide/bridge';
 import {
   DataType,
@@ -17,17 +16,19 @@ import type { EntityConfig, Field, Interpreter } from '@aloxide/bridge';
 import type { Logger } from './Logger';
 
 export interface ModelBuilderConfig {
-  aloxideConfigPath: string;
-  logger?: Logger;
+  aloxideConfig: AloxideConfig;
   typeInterpreter?: Interpreter<FieldTypeEnum, DataType>;
+  logger?: Logger;
 }
 
 export class ModelBuilder {
   aloxideConfig: AloxideConfig;
   typeInterpreter: Interpreter<FieldTypeEnum, DataType>;
+  logger?: Logger;
 
-  constructor({ aloxideConfigPath, logger, typeInterpreter }: ModelBuilderConfig) {
-    this.aloxideConfig = readAloxideConfig(aloxideConfigPath, logger);
+  constructor({ aloxideConfig, typeInterpreter, logger }: ModelBuilderConfig) {
+    this.aloxideConfig = aloxideConfig;
+    this.logger = logger;
 
     if (typeInterpreter) {
       this.typeInterpreter = typeInterpreter;
