@@ -1,0 +1,75 @@
+[
+  {
+    "pollId": 1001,
+    "name": "Lets have happy time together.",
+    "body": "We have three options. Where should we go?",
+    "start": "September 21st",
+    "end": "September 29th",
+    "options": [
+      {
+        "optionId": 10001,
+        "name": "Vietname",
+        "votes": [
+          { "voteId": 100001, "point": 90, "message": "v90", "ownerId": 1 },
+          { "voteId": 100004, "point": 90, "message": "v90", "ownerId": 2 },
+          { "voteId": 100007, "point": 90, "message": "v90", "ownerId": 3 },
+          { "voteId": 100011, "point": 90, "message": "v90", "ownerId": 4 },
+          { "voteId": 100014, "point": 90, "message": "v90", "ownerId": 5 }
+        ]
+      },
+      {
+        "optionId": 10002,
+        "name": "Thailand",
+        "votes": [
+          { "voteId": 100002, "point": 80, "message": "t80", "ownerId": 1 },
+          { "voteId": 100005, "point": 60, "message": "t60", "ownerId": 2 },
+          { "voteId": 100008, "point": 90, "message": "t90", "ownerId": 3 },
+          { "voteId": 100012, "point": 80, "message": "t80", "ownerId": 4 },
+          { "voteId": 100015, "point": 80, "message": "t80", "ownerId": 5 }
+        ]
+      },
+      {
+        "optionId": 10003,
+        "name": "Singapore",
+        "votes": [
+          { "voteId": 100003, "point": 70, "message": "s70", "ownerId": 1 },
+          { "voteId": 100006, "point": 80, "message": "s80", "ownerId": 2 },
+          { "voteId": 100009, "point": 70, "message": "s70", "ownerId": 3 },
+          { "voteId": 100013, "point": 90, "message": "s90", "ownerId": 4 },
+          { "voteId": 100016, "point": 80, "message": "s80", "ownerId": 5 }
+        ]
+      }
+    ]
+  },
+  {
+    "pollId": 2001,
+    "name": "Lets have a happy time together.",
+    "body": "When should we go? There are two periods which we can choose from.",
+    "start": "September 21st",
+    "end": "September 29th",
+    "options": [
+      {
+        "optionId": 20001,
+        "name": "October 2nd",
+        "votes": [
+          { "voteId": 200001, "point": 95, "message": "v95", "ownerId": 1 },
+          { "voteId": 200003, "point": 80, "message": "v80", "ownerId": 2 },
+          { "voteId": 200005, "point": 70, "message": "v70", "ownerId": 3 },
+          { "voteId": 200007, "point": 55, "message": "v55", "ownerId": 4 },
+          { "voteId": 200009, "point": 98, "message": "v98", "ownerId": 5 }
+        ]
+      },
+      {
+        "optionId": 20002,
+        "name": "December 30th",
+        "votes": [
+          { "voteId": 200002, "point": 70, "message": "t70", "ownerId": 1 },
+          { "voteId": 200004, "point": 90, "message": "t90", "ownerId": 2 },
+          { "voteId": 200006, "point": 85, "message": "t85", "ownerId": 3 },
+          { "voteId": 200008, "point": 77, "message": "t77", "ownerId": 4 },
+          { "voteId": 200011, "point": 94, "message": "t94", "ownerId": 5 }
+        ]
+      }
+    ]
+  }
+]

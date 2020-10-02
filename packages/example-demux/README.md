@@ -1,7 +1,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Package `example-demux`](#package-example-demux)
   - [Explain](#explain)
     - [Smart-contract](#smart-contract)
@@ -78,13 +77,13 @@ entities:
 
 Our user case starts with a group has 5 members. They want to have a trip after a long boring social distance because of the pandemic.
 They have two things that need to decide two things: where to go since they have three options: Vietnam, Thailand, or Singapore, and when to go
-since they have two options: October 2nd or December 30th. These decisions must be made before September 29th. With these inputs, we have data represents in JSON format as bellow:
+since they have two options: October 2nd or December 30th. These decisions must be made before September 29th. With these inputs, we have data represents in JSON format as bellow (more detail [here](./docs/poll-data.json)):
 
 ```json
 [
   {
     "pollId": 1001,
-    "name": "Let's have happy time together.",
+    "name": "Lets have happy time together.",
     "body": "We have three options. Where should we go?",
     "start": "September 21st",
     "end": "September 29th",
@@ -94,18 +93,18 @@ since they have two options: October 2nd or December 30th. These decisions must 
         "name": "Vietname"
       },
       {
-        "optionId": 10003,
+        "optionId": 10002,
         "name": "Thailand"
       },
       {
-        "optionId": 10004,
+        "optionId": 10003,
         "name": "Singapore"
       }
     ]
   },
   {
     "pollId": 2001,
-    "name": "Let's have a happy time together.",
+    "name": "Lets have a happy time together.",
     "body": "When should we go? There are two periods which we can choose from.",
     "start": "September 21st",
     "end": "September 29th",
@@ -123,7 +122,8 @@ since they have two options: October 2nd or December 30th. These decisions must 
 ]
 ```
 
-Besides those two sample polls above, I will generate 10 more dummy polls. These data will be posted directly to the blockchain.
+- [push data to blockchain](./docs/make-sample-data.md)
+
 Since smart-contract on the blockchain is also called a decentralized application (DApp), data can be a push from anywhere: command-line tools, webs, third-party applicationd, mobile applications... Our Aloxide will help set up a simple way to sync those data from the blockchain to centralized databases so that, we can do some complicated queries.
 
 - How many members have participated in the poll?

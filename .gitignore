@@ -124,3 +124,6 @@ dist
 
 # python env
 env/
+
+packages/example-demux/docs/icon/action-payload/*.json
+packages/example-demux/docs/icon/push-data.sh
