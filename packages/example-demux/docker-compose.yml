@@ -3,15 +3,18 @@ services:
   postgre-db:
     image: postgres
     environment:
-      POSTGRES_USER: aloxide
-      POSTGRES_PASSWORD: localhost-pw2020
+      - POSTGRES_USER=aloxide
+      - POSTGRES_PASSWORD=localhost-pw2020
+      - POSTGRES_DB=aloxide
     ports:
       - 5432:5432
   mysql-db:
     image: mysql
     environment:
-      MYSQL_USER: aloxide
-      MYSQL_ROOT_PASSWORD: localhost-pw2020
+      - MYSQL_ROOT_PASSWORD=localhost-pw2020
+      - MYSQL_USER=aloxide
+      - MYSQL_PASSWORD=localhost-pw2020
+      - MYSQL_DATABASE=aloxide
     ports:
       - 3306:3306
   mongo-db:

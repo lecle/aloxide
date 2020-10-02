@@ -26,6 +26,7 @@
     "url": "git+https://github.com/lecle/aloxide.git"
   },
   "scripts": {
+    "dev": "node src/index.js | bunyan -o short",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
@@ -36,9 +37,14 @@
     "@aloxide/abstraction": "^0.2.1",
     "@aloxide/bridge": "^0.2.1",
     "@aloxide/demux": "^0.2.1",
-    "@aloxide/model-knex": "^0.2.1",
-    "mysql": "^2.18.1",
+    "@aloxide/demux-icon": "^0.2.1",
+    "@aloxide/model-sequelize": "^0.2.1",
+    "bunyan": "^1.8.14",
+    "demux-eos": "^4.0.1",
+    "mysql2": "^2.2.5",
     "pg": "^8.3.3",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.4",
     "sqlite3": "^5.0.0"
   }
 }
