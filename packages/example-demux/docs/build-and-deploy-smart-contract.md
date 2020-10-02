@@ -152,11 +152,11 @@ cleos -u https://testnet.canfoundation.io set contract aloxidepolla . hello.wasm
 
 ### Deploy to ICON
 
-| Network                                        | Note                                 |
-| ---------------------------------------------- | ------------------------------------ |
-| [Testnet](https://www.icondev.io/docs/testnet) | Yeouido - ICON test net for DApps    |
-| URL                                            | https://bicon.net.solidwallet.io     |
-| Home page                                      | https://bicon.tracker.solidwallet.io |
+| Network                                        | Note                                    |
+| ---------------------------------------------- | --------------------------------------- |
+| [Testnet](https://www.icondev.io/docs/testnet) | Yeouido - ICON test net for DApps       |
+| URL                                            | https://bicon.net.solidwallet.io/api/v3 |
+| Home page                                      | https://bicon.tracker.solidwallet.io    |
 
 | Account name | Note                 | Address                                    | Password                                     |
 | ------------ | -------------------- | ------------------------------------------ | -------------------------------------------- |
