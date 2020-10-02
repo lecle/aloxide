@@ -21,7 +21,7 @@ import { ModelBuilder } from '@aloxide/model-sequelize';
 
 // create model builder from an Aloxide configuration
 const modelBuilder = new ModelBuilder({
-  aloxideConfigPath: config.aloxideConfigPath,
+  aloxideConfig,
   logger: Logger.createLogger({
     level: 'debug',
     name: 'models',
