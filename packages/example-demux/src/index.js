@@ -5,6 +5,8 @@ const { ModelBuilder } = require('@aloxide/model-sequelize');
 const Logger = require('bunyan');
 const Sequelize = require('sequelize');
 const { IconActionReader } = require('@aloxide/demux-icon');
+const { createDynamoDbConnection } = require('./dynamodb');
+const { createMongoDbConnection } = require('./mongodb');
 
 global.logger = Logger.createLogger({
   name: 'example-demux',
@@ -16,6 +18,8 @@ const aloxideConfig = readAloxideConfig(path.resolve('./aloxide.yml'), logger);
 
 indexStateSchema.name = 'DemuxIndexState_ICON';
 aloxideConfig.entities.push(indexStateSchema);
+
+const modelNames = aloxideConfig.entities.map(({ name }) => name);
 
 const modelBuilder = new ModelBuilder({
   aloxideConfig,
@@ -29,35 +33,43 @@ const db = [
   { dbType: 'postgres', enable: true },
   { dbType: 'mysql', enable: true },
   { dbType: 'memory', enable: true },
+  { dbType: 'dynamo', enable: true },
+  { dbType: 'mongo', enable: false },
 ]; // TODO add more database type
 
 const dbModels = db
   .filter(({ enable }) => enable)
   .map(({ dbType }) => {
-    let s;
+    let db;
     const options = {
       logging: msg => logger.debug(msg),
     };
 
     switch (dbType) {
       case 'memory':
-        s = new Sequelize('sqlite::memory:', options);
+        db = new Sequelize('sqlite::memory:', options);
         break;
       case 'postgres':
-        s = new Sequelize('postgres://aloxide:localhost-pw2020@localhost:5432/aloxide', options);
+        db = new Sequelize('postgres://aloxide:localhost-pw2020@localhost:5432/aloxide', options);
         break;
       case 'mysql':
-        s = new Sequelize('mysql://root:localhost-pw2020@localhost:3306/aloxide', options);
+        db = new Sequelize('mysql://root:localhost-pw2020@localhost:3306/aloxide', options);
+        break;
+      case 'mongo':
+        db = createMongoDbConnection(aloxideConfig.entities);
+        break;
+      case 'dynamo':
+        db = createDynamoDbConnection(aloxideConfig.entities);
         break;
     }
 
     return {
       dbType,
-      sequelize: s,
-      models: s && modelBuilder.build(s),
+      db,
+      models: db && db.modelBuilder ? db.modelBuilder.build(db) : modelBuilder.build(db),
     };
   })
-  .filter(({ sequelize }) => !!sequelize);
+  .filter(({ db }) => !!db);
 
 const defaultOrm = dbModels[0];
 
@@ -69,7 +81,7 @@ function getModel(models, name) {
   return models.find(m => m.name == name);
 }
 
-const dataProviders = ['Poll', 'Option', 'Vote', indexStateSchema.name].map(name => {
+const dataProviders = modelNames.map(name => {
   const isIndexState = name == indexStateSchema.name;
 
   return {
@@ -77,9 +89,9 @@ const dataProviders = ['Poll', 'Option', 'Vote', indexStateSchema.name].map(name
     setup() {
       if (isIndexState) {
         return Promise.all(
-          dbModels.map(({ sequelize }) =>
-            sequelize.authenticate().then(() =>
-              sequelize.sync({
+          dbModels.map(({ db }) =>
+            db.authenticate().then(() =>
+              db.sync({
                 force: true,
               }),
             ),

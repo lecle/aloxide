@@ -22,6 +22,7 @@ services:
     ports:
       - 27017:27017
     environment:
+      - MONGO_INITDB_DATABASE=aloxide
       - MONGO_INITDB_ROOT_USERNAME=aloxide
       - MONGO_INITDB_ROOT_PASSWORD=localhost-pw2020
   dynamo-db:
