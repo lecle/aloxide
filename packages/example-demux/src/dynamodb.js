@@ -149,16 +149,25 @@ function createDynamoDbConnection(entities) {
     return dynamodb.listTables({}).promise();
   }
   function sync() {
-    return dynamodb
-      .listTables()
-      .promise()
-      .then(({ TableNames }) =>
-        Promise.all(
-          entities
-            .filter(({ name }) => TableNames.indexOf(name) == -1)
-            .map(entity => createTable(entity)),
-        ),
-      );
+    return (
+      dynamodb
+        .listTables()
+        .promise()
+        /** drop table */
+        .then(({ TableNames }) =>
+          Promise.all(
+            TableNames.filter(TableName => entities.some(({ name }) => name == TableName)).map(
+              TableName =>
+                dynamodb
+                  .deleteTable({
+                    TableName,
+                  })
+                  .promise(),
+            ),
+          ),
+        )
+        .then(() => Promise.all(entities.map(entity => createTable(entity))))
+    );
   }
 
   function build(_db) {
