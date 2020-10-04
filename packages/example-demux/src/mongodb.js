@@ -1,76 +1,99 @@
 const { MongoClient } = require('mongodb');
 
+function makeObjId(str) {
+  return str;
+}
+
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://aloxide:localhost-pw2020@localhost:27017';
 
 // Create a new MongoClient
 const client = new MongoClient(url);
 
-const pDB = (handler = db => Promise.resolve(db)) =>
-  new Promise((resolve, reject) =>
-    client.connect(err => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve();
-    }),
-  )
-    .then(() => handler(client.db('aloxide')))
-    .then(res => {
-      client.close();
-      return res;
-    });
+let db;
 
-function createModel(entity) {
+// Use connect method to connect to the Server
+const pConnectDb = new Promise((resolve, reject) =>
+  client.connect(function (err) {
+    if (err) {
+      return reject(err);
+    }
+
+    db = client.db('aloxide');
+    resolve(db);
+  }),
+);
+
+function createModel(entity, mongoDb) {
+  let coll;
+
   function count() {
-    return pDB(db => db.collection(entity.name).count());
+    return Promise.resolve(coll.count());
   }
 
   function findAll() {
-    return pDB(db => db.collection(entity.name).find());
+    return Promise.resolve(find(coll.find()));
   }
 
   function findByPk(id) {
-    return pDB(db => db.collection(entity.name).find({ _id: id }));
+    return Promise.resolve(coll.findOne({ _id: makeObjId(id) }));
   }
 
-  function create(data, { entity }) {
-    data._id = data[entity.key];
-    return pDB(db => db.collection(entity.name).insertOne(data));
+  function create(data) {
+    const obj = {
+      _id: makeObjId(data[entity.key]),
+      ...data,
+    };
+    return Promise.resolve(coll.insertOne(obj)).then(() => data);
   }
 
   function update(data) {
-    data._id = data[entity.key];
-    return pDB(db => db.collection(entity.name).insertOne(data));
+    const obj = {
+      _id: makeObjId(data[entity.key]),
+      ...data,
+    };
+    return Promise.resolve(coll.replaceOne({ _id: obj._id }, obj)).then(() => data);
   }
 
   function destroy(id) {
-    return pDB(db => db.collection(entity.name).deleteOne({ _id: id }));
+    return Promise.resolve(coll.deleteOne({ _id: makeObjId(id) })).then(() => true);
   }
 
-  return {
-    name: entity.name,
-    count,
-    findAll,
-    findByPk,
-    create,
-    update,
-    destroy,
-  };
+  const name = entity.name;
+  return mongoDb
+    .dropCollection(name)
+    .catch(() => {
+      logger.debug('---- drop collection does not exist', name);
+    })
+    .then(() => {
+      return mongoDb.createCollection(name);
+    })
+    .then(() => {
+      logger.info('-- created mongodb collection:', name);
+      coll = mongoDb.collection(name);
+    })
+    .then(() => ({
+      name: entity.name,
+      count,
+      findAll,
+      findByPk,
+      create,
+      update,
+      destroy,
+    }));
 }
 
 function createMongoDbConnection(entities) {
   function authenticate() {
-    return pDB();
+    return pConnectDb;
   }
 
   function sync() {
-    return entities.map(({ name }) => pDB(db => db.collection(name).drop()));
+    return pConnectDb;
   }
 
   function build(_db) {
-    return entities.map(entity => createModel(entity));
+    return Promise.all(entities.map(entity => createModel(entity, db)));
   }
 
   return {
@@ -81,6 +104,12 @@ function createMongoDbConnection(entities) {
     },
   };
 }
+
+process.on('unhandledRejection', function (reason, p) {
+  logger.error('Unhandled', reason, p); // log all your errors, "unsuppressing" them.
+  client.close();
+  process.exit(1);
+});
 
 module.exports = {
   createMongoDbConnection,

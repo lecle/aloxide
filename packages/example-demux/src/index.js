@@ -32,9 +32,9 @@ const modelBuilder = new ModelBuilder({
 const db = [
   { dbType: 'postgres', enable: true },
   { dbType: 'mysql', enable: true },
-  { dbType: 'memory', enable: true },
   { dbType: 'dynamo', enable: true },
-  { dbType: 'mongo', enable: false },
+  { dbType: 'mongo', enable: true },
+  { dbType: 'memory', enable: false },
 ]; // TODO add more database type
 
 const dbModels = db
@@ -66,7 +66,8 @@ const dbModels = db
     return {
       dbType,
       db,
-      models: db && db.modelBuilder ? db.modelBuilder.build(db) : modelBuilder.build(db),
+      modelBuilder: db && db.modelBuilder ? db.modelBuilder : modelBuilder,
+      models: null,
     };
   })
   .filter(({ db }) => !!db);
@@ -76,104 +77,109 @@ const defaultOrm = dbModels[0];
 if (!defaultOrm) {
   throw new Error('There is no database');
 }
-
 function getModel(models, name) {
   return models.find(m => m.name == name);
 }
 
-const dataProviders = modelNames.map(name => {
-  const isIndexState = name == indexStateSchema.name;
+// initialize database connection requires running in asynchronization
+Promise.all(
+  dbModels.map(dbModel => {
+    const { db, modelBuilder } = dbModel;
 
-  return {
-    name,
-    setup() {
-      if (isIndexState) {
-        return Promise.all(
-          dbModels.map(({ db }) =>
-            db.authenticate().then(() =>
-              db.sync({
-                force: true,
-              }),
-            ),
-          ),
-        );
-      }
-      return Promise.resolve();
-    },
-
-    count() {
-      return getModel(defaultOrm.models, name).count();
-    },
-
-    findAll() {
-      return getModel(defaultOrm.models, name).findAll();
-    },
-
-    find(id) {
-      return getModel(defaultOrm.models, name).findByPk(id, { raw: true });
-    },
-
-    create(data) {
-      return Promise.all(
-        dbModels.map(({ models }) => {
-          const model = getModel(models, name);
-          return model.create(data);
+    return db
+      .authenticate()
+      .then(() => modelBuilder.build(db))
+      .then(models => (dbModel.models = models))
+      .then(() =>
+        db.sync({
+          force: true,
         }),
-      ).then(() => data);
-    },
-
-    update(data, meta) {
-      const key = meta.entity.key;
-
-      return Promise.all(
-        dbModels.map(({ models }) => {
-          const model = getModel(models, name);
-          return model.update(data, {
-            where: {
-              [key]: data[key],
-            },
-            logging: !isIndexState,
-          });
-        }),
-      ).then(() => data);
-    },
-
-    delete(id) {
-      return Promise.all(
-        dbModels.map(({ models }) => {
-          const model = getModel(models, name);
-          return model.destroy(id);
-        }),
-      ).then(() => true);
-    },
-  };
-});
-
-/**
- * required data provider
- * Poll, Option, Vote, DemuxIndexState_ICON
- */
-const dataAdapter = new AloxideDataManager({
-  dataProviderMap: new Map(),
-});
-
-dataProviders.forEach(d => dataAdapter.dataProviderMap.set(d.name, d));
-
-createWatcher({
-  bcName: 'ICON',
-  accountName: 'cxbc1b71bb40ef97c682114e10981169db23138327',
-  aloxideConfig,
-  actionReader: new IconActionReader({
-    endpoint: 'https://bicon.net.solidwallet.io/api/v3',
-    nid: 3,
-    logLevel: 'debug',
-    logSource: 'reader-ICON',
-    startAtBlock: 7563483,
-    numRetries: 5,
-    waitTimeMs: 2000,
+      );
   }),
-  dataAdapter,
-  logger,
-}).then(watcher => {
-  return watcher.start();
+).then(() => {
+  const dataProviders = modelNames.map(name => {
+    const isIndexState = name == indexStateSchema.name;
+
+    return {
+      name,
+      setup() {
+        return Promise.resolve();
+      },
+
+      count() {
+        return getModel(defaultOrm.models, name).count();
+      },
+
+      findAll() {
+        return getModel(defaultOrm.models, name).findAll();
+      },
+
+      find(id) {
+        return getModel(defaultOrm.models, name).findByPk(id, { raw: true });
+      },
+
+      create(data) {
+        return Promise.all(
+          dbModels.map(({ models }) => {
+            const model = getModel(models, name);
+            return model.create(data);
+          }),
+        ).then(() => data);
+      },
+
+      update(data, meta) {
+        const key = meta.entity.key;
+
+        return Promise.all(
+          dbModels.map(({ models }) => {
+            const model = getModel(models, name);
+            return model.update(data, {
+              where: {
+                [key]: data[key],
+              },
+              logging: !isIndexState,
+            });
+          }),
+        ).then(() => data);
+      },
+
+      delete(id) {
+        return Promise.all(
+          dbModels.map(({ models }) => {
+            const model = getModel(models, name);
+            return model.destroy(id);
+          }),
+        ).then(() => true);
+      },
+    };
+  });
+
+  /**
+   * required data provider
+   * Poll, Option, Vote, DemuxIndexState_ICON
+   */
+  const dataAdapter = new AloxideDataManager({
+    dataProviderMap: new Map(),
+  });
+
+  dataProviders.forEach(d => dataAdapter.dataProviderMap.set(d.name, d));
+
+  createWatcher({
+    bcName: 'ICON',
+    accountName: 'cxbc1b71bb40ef97c682114e10981169db23138327',
+    aloxideConfig,
+    actionReader: new IconActionReader({
+      endpoint: 'https://bicon.net.solidwallet.io/api/v3',
+      nid: 3,
+      logLevel: 'debug',
+      logSource: 'reader-ICON',
+      startAtBlock: 7563483,
+      numRetries: 5,
+      waitTimeMs: 2000,
+    }),
+    dataAdapter,
+    logger,
+  }).then(watcher => {
+    return watcher.start();
+  });
 });
