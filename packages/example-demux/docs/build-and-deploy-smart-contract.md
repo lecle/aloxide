@@ -50,6 +50,9 @@ To create account we need to go to [jungle-home-page](https://monitor.jungletest
 Deploy smart-contract from `./out/eos`:
 
 ```bash
+# change directory to smart-contract place
+cd out/eos
+
 # compilte to wasm
 eosio-cpp hello.cpp
 
