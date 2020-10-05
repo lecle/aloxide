@@ -5,7 +5,7 @@ It is required that we finish [build and deploy smart-contract](./build-and-depl
 ## EOS
 
 ```bash
-# create alias for shortening command
+# create an alias for shortening command
 alias cleosj="cleos -u https://jungle3.cryptolions.io"
 cleosj get info
 
@@ -55,7 +55,7 @@ cleosj push action aloxidepolla crevote '["aloxideuser5", 200011, 94, "t94", 5, 
 ## CAN
 
 ```bash
-# create alias for shortening command
+# create an alias for shortening command
 alias cleost="cleos -u https://testnet.canfoundation.io"
 cleot get info
 

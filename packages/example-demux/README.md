@@ -6,6 +6,8 @@
     - [Smart-contract](#smart-contract)
     - [Sample data](#sample-data)
   - [Usage](#usage)
+    - [Prerequisite](#prerequisite)
+    - [Start the example](#start-the-example)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -30,7 +32,7 @@ Smart-contract which is generatedd is a simple poll which include three tables:
 2. `Option` table holds available options of a poll: `optionId`, `name` (description), `pollId`
 3. `Vote` talbe holds votes from users: `voteId`, `point`, `message` (optional message), `ownerId`, `optionId`
 
-To generate smart-contract from above design. We need to contruct an [Aloxide configuration](./aloxide.yml):
+To generate a smart-contract from the above design. We need to construct an [Aloxide configuration](./aloxide.yml):
 
 ```yaml
 entities:
@@ -124,15 +126,32 @@ since they have two options: October 2nd or December 30th. These decisions must 
 
 - [push data to blockchain](./docs/make-sample-data.md)
 
-Since smart-contract on the blockchain is also called a decentralized application (DApp), data can be a push from anywhere: command-line tools, webs, third-party applicationd, mobile applications... Our Aloxide will help set up a simple way to sync those data from the blockchain to centralized databases so that, we can do some complicated queries.
+Since smart-contract on the blockchain is also called a decentralized application (DApp), data can be a push from anywhere: command-line tools, webs, third-party applications, mobile applications... Our Aloxide will help set up a simple way to sync those data from the blockchain to centralized databases so that, we can do some complicated queries.
 
 - How many members have participated in the poll?
 - Which option is likely a potential one?
 
 ## Usage
 
-```
-const exampleDemux = require('example-demux');
+### Prerequisite
 
-// TODO: DEMONSTRATE API
+This project is set up of `@aloxide/demux` that syncs data from the blockchain to 4 databases at the same time.
+To run this project on your machine, you will need:
+
+- docker: https://www.docker.com/products/docker-desktop
+- docker-compose: https://docs.docker.com/compose/install/. Note that is tool might be installed along with the above tool. You can check whether it is available by this command:
+
+```bash
+docker-compose -v
+# docker-compose version 1.27.2, build 18f557f9
 ```
+
+- Node js: https://nodejs.org/en/. And please install yarn after install node js: `npm i -g yarn`.
+
+### Start the example
+
+Here are steps to start the project.
+
+1. Start local databases using docker-compose: `docker-compose up -d`
+2. Install dependency: `yarn install`
+3. Start syncing blockchain: `yarn dev`

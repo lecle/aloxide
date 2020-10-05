@@ -19,8 +19,8 @@
 Build smart-contract from configured model [aloxide.yml](../aloxide.yml).
 
 ```bash
-# generate smart-contract for: ICON, EOS, and CAN
-# since CAN and EOS use the same engine, we only need to generate eos
+# generate smart-contract for ICON, EOS, and CAN
+# since CAN and EOS uses the same engine, we only need to generate eos
 yarn aloxide create ./aloxide.yml -o ./out -a 'eos,icon'
 
 # our smart-contract will be located at ./out
@@ -36,7 +36,7 @@ yarn aloxide create ./aloxide.yml -o ./out -a 'eos,icon'
 | URL       | https://jungle3.cryptolions.io         |
 | Home page | https://monitor.jungletestnet.io/#home |
 
-To create account we need to go to [jungle-home-page](https://monitor.jungletestnet.io/#home).
+To create an account we need to go to [jungle-home-page](https://monitor.jungletestnet.io/#home).
 
 | Account name | Note                 | Owner key          | Active key          |
 | ------------ | -------------------- | ------------------ | ------------------- |
@@ -53,7 +53,7 @@ Deploy smart-contract from `./out/eos`:
 # change directory to smart-contract place
 cd out/eos
 
-# compilte to wasm
+# compile to wasm
 eosio-cpp hello.cpp
 
 # import wallet
