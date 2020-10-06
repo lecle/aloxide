@@ -10,7 +10,9 @@ install:
   - npm i -g codecov
   - yarn
 scripts:
+  - yarn lerna bootstrap
   - yarn build
-  - yarn test:coverage
+  - yarn test
 after_success:
+  - yarn test:coverage
   - codecov
