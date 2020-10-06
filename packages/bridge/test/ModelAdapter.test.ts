@@ -46,7 +46,7 @@ describe('test Model Contract Adapter', () => {
     const outputPath = path.resolve(__dirname, '../out');
     it('should generate templete successful', () => {
       const adapter = new ModelContractAdapter();
-      const templatePath = path.resolve('../bridge/smart-contract-templates');
+      const templatePath = path.resolve(__dirname, '../smart-contract-templates');
       adapter.templatePath = templatePath;
       adapter.outputPath = outputPath;
 

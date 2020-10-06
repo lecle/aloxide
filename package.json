@@ -23,8 +23,8 @@
     "lint": "lerna run lint",
     "build": "lerna run build",
     "pub": "lerna publish",
-    "test": "lerna run --parallel --stream --no-bail test",
-    "test:coverage": "lerna run --parallel test:coverage"
+    "test": "jest --config ./jest-cov.config.js",
+    "test:coverage": "yarn test --coverage"
   },
   "husky": {
     "hooks": {
