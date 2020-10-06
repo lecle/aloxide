@@ -15,6 +15,7 @@
 
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![codecov](https://codecov.io/gh/lecle/aloxide/branch/master/graph/badge.svg?token=SMZFZL7G6C)](https://codecov.io/gh/lecle/aloxide)
+[![Build Status](https://travis-ci.org/lecle/aloxide.svg?branch=master)](https://travis-ci.org/lecle/aloxide)
 
 # Aloxide
 
