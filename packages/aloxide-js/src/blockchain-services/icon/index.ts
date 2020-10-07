@@ -4,10 +4,10 @@ import { BlockchainAccount } from '../BlockchainAccount';
 import { BlockchainService } from '../BlockchainService';
 import ContractFilesReader from '../../helpers/contract-files-reader';
 
-const { DeployTransactionBuilder } = IconBuilder
+const { DeployTransactionBuilder } = IconBuilder;
 
 export class IconBlockchainService extends BlockchainService {
-  client: IconService
+  client: IconService;
 
   constructor(config: NetworkConfig) {
     super(config);
@@ -15,15 +15,27 @@ export class IconBlockchainService extends BlockchainService {
     this.client = new IconService(new HttpProvider(this.url()));
   }
 
-  deployContract(contractPath: ContractPath, account: BlockchainAccount, key: string, opts: { params: object } = { params: {} }) {
-    const { pyPath } = contractPath;
-    const pyContent = ContractFilesReader.readPSFromFile(pyPath).toString('hex');
+  deployContract(
+    contractPath: ContractPath,
+    account: BlockchainAccount,
+    opts: { params: object } = { params: {} },
+  ) {
+    const { psPath } = contractPath;
+    const pyContent = ContractFilesReader.readPSFromFile(psPath).toString('hex');
     return this.processDeployment(pyContent, account, opts.params);
   }
 
-  private async processDeployment(contractContent: any, account: BlockchainAccount, params: object) {
+  private async processDeployment(
+    contractContent: any,
+    account: BlockchainAccount,
+    params: object,
+  ) {
     const wallet = IconService.IconWallet.loadPrivateKey(account.privateKey);
-    const transaction = await this.buildDeployTransaction(contractContent, params, wallet.getAddress());
+    const transaction = await this.buildDeployTransaction(
+      contractContent,
+      params,
+      wallet.getAddress(),
+    );
     const signedTransaction = await this.signedTransaction(transaction, wallet);
     return await this.pushTransaction(signedTransaction);
   }
@@ -34,7 +46,7 @@ export class IconBlockchainService extends BlockchainService {
     const stepLimit = await this.getMaxStepLimit();
     const networkId = IconService.IconConverter.toBigNumber(3);
     const version = IconService.IconConverter.toBigNumber(3);
-    const timestamp = (new Date()).getTime() * 1000;
+    const timestamp = new Date().getTime() * 1000;
 
     const deployTransactionBuilder = new DeployTransactionBuilder();
     const transaction = deployTransactionBuilder
@@ -51,9 +63,11 @@ export class IconBlockchainService extends BlockchainService {
     return transaction;
   }
 
-  private async signedTransaction(transaction: InstanceType<typeof DeployTransactionBuilder>, wallet: InstanceType<typeof Wallet>) {
+  private async signedTransaction(
+    transaction: InstanceType<typeof DeployTransactionBuilder>,
+    wallet: InstanceType<typeof Wallet>,
+  ) {
     const signedTransaction = new IconService.SignedTransaction(transaction, wallet);
-    const signedTransactionProperties = JSON.stringify(signedTransaction.getProperties()).split(',').join(', \n');
     return signedTransaction;
   }
 
@@ -64,7 +78,9 @@ export class IconBlockchainService extends BlockchainService {
 
   async getMaxStepLimit() {
     const { CallBuilder } = IconService.IconBuilder;
-    const governanceApi = await this.client.getScoreApi('cx0000000000000000000000000000000000000001').execute();
+    const governanceApi = await this.client
+      .getScoreApi('cx0000000000000000000000000000000000000001')
+      .execute();
     const methodName = 'getMaxStepLimit';
     const getMaxStepLimitApi = governanceApi.getMethod(methodName);
     const params = {};
