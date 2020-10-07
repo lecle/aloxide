@@ -1,10 +1,14 @@
-import IconService, { HttpProvider, IconBuilder, SignedTransaction, Wallet } from 'icon-sdk-js';
+import IconService, {
+  HttpProvider,
+  IconBuilder,
+  SignedTransaction,
+  IconWallet,
+  IconConverter,
+} from 'icon-sdk-js';
 import { ContractPath, NetworkConfig } from '../TypeDefinitions';
 import { BlockchainAccount } from '../BlockchainAccount';
 import { BlockchainService } from '../BlockchainService';
 import ContractFilesReader from '../../helpers/contract-files-reader';
-
-const { DeployTransactionBuilder } = IconBuilder;
 
 export class IconBlockchainService extends BlockchainService {
   client: IconService;
@@ -30,7 +34,7 @@ export class IconBlockchainService extends BlockchainService {
     account: BlockchainAccount,
     params: object,
   ) {
-    const wallet = IconService.IconWallet.loadPrivateKey(account.privateKey);
+    const wallet = IconWallet.loadPrivateKey(account.privateKey);
     const transaction = await this.buildDeployTransaction(
       contractContent,
       params,
@@ -44,9 +48,10 @@ export class IconBlockchainService extends BlockchainService {
     const contentType = 'application/zip';
 
     const stepLimit = await this.getMaxStepLimit();
-    const networkId = IconService.IconConverter.toBigNumber(3);
-    const version = IconService.IconConverter.toBigNumber(3);
+    const networkId = IconConverter.toBigNumber(3);
+    const version = IconConverter.toBigNumber(3);
     const timestamp = new Date().getTime() * 1000;
+    const { DeployTransactionBuilder } = IconBuilder;
 
     const deployTransactionBuilder = new DeployTransactionBuilder();
     const transaction = deployTransactionBuilder
@@ -63,11 +68,8 @@ export class IconBlockchainService extends BlockchainService {
     return transaction;
   }
 
-  private async signedTransaction(
-    transaction: InstanceType<typeof DeployTransactionBuilder>,
-    wallet: InstanceType<typeof Wallet>,
-  ) {
-    const signedTransaction = new IconService.SignedTransaction(transaction, wallet);
+  private async signedTransaction(transaction: any, wallet: InstanceType<typeof IconWallet>) {
+    const signedTransaction = new SignedTransaction(transaction, wallet);
     return signedTransaction;
   }
 
@@ -77,7 +79,7 @@ export class IconBlockchainService extends BlockchainService {
   }
 
   async getMaxStepLimit() {
-    const { CallBuilder } = IconService.IconBuilder;
+    const { CallBuilder } = IconBuilder;
     const governanceApi = await this.client
       .getScoreApi('cx0000000000000000000000000000000000000001')
       .execute();
@@ -93,7 +95,7 @@ export class IconBlockchainService extends BlockchainService {
       .build();
     const maxStepLimit = await this.client.call(call).execute();
 
-    return IconService.IconConverter.toBigNumber(maxStepLimit);
+    return IconConverter.toBigNumber(maxStepLimit);
   }
 
   async getBalance(account: string, code?: string, symbol?: string) {
