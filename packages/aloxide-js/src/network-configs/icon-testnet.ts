@@ -5,7 +5,7 @@ export const iconTestnetConfig: NetworkConfig = {
   type: BlockchainTypes.ICON,
   chainId: '',
   host: 'bicon.net.solidwallet.io/api/v3',
-  port: 80,
+  port: 443,
   protocol: 'https',
   coreToken: 'ICX',
 };

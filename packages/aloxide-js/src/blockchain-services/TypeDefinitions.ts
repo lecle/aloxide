@@ -11,10 +11,10 @@ export type NetworkConfig = {
 export enum BlockchainTypes {
   EOS = 'eos',
   ICON = 'icon',
-};
+}
 
 export type ContractPath = {
-  wasmPath?: string,
-  abiPath?: string,
-  pyPath?: string,
+  wasmPath?: string;
+  abiPath?: string;
+  psPath?: string;
 };
