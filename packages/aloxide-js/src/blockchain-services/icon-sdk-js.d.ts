@@ -1,10 +1,6 @@
+/* tslint:disable:max-classes-per-file */
 declare module 'icon-sdk-js' {
   export default class IconService {
-
-    static IconWallet = IconWallet;
-    static IconConverter = IconConverter;
-    static SignedTransaction = SignedTransaction;
-    static IconBuilder = IconBuilder;
 
     constructor(provider: HttpProvider)
     getTotalSupply();
@@ -49,7 +45,7 @@ declare module 'icon-sdk-js' {
      * @param {string} address SCORE address
      * @return {array} The list of SCORE API
      */
-    getScoreApi(address: string): array;
+    getScoreApi(address: string): HttpCall;
 
     /**
      * Get the transaction information.
@@ -83,7 +79,7 @@ declare module 'icon-sdk-js' {
   export class HttpProvider {
     url: string
 
-    constructor(public url: string);
+    constructor(url: string);
 
     request(request: object, converter);
   }
@@ -96,7 +92,7 @@ declare module 'icon-sdk-js' {
     callAsync(): any;
   }
 
-  export class Wallet {
+  export class IconWallet {
     /**
      * Creates an instance of Wallet.
      */
@@ -105,17 +101,17 @@ declare module 'icon-sdk-js' {
     /**
      * Creates an instance of Wallet with random key
      * @static
-     * @return {Wallet} The wallet instance.
+     * @return {IconWallet} The IconWallet instance.
      */
-    static create(): Wallet;
+    static create(): IconWallet;
 
     /**
      * Import existing wallet instance using private key.
      * @static
      * @param {string} privKey - The private key.
-     * @return {Wallet} The wallet instance.
+     * @return {IconWallet} The wallet instance.
      */
-    static loadPrivateKey(privKey: string): Wallet;
+    static loadPrivateKey(privKey: string): IconWallet;
 
     /**
      * Import existing wallet instance using keystore object.
@@ -123,12 +119,12 @@ declare module 'icon-sdk-js' {
      * @param {object|string} keystore - The keystore object or stringified object.
      * @param {string} password - The password of keystore object.
      * @param {boolean=} nonStrict - Set whether checking keystore file case-insensitive or not. (affects when 'keystore' param is string.)
-     * @return {Wallet} The wallet instance.
+     * @return {IconWallet} The wallet instance.
      */
-    static loadKeystore(keystore: object | string, password: string, nonStrict: boolean): Wallet;
+    static loadKeystore(keystore: object | string, password: string, nonStrict: boolean): IconWallet;
 
     /**
-     * Get keystore object of an instance of a `Wallet` class.
+     * Get keystore object of an instance of a `IconWallet` class.
      * @param {string} password - The new password for encryption.
      * @param {object=} opts - The custom options for encryption.
      * @return {object} A keystore object.
@@ -161,9 +157,7 @@ declare module 'icon-sdk-js' {
     getAddress(): string;
   }
 
-  export const IconWallet = Wallet;
-
-  class Converter {
+  export class IconConverter {
     /**
      * Convert UTF-8 text to hex string.
      * @param {string} value - the UTF-8 string only.
@@ -190,7 +184,7 @@ declare module 'icon-sdk-js' {
      * @param {string|number} value - the value.
      * @return {BigNumber} the value converted to BigNumber.
      */
-    static toBigNumber(value: string | number): BigNumber;
+    static toBigNumber(value: string | number): any;
 
     /**
      * Convert string, number or BigNumber value to hex string strictly.
@@ -213,46 +207,56 @@ declare module 'icon-sdk-js' {
      */
     static toRawTransaction(transaction: object): object;
   }
-  export const IconConverter = Converter;
 
-  export const IconBuilder = {
-    DeployTransactionBuilder,
-    CallBuilder
-  };
+  export namespace IconBuilder {
+    class DeployTransactionBuilder extends IcxTransactionBuilder {
+      constructor();
+      /**
+       * Creates an instance of DeployTransactionBuilder.
+       */
+      constructor(to, from, value, stepLimit, nid, nonce, version, timestamp);
 
-  class DeployTransactionBuilder extends IcxTransactionBuilder {
-    constructor();
-    /**
-     * Creates an instance of DeployTransactionBuilder.
-     */
-    constructor(to, from, value, stepLimit, nid, nonce, version, timestamp);
+      /**
+       * Set 'contentType' property
+       * @param {string} contentType - The content type of content
+       * @return {DeployTransactionBuilder} this.
+       */
+      contentType(contentType: string): DeployTransactionBuilder;
 
-    /**
-     * Set 'contentType' property
-     * @param {string} contentType - The content type of content
-     * @return {DeployTransactionBuilder} this.
-     */
-    contentType(contentType: string): DeployTransactionBuilder;
+      /**
+       * Set 'content' property
+       * @param {string} content - The content to deploy.
+       * @return {DeployTransactionBuilder} this.
+       */
+      content(content: string): DeployTransactionBuilder;
 
-    /**
-     * Set 'content' property
-     * @param {string} content - The content to deploy.
-     * @return {DeployTransactionBuilder} this.
-     */
-    content(content: string): DeployTransactionBuilder;
+      /**
+       * Set 'params' property
+       * @param {object} params - The input params for deploying content
+       * @return {DeployTransactionBuilder} this.
+       */
+      params(params: object): DeployTransactionBuilder;
 
-    /**
-     * Set 'params' property
-     * @param {object} params - The input params for deploying content
-     * @return {DeployTransactionBuilder} this.
-     */
-    params(params: object): DeployTransactionBuilder;
+      /**
+       * Build 'DeployTransaction' object
+       * @return {DeployTransaction} 'DeployTransaction' instance exported by 'DeployTransactionBuilder'
+       */
+      build(): DeployTransaction;
+    }
 
-    /**
-     * Build 'DeployTransaction' object
-     * @return {DeployTransaction} 'DeployTransaction' instance exported by 'DeployTransactionBuilder'
-     */
-    build(): DeployTransactionBuilder;
+    class CallBuilder {
+      constructor();
+
+      to(to): this;
+
+      from(from): this;
+
+      method(method): this;
+
+      params(params): this;
+
+      build(): Call;
+    }
   }
 
   class IcxTransactionBuilder {
@@ -277,28 +281,54 @@ declare module 'icon-sdk-js' {
     build(): IcxTransaction;
   }
 
-  class CallBuilder {
-    constructor();
+  class DeployTransaction extends IcxTransaction {
+    contentType: string;
 
-    to(to): this;
+    content: string;
 
-    from(from): this;
+    params: string;
 
-    method(method): this;
-
-    params(params): this;
-
-    build(): Call;
+    constructor(to, from, value, stepLimit, nid, nonce, version, timestamp, contentType, content, params);
   }
 
-  class SignedTransaction {
+  class IcxTransaction {
+    to: string;
+
+    from: string;
+
+    stepLimit: any;
+
+    nid: string | any;
+
+    version: string | any;
+
+    timestamp: number;
+
+    value: string;
+
+    nonce: string
+
+    constructor(to: string, from: string, value: string, stepLimit: any, nid: string | any, nonce: string, version: string | any, timestamp: number);
+  }
+
+  class Call {
+    to: string;
+
+    from: string;
+
+    data: any;
+
+    constructor(to: string, from: string, data: any);
+  }
+
+  export class SignedTransaction {
     /**
      * Creates an instance of SignedTransaction.
      * @param {IcxTransaction|MessageTransaction|CallTransaction|DeployTransaction}
      * 	transaction - The transaction instance.
-     * @param {Wallet} wallet - The wallet instance.
+     * @param {IconWallet} wallet - The wallet instance.
      */
-    constructor(transaction: IcxTransaction | MessageTransaction | CallTransaction | DeployTransaction, wallet: Wallet);
+    constructor(transaction: IcxTransaction | DeployTransaction | any, wallet: IconWallet);
 
     /**
      * Get raw transaction object of this.transaction.
@@ -319,3 +349,4 @@ declare module 'icon-sdk-js' {
     getProperties(): object;
   }
 }
+/* tslint:enable:max-classes-per-file */
