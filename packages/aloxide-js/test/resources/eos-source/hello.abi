@@ -1,0 +1,236 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "crepoll",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "body",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "crevote",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "pollId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "ownerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "point",
+                    "type": "float64"
+                }
+            ]
+        },
+        {
+            "name": "delpoll",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "id",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "delvote",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "id",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "hi",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "poll",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "body",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "updpoll",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "body",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "updvote",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "pollId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "ownerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "point",
+                    "type": "float64"
+                }
+            ]
+        },
+        {
+            "name": "vote",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "pollId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "ownerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "point",
+                    "type": "float64"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "crepoll",
+            "type": "crepoll",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "crevote",
+            "type": "crevote",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "delpoll",
+            "type": "delpoll",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "delvote",
+            "type": "delvote",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "hi",
+            "type": "hi",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "updpoll",
+            "type": "updpoll",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "updvote",
+            "type": "updvote",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "poll",
+            "type": "poll",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "vote",
+            "type": "vote",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}

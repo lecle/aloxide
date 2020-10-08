@@ -1,16 +1,16 @@
-import fetch from'node-fetch';
+import fetch from 'node-fetch';
 import { TextEncoder, TextDecoder } from 'util';
 import { Api, JsonRpc } from 'eosjs';
 import { JsSignatureProvider, PrivateKey } from 'eosjs/dist/eosjs-jssig';
 
 import { BlockchainService } from '../BlockchainService';
 import { ContractPath, NetworkConfig } from '../TypeDefinitions';
-import ContractFilesReader from '../../helpers/contract-files-reader';
+import { readABIFile, readWASMFile } from '../../helpers/contract-files-reader';
 import { BlockchainAccount } from '../BlockchainAccount';
 
 export class EosBlockchainService extends BlockchainService {
-  client: Api
-  signatureProvider: JsSignatureProvider
+  client: Api;
+  signatureProvider: JsSignatureProvider;
 
   constructor(config: NetworkConfig) {
     super(config);
@@ -37,8 +37,8 @@ export class EosBlockchainService extends BlockchainService {
     this.signatureProvider.keys.set(pubKey, priv.toElliptic());
     this.signatureProvider.availableKeys.push(pubKey);
 
-    const abi = ContractFilesReader.readABIFromFile(abiPath);
-    const wasm = ContractFilesReader.readWASMFromFile(wasmPath);
+    const abi = readABIFile(abiPath, this.client);
+    const wasm = readWASMFile(wasmPath);
 
     const trx = await this.client.transact(
       {
@@ -54,7 +54,7 @@ export class EosBlockchainService extends BlockchainService {
             ],
             data: {
               account: accountName,
-              code: wasm.toString('hex'),
+              code: wasm,
               vmtype: 0,
               vmversion: 0,
             },
@@ -70,7 +70,7 @@ export class EosBlockchainService extends BlockchainService {
             ],
             data: {
               account: accountName,
-              abi: abi.toString('hex'),
+              abi,
             },
           },
         ],
@@ -78,13 +78,13 @@ export class EosBlockchainService extends BlockchainService {
       {
         blocksBehind: 3,
         expireSeconds: 30,
-      }
+      },
     );
 
     return trx;
   }
 
-  async getBalance(account: string, code: string, symbol: string) {
+  async getBalance(account: string, code: string, symbol: string): Promise<any> {
     if (!code || !symbol) {
       throw new Error('"Code" and "Symbol" are needed when getting balance from EOS Network');
     }
