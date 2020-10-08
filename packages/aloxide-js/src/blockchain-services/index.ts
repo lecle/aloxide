@@ -23,7 +23,9 @@ export class Aloxide {
       }
     } catch (e) {
       if (e.code === 'MODULE_NOT_FOUND') {
-        throw new Error(`Missing dependency: Please install missing module '${e.moduleName}' in order to create relative service!`);
+        throw new Error(
+          `Missing dependency: Please install missing module '${e.moduleName}' in order to create relative service!`,
+        );
       }
 
       throw e;
@@ -31,10 +33,4 @@ export class Aloxide {
   }
 }
 
-export {
-  NetworkConfig,
-  BlockchainTypes,
-  BlockchainService,
-  ContractPath,
-  BlockchainAccount,
-}
+export { NetworkConfig, BlockchainTypes, BlockchainService, ContractPath, BlockchainAccount };

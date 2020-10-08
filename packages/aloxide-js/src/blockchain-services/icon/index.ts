@@ -8,7 +8,7 @@ import IconService, {
 import { ContractPath, NetworkConfig } from '../TypeDefinitions';
 import { BlockchainAccount } from '../BlockchainAccount';
 import { BlockchainService } from '../BlockchainService';
-import ContractFilesReader from '../../helpers/contract-files-reader';
+import { readPSFile } from '../../helpers/contract-files-reader';
 
 export class IconBlockchainService extends BlockchainService {
   client: IconService;
@@ -25,7 +25,7 @@ export class IconBlockchainService extends BlockchainService {
     opts: { params: object } = { params: {} },
   ) {
     const { psPath } = contractPath;
-    const pyContent = ContractFilesReader.readPSFromFile(psPath).toString('hex');
+    const pyContent = readPSFile(psPath);
     return this.processDeployment(pyContent, account, opts.params);
   }
 

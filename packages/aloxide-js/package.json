@@ -23,13 +23,12 @@
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn build",
     "lint": "tslint --project . --fix",
-    "test": "jest -o"
+    "test": "jest -o",
+    "test:coverage": "yarn test --collectCoverage"
   },
   "dependencies": {
     "crypto-js": "3.1.9-1",
     "eosjs": "^21.0.3",
-    "icon-sdk-js": "^0.0.18",
-    "is-invalid-path": "1.0.2",
-    "jszip": "^3.5.0"
+    "icon-sdk-js": "^0.0.18"
   }
 }
