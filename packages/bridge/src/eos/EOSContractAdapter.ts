@@ -104,6 +104,9 @@ export class EOSContractAdapter extends AbsContractAdapter {
 
     // translate
     const outText = template({
+      _config: {
+        logDataOnly: this.logDataOnly,
+      },
       contractName: this.contractName,
       actions: this.actions,
       tables: this.tables,
