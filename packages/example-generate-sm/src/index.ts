@@ -1,5 +1,5 @@
 import { ContractGenerator } from '@aloxide/abstraction';
-import { EOSContractAdapter, ICONContractAdapter, ModelContractAdapter } from '@aloxide/bridge';
+import { EOSContractAdapter, ICONContractAdapter } from '@aloxide/bridge';
 import { createLogger } from 'bunyan';
 import path from 'path';
 
@@ -11,11 +11,9 @@ const contractGenerator = new ContractGenerator({
   adapters: [
     new EOSContractAdapter() /* generate smart contract for EOS network */,
     new EOSContractAdapter({
-      logDataOnly: true,
       outputPath: path.resolve(outputPath, 'eos-no-state'),
     }) /* generate smart contract for EOS network */,
     new ICONContractAdapter(),
-    new ModelContractAdapter(),
   ],
   logger: createLogger({
     level: 'debug',
