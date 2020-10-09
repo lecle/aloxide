@@ -17,8 +17,8 @@ export abstract class AbsContractAdapter implements ContractAdapter {
   templatePath: string;
   outputPath: string;
   typeInterpreter: AbsTypeInterpreter;
-  protected blockchainType: string;
-  public logDataOnly?: boolean;
+  blockchainType: string;
+  logDataOnly?: boolean;
   config: ContractAdapterConfig;
 
   constructor(config?: ContractAdapterConfig) {

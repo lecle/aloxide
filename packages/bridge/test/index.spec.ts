@@ -1,4 +1,10 @@
+import { AbsTypeInterpreter, PythonPrettier } from "../src";
+
 describe('test contract addaper', () => {
-  it.todo('should create new instance of EOSContractAdapter');
-  it.todo('should create new instance of EOSContractAdapter');
+  it('should export PythonPrettier', () => {
+    expect(PythonPrettier).toBeTruthy();
+  });
+  it('should export AbsTypeInterpreter', () => {
+    expect(AbsTypeInterpreter).toBeTruthy();
+  });
 });

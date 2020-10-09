@@ -1,9 +1,20 @@
 import path from 'path';
 import fs from 'fs';
 
-import { EntityConfig, FilePrinter, ICONContractAdapter, JsPrettier } from '../src';
+import {
+  EntityConfig,
+  FilePrinter,
+  ICONContractAdapter,
+  JsPrettier,
+  PythonPrettier,
+} from '../../src';
+import createLoggerTest from '../createLoggerTest';
 
 describe('test ICON contract addapter', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+
   const blockchain = 'icon';
   const entityConfigs: EntityConfig[] = [
     {
@@ -26,6 +37,21 @@ describe('test ICON contract addapter', () => {
       name: 'Vote',
     },
   ];
+
+  describe('constructor', () => {
+    it('default', () => {
+      const a = new ICONContractAdapter();
+      expect(a.typeInterpreter).toBeTruthy();
+      expect(a.blockchainType).toEqual('icon');
+    });
+
+    it('blockchainType is not null', () => {
+      const a = new ICONContractAdapter({
+        blockchainType: 'test',
+      });
+      expect(a.blockchainType).toEqual('test');
+    });
+  });
 
   describe('test generate', () => {
     const outputPath = path.resolve(__dirname, '../out');
@@ -359,6 +385,89 @@ describe('test ICON contract addapter', () => {
           },
         }),
         adapter.folderName,
+      );
+    });
+  });
+
+  describe('generateUnitTestPy', () => {
+    it('no error', () => {
+      jest.spyOn(fs, 'writeFileSync').mockReturnValue();
+      const spyFsReadFileSync = jest.spyOn(fs, 'readFileSync').mockReturnValue('hbsTemplate');
+      const a = new ICONContractAdapter();
+      a.templatePath = 'templatePath';
+      a.folderName = 'folderName';
+      a.folderTestName = 'folderTestName';
+      a.logger = createLoggerTest();
+      a.pyFilePrinter = new FilePrinter(a.outputPath, new PythonPrettier(), a.logger);
+      const spyPrint = jest.spyOn(a.pyFilePrinter, 'print').mockReturnValue('');
+
+      a.generateUnitTestPy();
+
+      expect(spyFsReadFileSync).toBeCalledTimes(2);
+      expect(spyFsReadFileSync).toHaveBeenNthCalledWith(
+        1,
+        expect.stringContaining(
+          '/templatePath/folderName/folderTestName/test_unit_icon_hello.py.hbs',
+        ),
+        'utf-8',
+      );
+      expect(spyFsReadFileSync).toHaveBeenNthCalledWith(
+        2,
+        expect.stringContaining('/templatePath/folderName/__init__.py'),
+        'utf-8',
+      );
+
+      expect(spyFsReadFileSync).toHaveBeenNthCalledWith(
+        1,
+        expect.stringContaining('test_unit_icon_hello.py.hbs'),
+        'utf-8',
+      );
+      expect(spyFsReadFileSync).toHaveBeenNthCalledWith(
+        2,
+        expect.stringContaining('__init__.py'),
+        'utf-8',
+      );
+      expect(spyPrint).toBeCalledTimes(2);
+      expect(spyPrint).toHaveBeenNthCalledWith(
+        1,
+        'test_unit_icon_hello.py',
+        'hbsTemplate',
+        'folderName/folderTestName',
+      );
+      expect(spyPrint).toHaveBeenNthCalledWith(
+        2,
+        '__init__.py',
+        'hbsTemplate',
+        'folderName/folderTestName',
+      );
+    });
+  });
+
+  describe('generateIntegrateTestPy', () => {
+    it('no error', () => {
+      jest.spyOn(fs, 'writeFileSync').mockReturnValue();
+      const spyFsReadFileSync = jest.spyOn(fs, 'readFileSync').mockReturnValue('hbsTemplate');
+      const a = new ICONContractAdapter();
+      a.templatePath = 'templatePath';
+      a.folderName = 'folderName';
+      a.folderTestName = 'folderTestName';
+      a.logger = createLoggerTest();
+      a.pyFilePrinter = new FilePrinter(a.outputPath, new PythonPrettier(), a.logger);
+      const spyPrint = jest.spyOn(a.pyFilePrinter, 'print').mockReturnValue('');
+
+      a.generateIntegrateTestPy();
+
+      expect(spyFsReadFileSync).toBeCalledTimes(1);
+      expect(spyFsReadFileSync).toBeCalledWith(
+        expect.stringContaining('test_integrate_icon_hello.py.hbs'),
+        'utf-8',
+      );
+      expect(spyPrint).toBeCalledTimes(1);
+      expect(spyPrint).toHaveBeenNthCalledWith(
+        1,
+        'test_integrate_icon_hello.py',
+        'hbsTemplate',
+        'folderName/folderTestName',
       );
     });
   });

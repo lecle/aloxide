@@ -10,7 +10,7 @@ import type { Prettier } from '../prettier/Prettier';
  * Print output code to files
  */
 export class FilePrinter implements Printer {
-  constructor(private outputPath: string, public prettier: Prettier, private logger: Logger) {}
+  constructor(public outputPath: string, public prettier: Prettier, public logger: Logger) {}
 
   print(fileName: string, outputText: string, outputPath?: string) {
     if (outputPath) {
