@@ -78,7 +78,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
     const template = Handlebars.compile(hbsTemplate);
 
     const outText = template({
-      tables: this.entityConfigs?.map(item => {
+      tables: this.entityConfigs.map(item => {
         const key = item.fields.find(({ name }) => name == item.key);
         return {
           name: item.name.toLocaleLowerCase(),
@@ -104,7 +104,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
     );
     const template = Handlebars.compile(hbsTemplate);
 
-    this.entityConfigs?.map(item => {
+    this.entityConfigs.map(item => {
       const actionName = 'get' + item.name;
       const outFileName = actionName + '.json';
       const key = item.fields.find(({ name }) => name == item.key);
@@ -127,7 +127,7 @@ export class ICONContractAdapter extends AbsContractAdapter {
     );
     const template = Handlebars.compile(hbsTemplate);
 
-    this.entityConfigs?.map(item => {
+    this.entityConfigs.map(item => {
       // create data
       const creActionName = 'cre' + item.name;
       const creFileName = creActionName + '.json';

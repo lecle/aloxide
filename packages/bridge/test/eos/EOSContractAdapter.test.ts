@@ -2,12 +2,12 @@ import fs from 'fs';
 import Handlebars from 'handlebars';
 import path from 'path';
 
-import { CplusplusPrettier, EntityConfig, EOSContractAdapter, FilePrinter } from '../src';
-import { EOSCreAction } from '../src/eos/EOSCreAction';
-import { EOSDelAction } from '../src/eos/EOSDelAction';
-import { EOSUpdAction } from '../src/eos/EOSUpdAction';
+import { CplusplusPrettier, EntityConfig, EOSContractAdapter, FilePrinter } from '../../src';
+import { EOSCreAction } from '../../src/eos/EOSCreAction';
+import { EOSDelAction } from '../../src/eos/EOSDelAction';
+import { EOSUpdAction } from '../../src/eos/EOSUpdAction';
 
-jest.mock('../src/printer/FilePrinter');
+jest.mock('../../src/printer/FilePrinter');
 
 describe('test EOS contract addapter', () => {
   const blockchain = 'eos';
@@ -33,8 +33,15 @@ describe('test EOS contract addapter', () => {
     },
   ];
 
+  describe('constructor', () => {
+    const a = new EOSContractAdapter({
+      blockchainType: 'can',
+    });
+    expect(a.blockchainType).toEqual('can');
+  });
+
   describe('test generate', () => {
-    const outputPath = path.resolve(__dirname, '../out');
+    const outputPath = path.resolve(__dirname, '../../out');
 
     it('should call generateFromTemplate', () => {
       const adapter = new EOSContractAdapter();
@@ -72,7 +79,7 @@ describe('test EOS contract addapter', () => {
         info: jest.fn(),
         debug: jest.fn(),
       };
-      const templatePath = path.resolve(__dirname, '../smart-contract-templates');
+      const templatePath = path.resolve(__dirname, '../../smart-contract-templates');
       adapter.templatePath = templatePath;
 
       const createTables = jest.spyOn(adapter, 'createTables');
@@ -165,7 +172,7 @@ describe('test EOS contract addapter', () => {
         info: jest.fn(),
         debug: jest.fn(),
       };
-      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      const templatePath = path.resolve(__dirname, '../../smart-contract-templates/eos');
       adapter.templatePath = templatePath;
       adapter.contractName = 'contractName';
       adapter.printer = new FilePrinter(
@@ -187,7 +194,7 @@ describe('test EOS contract addapter', () => {
         info: jest.fn(),
         debug: jest.fn(),
       };
-      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      const templatePath = path.resolve(__dirname, '../../smart-contract-templates/eos');
       adapter.templatePath = templatePath;
       adapter.contractName = 'contractName';
       adapter.printer = new FilePrinter(
@@ -210,7 +217,7 @@ describe('test EOS contract addapter', () => {
         info: jest.fn(),
         debug: jest.fn(),
       };
-      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      const templatePath = path.resolve(__dirname, '../../smart-contract-templates/eos');
       adapter.templatePath = templatePath;
       adapter.contractName = 'contractName';
       adapter.printer = new FilePrinter(
@@ -232,7 +239,7 @@ describe('test EOS contract addapter', () => {
         info: jest.fn(),
         debug: jest.fn(),
       };
-      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      const templatePath = path.resolve(__dirname, '../../smart-contract-templates/eos');
       adapter.templatePath = templatePath;
       adapter.contractName = 'contractName';
       adapter.printer = new FilePrinter(
@@ -308,7 +315,7 @@ describe('test EOS contract addapter', () => {
         },
       ];
       adapter.tables = table;
-      const templatePath = path.resolve(__dirname, '../smart-contract-templates/eos');
+      const templatePath = path.resolve(__dirname, '../../smart-contract-templates/eos');
       adapter.templatePath = templatePath;
       adapter.actionCreators = [new EOSCreAction(), new EOSUpdAction(), new EOSDelAction()];
       adapter.actionCreators.forEach(ac => {

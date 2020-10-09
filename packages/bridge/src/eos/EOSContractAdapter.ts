@@ -53,7 +53,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
    * make tables from entity config
    */
   createTables() {
-    this.tables = this.entityConfigs?.map<Table>(item => {
+    this.tables = this.entityConfigs.map<Table>(item => {
       const fields = item.fields.map(({ name, type }) => ({
         name,
         type: this.typeInterpreter.interpret(type as FieldTypeEnum),
@@ -72,7 +72,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
    */
   createActions() {
     this.actions = this.tables
-      ?.map<Action[]>(item => this.actionCreators.map(ac => ac.create(item)))
+      .map<Action[]>(item => this.actionCreators.map(ac => ac.create(item)))
       .reduce<Action[]>((a, c) => a.concat(c), []);
   }
 

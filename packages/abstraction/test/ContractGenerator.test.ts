@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { EOSContractAdapter, ICONContractAdapter, ModelContractAdapter } from '../../bridge/src';
+import { EOSContractAdapter, ICONContractAdapter } from '../../bridge/src';
 import { ContractGeneratorConfig } from '../src';
 import { ContractGenerator } from '../src/ContractGenerator';
 import createLoggerTest from './createLoggerTest';
@@ -70,13 +70,10 @@ describe('test ContractGenerator', () => {
       const adapter2 = new ICONContractAdapter();
       adapter2.generate = jest.fn();
 
-      const adapter3 = new ModelContractAdapter();
-      adapter3.generate = jest.fn();
-
       const logger = createLoggerTest();
       const generator = new ContractGenerator({
         logger,
-        adapters: [adapter1, adapter2, adapter3],
+        adapters: [adapter1, adapter2],
         outputPath,
         aloxideConfigPath: path.resolve(__dirname, './aloxide.yml'),
       });
@@ -85,7 +82,6 @@ describe('test ContractGenerator', () => {
 
       expect(adapter1.generate).toBeCalledWith(outputPath);
       expect(adapter2.generate).toBeCalledWith(outputPath);
-      expect(adapter3.generate).toBeCalledWith(outputPath);
     });
   });
 
