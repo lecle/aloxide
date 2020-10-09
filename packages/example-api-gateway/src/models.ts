@@ -1,3 +1,4 @@
+import { readAloxideConfig } from '@aloxide/abstraction';
 import { DataProvider, indexStateSchema } from '@aloxide/demux';
 import { ModelBuilder } from '@aloxide/model-sequelize';
 import Logger from 'bunyan';
@@ -5,8 +6,9 @@ import { ModelAttributes, Op, Sequelize } from 'sequelize';
 
 import config from './config';
 
+const aloxideConfig = readAloxideConfig(config.aloxideConfigPath);
 const modelBuilder = new ModelBuilder({
-  aloxideConfigPath: config.aloxideConfigPath,
+  aloxideConfig,
   logger: Logger.createLogger({
     level: 'debug',
     name: 'models',
