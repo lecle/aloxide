@@ -25,6 +25,10 @@ While there are a lot of blockchain softwares available and it's not uncommon to
 
 Check out the [working example using Aloxide API gateway](https://github.com/lecle/aloxide/blob/master/packages/example-api-gateway/README.md).
 
+[Gitpod](https://www.gitpod.io/) is an online open source VS Code-like IDE (and is free for open source projects) for working on issues and making PRs to this project. With a single click it will start a workspace automatically.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/lecle/aloxide)
+
 # How to build
 
 ## Development Environment
