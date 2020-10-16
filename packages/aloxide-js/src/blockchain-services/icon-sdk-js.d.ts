@@ -83,9 +83,7 @@ declare module 'icon-sdk-js' {
     request(request: object, converter);
   }
 
-  export class HttpCall {
-    constructor(httpCall, converter);
-
+  export interface HttpCall {
     execute(): any;
 
     callAsync(): any;
@@ -211,6 +209,8 @@ declare module 'icon-sdk-js' {
     static toRawTransaction(transaction: object): object;
   }
 
+  export * from 'bignumber.js';
+
   export namespace IconBuilder {
     class DeployTransactionBuilder extends IcxTransactionBuilder {
       /**
@@ -334,6 +334,10 @@ declare module 'icon-sdk-js' {
     );
   }
 
+  class CallTransaction extends IcxTransaction {
+    constructor(to, from, value, stepLimit, nid, nonce, version, timestamp, method, params);
+  }
+
   class IcxTransaction {
     to: string;
 
@@ -363,14 +367,12 @@ declare module 'icon-sdk-js' {
     );
   }
 
-  class Call {
+  export interface Call {
     to: string;
 
     from: string;
 
     data: any;
-
-    constructor(to: string, from: string, data: any);
   }
 
   export class SignedTransaction {

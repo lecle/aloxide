@@ -2,17 +2,43 @@ import { BlockchainAccount } from '../blockchain-services/BlockchainAccount';
 
 export abstract class BlockchainModel {
   public readonly name: string;
+  public readonly url: string;
   public readonly actions: BlockchainAction[];
+  public readonly contract: string;
+  public account: BlockchainAccount;
 
   constructor(
     name: string,
-    protected account: BlockchainAccount,
-    protected url: string,
+    url: string,
     actions: BlockchainAction[],
+    contract: string,
+    account?: BlockchainAccount,
   ) {
-    this.actions = actions;
-    this.account = account;
     this.name = name.toLocaleLowerCase();
+    this.url = url;
+    this.actions = actions;
+    this.contract = contract;
+
+    if (account instanceof BlockchainAccount) {
+      this.account = account;
+    }
+  }
+
+  /**
+   * Set default account for the model
+   * @param account
+   */
+  protected configureAccount(account: string | BlockchainAccount): BlockchainAccount {
+    if (!(account instanceof BlockchainAccount) && typeof account != 'string') {
+      throw new Error('Account must be a Private Key string or an instance of Blockchain Account!');
+    }
+
+    if (typeof account === 'string') {
+      account = new BlockchainAccount(account);
+    }
+
+    this.account = account;
+    return this.account;
   }
 
   getAction(name: string): BlockchainAction {
@@ -38,53 +64,56 @@ export abstract class BlockchainModel {
     const { inputs: inputSchema } = this.getAction(actionName);
     const valueKeys = Object.keys(value);
 
+    /**
+     * TODO: Support strictly checking type before sending to blockchain
+     */
     // Check param to strictly follow input schema
-    if (strict === true) {
-      if (inputSchema.length !== valueKeys.length) {
-        throw new Error(
-          `Expected ${inputSchema.length} arguments (${inputSchema
-            .map(input => `"${input.name}"`)
-            .join(', ')}), but got ${valueKeys.length}.`,
-        );
+    // if (strict === true) {
+    //   if (inputSchema.length !== valueKeys.length) {
+    //     throw new Error(
+    //       `Expected ${inputSchema.length} arguments (${inputSchema
+    //         .map(input => `"${input.name}"`)
+    //         .join(', ')}), but got ${valueKeys.length}.`,
+    //     );
+    //   }
+
+    //   inputSchema.forEach(input => {
+    //     if (!value[input.name]) {
+    //       throw new Error(`Argument "${input.name}" was not provided.`);
+    //     }
+
+    //     if (typeof value[input.name] !== input.type) {
+    //       throw new Error(
+    //         `Argument "${input.name}" was expected to be ${input.type}, but got ${typeof value[
+    //           input.name
+    //         ]}: ${value[input.name]}`,
+    //       );
+    //     }
+    //   });
+
+    //   return value;
+    // } else {
+    // Only check as if param is acceptable
+    const inputParamNames = inputSchema.map(input => input.name);
+    const res = valueKeys.reduce((accumulator, key) => {
+      if (inputParamNames.indexOf(key) !== -1) {
+        accumulator[key] = value[key];
       }
 
-      inputSchema.forEach(input => {
-        if (!value[input.name]) {
-          throw new Error(`Argument "${input.name}" was not provided.`);
-        }
+      return accumulator;
+    }, {});
 
-        if (typeof value[input.name] !== input.type) {
-          throw new Error(
-            `Argument "${input.name}" was expected to be ${input.type}, but got ${typeof value[
-              input.name
-            ]}: ${value[input.name]}`,
-          );
-        }
-      });
-
-      return value;
-    } else {
-      // Only check as if param is acceptable
-      const inputParamNames = inputSchema.map(input => input.name);
-      const res = valueKeys.reduce((accumulator, key) => {
-        if (inputParamNames.indexOf(key) !== -1) {
-          accumulator[key] = value[key];
-        }
-
-        return accumulator;
-      }, {});
-
-      return res;
-    }
+    return res;
+    // }
   }
 
-  abstract async get(id: any): Promise<object>;
+  abstract async get(key: { [key: string]: any }): Promise<object>;
 
   abstract async add(params: object): Promise<any>;
 
-  abstract async update(id: string, params: object): Promise<any>;
+  abstract async update(key: { [key: string]: any }, params: object): Promise<any>;
 
-  abstract async delete(id: string): Promise<any>;
+  abstract async delete(key: { [key: string]: any }): Promise<any>;
 }
 
 export type BlockchainAction = {
