@@ -3,7 +3,9 @@ import { TextEncoder, TextDecoder } from 'util';
 import { Api, JsonRpc } from 'eosjs';
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
 import fs from 'fs';
-import { readWASMFile, readPSFile, readABIFile } from '../../src/helpers/contract-files-reader';
+const { readWASMFile, readPSFile, readABIFile } = jest.requireActual(
+  '../../src/helpers/contract-files-reader',
+);
 
 describe('test contract-files-reader', () => {
   describe('readABIFile()', () => {

@@ -1,4 +1,4 @@
-import { IconBlockchainService } from '../../../src/blockchain-services/icon';
+import { IconBlockchainModel, IconBlockchainService } from '../../../src/blockchain-services/icon';
 import path from 'path';
 import { Aloxide, BlockchainAccount, iconTestnetConfig } from '../../../src';
 
@@ -10,7 +10,11 @@ const testConfig = Object.assign({}, iconTestnetConfig, {
 
 describe('test IconBlockchainService', () => {
   describe('test IconBlockchainService creation', () => {
-    it.todo('should create IconBlockchainService successful');
+    it('should create IconBlockchainService successful', () => {
+      const iconService = new IconBlockchainService(testConfig);
+
+      expect(iconService).toBeDefined();
+    });
   });
 
   describe('deployContract()', () => {
@@ -25,22 +29,107 @@ describe('test IconBlockchainService', () => {
       const trn = await iconTestnetService.deployContract(
         { psPath: ICON_TOKEN_PATH },
         new BlockchainAccount('592eb276d534e2c41a2d9356c0ab262dc233d87e4dd71ce705ec130a8d27ff0c'),
+        {
+          // Update contract
+          contract: 'cx26d2757d45ea7e559940d86761330005b0e9f2d8',
+        },
       );
 
       expect(trn).toBeDefined();
     });
   });
 
+  describe('getBalance()', () => {
+    it('should return balance', async () => {
+      const iconService = new IconBlockchainService(testConfig);
+      // @ts-ignore
+      const balanceMock = jest.spyOn(iconService.client, 'getBalance').mockReturnValueOnce({
+        execute: () => {
+          return 'test_result';
+        },
+      });
+
+      const res = await iconService.getBalance('testAccount');
+      expect(res).toBe('test_result');
+      expect(balanceMock).toBeCalledWith('testAccount');
+    });
+  });
+
   describe('model()', () => {
-    xit('should create model', async () => {
+    it('should create model', async () => {
       const iconService = new IconBlockchainService(iconTestnetConfig);
-      const iconBcModel = await iconService.model(
+      const iconBcModel = await iconService.createModel(
         'Poll',
-        new BlockchainAccount('592eb276d534e2c41a2d9356c0ab262dc233d87e4dd71ce705ec130a8d27ff0c'),
         'cx26d2757d45ea7e559940d86761330005b0e9f2d8',
+        new BlockchainAccount('592eb276d534e2c41a2d9356c0ab262dc233d87e4dd71ce705ec130a8d27ff0c'),
       );
 
-      expect(true).toBe(true);
+      expect(iconBcModel).toBeDefined();
+      expect(iconBcModel instanceof IconBlockchainModel).toBe(true);
+    });
+
+    it('should create Poll model', async () => {
+      const iconService = new IconBlockchainService(testConfig);
+      const data = [
+        {
+          name: 'crepoll',
+          inputs: [
+            {
+              name: 'id',
+              type: 'int',
+            },
+            {
+              name: 'name',
+              type: 'str',
+            },
+          ],
+        },
+        {
+          name: 'updpoll',
+          inputs: [
+            {
+              name: 'id',
+              type: 'int',
+            },
+            {
+              name: 'name',
+              type: 'str',
+            },
+          ],
+        },
+      ];
+      // @ts-ignore
+      const abiMock = jest.spyOn(iconService.client, 'getScoreApi').mockReturnValueOnce({
+        execute: async () => {
+          return {
+            getList: () => data,
+          };
+        },
+      });
+
+      const Poll = await iconService.createModel(
+        'Poll',
+        'testcontract',
+        new BlockchainAccount('testaccount'),
+      );
+      expect(Poll instanceof IconBlockchainModel).toBe(true);
+      expect(abiMock).toBeCalledTimes(1);
+      expect(Poll.actions).toEqual([
+        {
+          name: 'crepoll',
+          inputs: [
+            { name: 'id', type: 'number' },
+            { name: 'name', type: 'string' },
+          ],
+        },
+        {
+          name: 'updpoll',
+          inputs: [
+            { name: 'id', type: 'number' },
+            { name: 'name', type: 'string' },
+          ],
+        },
+      ]);
     });
   });
 });
