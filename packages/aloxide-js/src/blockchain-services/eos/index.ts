@@ -7,6 +7,8 @@ import { BlockchainService } from '../BlockchainService';
 import { ContractPath, NetworkConfig } from '../TypeDefinitions';
 import { readABIFile, readWASMFile } from '../../helpers/contract-files-reader';
 import { BlockchainAccount } from '../BlockchainAccount';
+import { BlockchainModel } from '../BlockchainModel';
+import { EosBlockchainModel } from './EosBlockchainModel';
 
 export class EosBlockchainService extends BlockchainService {
   client: Api;
@@ -90,5 +92,59 @@ export class EosBlockchainService extends BlockchainService {
     }
 
     return await this.client.rpc.get_currency_balance(code, account, symbol);
+  }
+
+  async model(
+    entityName: string,
+    account: BlockchainAccount,
+    contract: string,
+  ): Promise<BlockchainModel> {
+    entityName = entityName.toLocaleLowerCase();
+    const modelAbi = await this.client.rpc.get_abi('aloxidejs123');
+    const actionsList = modelAbi.abi.structs;
+    const bcToJsType = type => {
+      switch (type) {
+        case 'name':
+          return 'string';
+        case 'string':
+          return 'string';
+        case 'uint64':
+        case 'float64':
+          return 'number';
+        default:
+          return;
+      }
+    };
+    const actions = actionsList.reduce((accumulator, action) => {
+      // check if action name contain the entity name as last word. ex: checking poll
+      // createpoll -> true
+      // createpollandvote -> false
+      if (action.name.lastIndexOf(entityName) === action.name.length - entityName.length) {
+        if (action.name === entityName) {
+          // workaround for the `poll` action on EOS
+          accumulator.push({
+            name: action.name,
+            inputs: [
+              {
+                name: 'id',
+                type: 'number',
+              },
+            ],
+          });
+        } else {
+          accumulator.push({
+            name: action.name,
+            inputs: action.fields.map(input => ({
+              name: input.name,
+              type: bcToJsType(input.type),
+            })),
+          });
+        }
+      }
+
+      return accumulator;
+    }, []);
+
+    return new EosBlockchainModel(entityName, account, contract, this.url(), actions);
   }
 }

@@ -1,6 +1,7 @@
 import type { Api as EosApi } from 'eosjs';
 import type IconService from 'icon-sdk-js';
 import { BlockchainAccount } from './BlockchainAccount';
+import { BlockchainModel } from './BlockchainModel';
 import { ContractPath, NetworkConfig } from './TypeDefinitions';
 import { removeTrailingSlash } from '../helpers/remove-trailing-slash';
 
@@ -38,4 +39,10 @@ export abstract class BlockchainService {
   abstract async deployContract(contractPath: ContractPath, account: BlockchainAccount, opts?: any);
 
   abstract async getBalance(account: string, code?: string, symbol?: string);
+
+  abstract async model(
+    entityName: string,
+    account: BlockchainAccount,
+    contract: string,
+  ): Promise<BlockchainModel>;
 }
