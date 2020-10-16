@@ -1,14 +1,16 @@
 import IconService, {
   HttpProvider,
   IconBuilder,
-  SignedTransaction,
   IconWallet,
+  SignedTransaction,
   IconConverter,
 } from 'icon-sdk-js';
 import { ContractPath, NetworkConfig } from '../TypeDefinitions';
 import { BlockchainAccount } from '../BlockchainAccount';
 import { BlockchainService } from '../BlockchainService';
 import { readPSFile } from '../../helpers/contract-files-reader';
+import { BlockchainModel } from '../BlockchainModel';
+import { IconBlockchainModel } from './IconBlockchainModel';
 
 export class IconBlockchainService extends BlockchainService {
   client: IconService;
@@ -44,7 +46,7 @@ export class IconBlockchainService extends BlockchainService {
     return await this.pushTransaction(signedTransaction);
   }
 
-  private async buildDeployTransaction(content: any, params: object, walletAddress: string) {
+  private async buildDeployTransaction(content: any, params: object, address: string) {
     const contentType = 'application/zip';
 
     const stepLimit = await this.getMaxStepLimit();
@@ -56,8 +58,9 @@ export class IconBlockchainService extends BlockchainService {
     const deployTransactionBuilder = new DeployTransactionBuilder();
     const transaction = deployTransactionBuilder
       .nid(networkId)
-      .from(walletAddress)
-      .to('cx0000000000000000000000000000000000000000')
+      .from(address)
+      // .to('cx0000000000000000000000000000000000000000')
+      .to('cx26d2757d45ea7e559940d86761330005b0e9f2d8')
       .stepLimit(stepLimit)
       .timestamp(timestamp)
       .contentType(contentType)
@@ -73,8 +76,11 @@ export class IconBlockchainService extends BlockchainService {
     return signedTransaction;
   }
 
-  async pushTransaction(signedTransaction: InstanceType<typeof SignedTransaction>) {
+  async pushTransaction(
+    signedTransaction: InstanceType<typeof SignedTransaction>,
+  ): Promise<string> {
     const txHash = await this.client.sendTransaction(signedTransaction).execute();
+
     return txHash;
   }
 
@@ -85,8 +91,9 @@ export class IconBlockchainService extends BlockchainService {
       .execute();
     const methodName = 'getMaxStepLimit';
     const getMaxStepLimitApi = governanceApi.getMethod(methodName);
-    const params = {};
-    params[getMaxStepLimitApi.inputs[0].name] = 'invoke';
+    const params = {
+      [getMaxStepLimitApi.inputs[0].name]: 'invoke',
+    };
     const callBuilder = new CallBuilder();
     const call = callBuilder
       .to('cx0000000000000000000000000000000000000001')
@@ -100,5 +107,43 @@ export class IconBlockchainService extends BlockchainService {
 
   async getBalance(account: string, code?: string, symbol?: string) {
     return await this.client.getBalance(account);
+  }
+
+  async model(
+    entityName: string,
+    account: BlockchainAccount,
+    contract: string,
+  ): Promise<BlockchainModel> {
+    entityName = entityName.toLocaleLowerCase();
+    const modelAbi = await this.client
+      .getScoreApi('cx26d2757d45ea7e559940d86761330005b0e9f2d8')
+      .execute();
+    const actionsList = modelAbi.getList();
+    const bcToJsType = type => {
+      switch (type) {
+        case 'int':
+          return 'number';
+        case 'str':
+          return 'string';
+        default:
+          return;
+      }
+    };
+    // Build Blockchain Action Input
+    const actions = actionsList.reduce((accumulator, action) => {
+      if (action.name.lastIndexOf(entityName) === action.name.length - entityName.length) {
+        accumulator.push({
+          name: action.name,
+          inputs: action.inputs.map(input => ({
+            name: input.name,
+            type: bcToJsType(input.type),
+          })),
+        });
+      }
+
+      return accumulator;
+    }, []);
+
+    return new IconBlockchainModel(entityName, account, contract, this.url(), actions);
   }
 }

@@ -1,8 +1,7 @@
 /* tslint:disable:max-classes-per-file */
 declare module 'icon-sdk-js' {
   export default class IconService {
-
-    constructor(provider: HttpProvider)
+    constructor(provider: HttpProvider);
     getTotalSupply();
 
     /**
@@ -77,7 +76,7 @@ declare module 'icon-sdk-js' {
   }
 
   export class HttpProvider {
-    url: string
+    url: string;
 
     constructor(url: string);
 
@@ -121,7 +120,11 @@ declare module 'icon-sdk-js' {
      * @param {boolean=} nonStrict - Set whether checking keystore file case-insensitive or not. (affects when 'keystore' param is string.)
      * @return {IconWallet} The wallet instance.
      */
-    static loadKeystore(keystore: object | string, password: string, nonStrict: boolean): IconWallet;
+    static loadKeystore(
+      keystore: object | string,
+      password: string,
+      nonStrict: boolean,
+    ): IconWallet;
 
     /**
      * Get keystore object of an instance of a `IconWallet` class.
@@ -210,10 +213,10 @@ declare module 'icon-sdk-js' {
 
   export namespace IconBuilder {
     class DeployTransactionBuilder extends IcxTransactionBuilder {
-      constructor();
       /**
        * Creates an instance of DeployTransactionBuilder.
        */
+      constructor();
       constructor(to, from, value, stepLimit, nid, nonce, version, timestamp);
 
       /**
@@ -257,6 +260,34 @@ declare module 'icon-sdk-js' {
 
       build(): Call;
     }
+
+    class CallTransactionBuilder extends IcxTransactionBuilder {
+      /**
+       * Creates an instance of CallTransactionBuilder.
+       */
+      constructor();
+      constructor(to, from, value, stepLimit, nid, nonce, version, timestamp);
+
+      /**
+       * Set 'method' property
+       * @param {string} method - The method name of SCORE API
+       * @return {CallTransactionBuilder} this.
+       */
+      method(method: string): this;
+
+      /**
+       * Set 'params' property
+       * @param {object} params - The input params for method
+       * @return {CallTransactionBuilder} this.
+       */
+      params(params: object): this;
+
+      /**
+       * Build 'CallTransaction' object
+       * @return {CallTransaction} 'CallTransaction' instance exported by 'CallTransactionBuilder'.
+       */
+      build(): CallTransaction;
+    }
   }
 
   class IcxTransactionBuilder {
@@ -288,7 +319,19 @@ declare module 'icon-sdk-js' {
 
     params: string;
 
-    constructor(to, from, value, stepLimit, nid, nonce, version, timestamp, contentType, content, params);
+    constructor(
+      to,
+      from,
+      value,
+      stepLimit,
+      nid,
+      nonce,
+      version,
+      timestamp,
+      contentType,
+      content,
+      params,
+    );
   }
 
   class IcxTransaction {
@@ -306,9 +349,18 @@ declare module 'icon-sdk-js' {
 
     value: string;
 
-    nonce: string
+    nonce: string;
 
-    constructor(to: string, from: string, value: string, stepLimit: any, nid: string | any, nonce: string, version: string | any, timestamp: number);
+    constructor(
+      to: string,
+      from: string,
+      value: string,
+      stepLimit: any,
+      nid: string | any,
+      nonce: string,
+      version: string | any,
+      timestamp: number,
+    );
   }
 
   class Call {
