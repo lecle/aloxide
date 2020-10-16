@@ -40,9 +40,9 @@ export abstract class BlockchainService {
 
   abstract async getBalance(account: string, code?: string, symbol?: string);
 
-  abstract async model(
+  abstract async createModel(
     entityName: string,
-    account: BlockchainAccount,
     contract: string,
+    account?: BlockchainAccount,
   ): Promise<BlockchainModel>;
 }

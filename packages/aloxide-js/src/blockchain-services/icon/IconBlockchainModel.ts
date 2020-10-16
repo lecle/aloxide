@@ -4,58 +4,25 @@ import IconService, {
   IconBuilder,
   IconConverter,
   SignedTransaction,
+  BigNumber,
 } from 'icon-sdk-js';
+import { checkSingleKey } from '../../helpers/has-single-key';
 import { BlockchainAccount } from '../BlockchainAccount';
 import { BlockchainAction, BlockchainModel } from '../BlockchainModel';
 
 export class IconBlockchainModel extends BlockchainModel {
-  protected client: IconService;
+  client: IconService;
 
   constructor(
     name: string,
-    protected account: BlockchainAccount,
-    public contract: string,
-    protected url: string,
+    url: string,
     actions: BlockchainAction[],
+    contract: string,
+    account?: BlockchainAccount,
   ) {
-    super(name, account, url, actions);
+    super(name, url, actions, contract, account);
 
     this.client = new IconService(new HttpProvider(url));
-  }
-
-  async get(id: string): Promise<object> {
-    const methodName = `get${this.name}`;
-    const validatedParams = this.validateParams({ id }, methodName, false);
-    const callBuilder = new IconBuilder.CallBuilder();
-    const call = callBuilder.to(this.contract).method(methodName).params(validatedParams).build();
-    const res = await this.client.call(call).execute();
-
-    return JSON.parse(res);
-  }
-
-  async add(params: object): Promise<string> {
-    const methodName = `cre${this.name}`;
-    const validatedParams = this.validateParams(params, methodName, false);
-    const res = await this._sendCallTransaction(methodName, validatedParams);
-
-    return res;
-  }
-
-  async update(id: string, params: any): Promise<string> {
-    params.id = id;
-    const methodName = `upd${this.name}`;
-    const validatedParams = this.validateParams(params, methodName, false);
-    const res = await this._sendCallTransaction(methodName, validatedParams);
-
-    return res;
-  }
-
-  async delete(id: string): Promise<any> {
-    const methodName = `del${this.name}`;
-    const validatedParams = this.validateParams({ id }, methodName, false);
-    const res = await this._sendCallTransaction(methodName, validatedParams);
-
-    return res;
   }
 
   /**
@@ -85,7 +52,7 @@ export class IconBlockchainModel extends BlockchainModel {
     return trxId;
   }
 
-  async _getMaxLimit() {
+  async _getMaxLimit(): Promise<BigNumber> {
     const governanceApi = await this.client
       .getScoreApi('cx0000000000000000000000000000000000000001')
       .execute();
@@ -103,5 +70,47 @@ export class IconBlockchainModel extends BlockchainModel {
     const maxStepLimit = await this.client.call(call).execute();
 
     return IconConverter.toBigNumber(maxStepLimit);
+  }
+
+  async get(key: { [key: string]: any }): Promise<object> {
+    checkSingleKey(key);
+    const methodName = `get${this.name}`;
+    const validatedParams = this.validateParams(key, methodName, false);
+    const callBuilder = new IconBuilder.CallBuilder();
+    const call = callBuilder.to(this.contract).method(methodName).params(validatedParams).build();
+    const res = await this.client.call(call).execute();
+
+    return JSON.parse(res);
+  }
+
+  async add(params: object): Promise<string> {
+    const methodName = `cre${this.name}`;
+    const validatedParams = this.validateParams(params, methodName, false);
+    const res = await this._sendCallTransaction(methodName, validatedParams);
+
+    return res;
+  }
+
+  async update(key: { [key: string]: any }, params: any): Promise<string> {
+    checkSingleKey(key);
+    params = {
+      ...params,
+      ...key,
+    };
+    const methodName = `upd${this.name}`;
+    const validatedParams = this.validateParams(params, methodName, false);
+    const res = await this._sendCallTransaction(methodName, validatedParams);
+
+    return res;
+  }
+
+  async delete(key: { [key: string]: any }): Promise<any> {
+    checkSingleKey(key);
+
+    const methodName = `del${this.name}`;
+    const validatedParams = this.validateParams(key, methodName, false);
+    const res = await this._sendCallTransaction(methodName, validatedParams);
+
+    return res;
   }
 }

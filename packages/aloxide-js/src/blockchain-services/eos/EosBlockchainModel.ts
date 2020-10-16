@@ -1,24 +1,28 @@
 import { Api, JsonRpc } from 'eosjs';
-import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
+import { JsSignatureProvider, PrivateKey } from 'eosjs/dist/eosjs-jssig';
 import { BlockchainAccount } from '../BlockchainAccount';
 import { BlockchainAction, BlockchainModel } from '../BlockchainModel';
 import { TextEncoder, TextDecoder } from 'util';
-import { NetworkConfig } from '../TypeDefinitions';
 import fetch from 'node-fetch';
+import { checkSingleKey } from '../../helpers/has-single-key';
 
 export class EosBlockchainModel extends BlockchainModel {
-  protected client: Api;
+  client: Api;
 
   constructor(
     name: string,
-    protected account: BlockchainAccount,
-    public contract: string,
-    protected url: string,
+    url: string,
     actions: BlockchainAction[],
+    contract: string,
+    account?: BlockchainAccount,
   ) {
-    super(name, account, url, actions);
+    super(name, url, actions, contract, account);
 
-    const signatureProvider = new JsSignatureProvider([this.account.privateKey]);
+    let keys = [];
+    if (this.account) {
+      keys = [this.account.privateKey];
+    }
+    const signatureProvider = new JsSignatureProvider(keys);
     const rpc = new JsonRpc(url, { fetch });
 
     this.client = new Api({
@@ -29,24 +33,18 @@ export class EosBlockchainModel extends BlockchainModel {
     });
   }
 
-  async get(id: string): Promise<any> {
-    const methodName = 'get';
-    this.validateParams({ id }, this.name, false);
+  configureAccount(account: string | BlockchainAccount): BlockchainAccount {
+    const acc = super.configureAccount(account);
+    const signatureProvider = (this.client.signatureProvider as unknown) as JsSignatureProvider;
 
-    const res = await this.client.rpc.get_table_rows({
-      json: true,
-      code: this.contract,
-      scope: this.account.name,
-      table: this.name,
-      limit: 1,
-      reverse: false,
-      show_payer: false,
-      key_type: 'i64',
-      lower_bound: id,
-      upper_bound: id,
-    });
+    // Add key to Signature Provider
+    const priv = PrivateKey.fromString(acc.privateKey);
+    const pubKey = priv.getPublicKey().toString();
 
-    return res.rows[0];
+    signatureProvider.keys.set(pubKey, priv.toElliptic());
+    signatureProvider.availableKeys.push(pubKey);
+
+    return acc;
   }
 
   async _sendTransaction(actionName: string, params: object): Promise<any> {
@@ -73,6 +71,27 @@ export class EosBlockchainModel extends BlockchainModel {
     );
   }
 
+  async get(key: { [key: string]: any }): Promise<any> {
+    checkSingleKey(key);
+    const k = Object.keys(key)[0];
+    this.validateParams(key, this.name, false);
+
+    const res = await this.client.rpc.get_table_rows({
+      json: true,
+      code: this.contract,
+      scope: this.account?.name,
+      table: this.name,
+      limit: 1,
+      reverse: false,
+      show_payer: false,
+      key_type: 'i64',
+      lower_bound: key[k],
+      upper_bound: key[k],
+    });
+
+    return res.rows[0];
+  }
+
   async add(params: any): Promise<any> {
     const actionName = `cre${this.name}`;
     if (!params.user) {
@@ -84,7 +103,12 @@ export class EosBlockchainModel extends BlockchainModel {
     return res.transaction_id;
   }
 
-  async update(id: string, params: any): Promise<any> {
+  async update(key: { [key: string]: any }, params: any): Promise<any> {
+    checkSingleKey(key);
+    params = {
+      ...params,
+      ...key,
+    };
     const actionName = `upd${this.name}`;
     if (!params.user) {
       params.user = this.account.name;
@@ -95,9 +119,10 @@ export class EosBlockchainModel extends BlockchainModel {
     return res.transaction_id;
   }
 
-  async delete(id: string, user?: string): Promise<any> {
+  async delete(key: { [key: string]: any }, user?: string): Promise<any> {
+    checkSingleKey(key);
     const actionName = `del${this.name}`;
-    const params: any = { id };
+    const params = key;
     if (!user) {
       params.user = this.account.name;
     }
