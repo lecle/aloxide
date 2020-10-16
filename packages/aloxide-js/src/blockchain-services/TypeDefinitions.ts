@@ -3,6 +3,7 @@ export type NetworkConfig = {
   type: BlockchainTypes;
   protocol: string;
   host: string;
+  path?: string;
   port: number;
   chainId: string;
   coreToken: string;
