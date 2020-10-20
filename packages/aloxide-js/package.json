@@ -1,7 +1,7 @@
 {
   "name": "@aloxide/aloxide-js",
   "description": "Aloxide SDK for Javascript",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "author": "Lecle",
   "license": "Apache-2.0",
   "private": false,
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git@github.com:lecle/aloxide.git"
   },
-  "main": "./dist/src/index",
+  "main": "./dist/index",
   "files": [
     "dist"
   ],
