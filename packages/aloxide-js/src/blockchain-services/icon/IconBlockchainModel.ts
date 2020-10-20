@@ -80,7 +80,9 @@ export class IconBlockchainModel extends BlockchainModel {
     const call = callBuilder.to(this.contract).method(methodName).params(validatedParams).build();
     const res = await this.client.call(call).execute();
 
-    return JSON.parse(res);
+    if (res) {
+      return JSON.parse(res);
+    }
   }
 
   async add(params: object): Promise<string> {

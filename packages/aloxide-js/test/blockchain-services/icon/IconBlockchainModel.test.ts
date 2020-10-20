@@ -164,6 +164,31 @@ describe('test IconBlockchainModel', () => {
       expect(callMock).toBeCalledWith('test');
       expect(callMock).toBeCalledTimes(1);
     });
+
+    it('should return empty when item doesnt exist', async () => {
+      const CallBuilderMock = jest
+        .spyOn(IconBuilder.CallBuilder.prototype, 'build')
+        .mockReturnValueOnce(('test' as unknown) as Call);
+      const Poll = new IconBlockchainModel(
+        'Poll',
+        testUrl,
+        testActions,
+        'testcontract',
+        new BlockchainAccount('testaccount', testKey),
+      );
+      // @ts-ignore
+      const callMock = jest.spyOn(Poll.client, 'call').mockReturnValue({
+        execute: async () => {
+          return;
+        },
+      });
+
+      const res = await Poll.get({ id: '1' });
+      expect(res).toBeUndefined();
+      expect(CallBuilderMock).toBeCalledTimes(1);
+      expect(callMock).toBeCalledWith('test');
+      expect(callMock).toBeCalledTimes(1);
+    });
   });
 
   describe('update()', () => {

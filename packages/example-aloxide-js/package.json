@@ -1,0 +1,39 @@
+{
+  "name": "@aloxide/example-aloxide",
+  "version": "0.2.1",
+  "description": "An example for using Aloxide JS SDK",
+  "author": "Lecle",
+  "homepage": "https://github.com/lecle/aloxide/tree/master/packages/example-aloxide-js#readme",
+  "license": "Apache-2.0",
+  "private": true,
+  "main": "src/index.ts",
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lecle/aloxide.git"
+  },
+  "scripts": {
+    "get": "ts-node -P ./tsconfig.json src/index.ts get",
+    "set": "ts-node -P ./tsconfig.json src/index.ts update",
+    "delete": "ts-node -P ./tsconfig.json src/index.ts delete"
+  },
+  "bugs": {
+    "url": "https://github.com/lecle/aloxide/issues"
+  },
+  "dependencies": {
+    "@aloxide/abstraction": "^0.2.1",
+    "@aloxide/aloxide-js": "^0.2.1"
+  },
+  "devDependencies": {
+    "ts-node": "^9.0.0"
+  }
+}
