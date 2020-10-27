@@ -32,6 +32,14 @@ describe('test Aloxide', () => {
       await expect(Aloxide.createService(config)).rejects.toThrowError('No supported blockchain');
     });
 
+    it('should create EOS blockchain type', async () => {
+      expect(Aloxide.createService(canTestnetConfig)).toBeDefined();
+    });
+
+    it('should create ICON blockchain type', async () => {
+      expect(Aloxide.createService(iconTestnetConfig)).toBeDefined();
+    });
+
     xit('should throw error if needed dependency is not installed', async () => {
       await expect(Aloxide.createService(canTestnetConfig)).rejects.toThrowError(
         "Missing dependency: Please install missing module 'eosjs' in order to create relative service!",
