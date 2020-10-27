@@ -43,6 +43,14 @@ describe('test EosBlockchainService', () => {
           testConfig.port
         }`,
       );
+
+      // make url without port
+      testConfig.port = null;
+      expect(eosService.url()).toBe(
+        `${testConfig.protocol}://${testConfig.host}${testConfig.port ? ':' : ''}${
+          testConfig.port
+        }`,
+      );
     });
   });
 
@@ -50,6 +58,21 @@ describe('test EosBlockchainService', () => {
     it('should generate unique string based on config', () => {
       const eosService = new EosBlockchainService(testConfig);
 
+      expect(eosService.unique()).toBe(
+        (
+          `${testConfig.type}:` +
+          (testConfig.chainId.length
+            ? `chain:${testConfig.chainId}`
+            : `${testConfig.host}:${testConfig.port}`)
+        ).toLowerCase(),
+      );
+    });
+  });
+
+  describe('unique() empty chainId', () => {
+    it('should generate unique string based on config', () => {
+      const eosService = new EosBlockchainService(testConfig);
+      testConfig.chainId = '';
       expect(eosService.unique()).toBe(
         (
           `${testConfig.type}:` +
@@ -174,6 +197,22 @@ describe('test EosBlockchainService', () => {
               ],
               base: '',
             },
+            {
+              name: 'poll',
+              fields: [
+                { name: 'testparam3', type: 'name' },
+                { name: 'testparam4', type: 'uint64' },
+              ],
+              base: '',
+            },
+            {
+              name: 'unknown',
+              fields: [
+                { name: 'testparam5', type: 'name' },
+                { name: 'testparam6', type: 'uint64' },
+              ],
+              base: '',
+            },
           ],
         },
       });
@@ -192,6 +231,10 @@ describe('test EosBlockchainService', () => {
             { name: 'testparam1', type: 'string' },
             { name: 'testparam2', type: 'number' },
           ],
+        },
+        {
+          name: 'poll',
+          inputs: [{ name: 'id', type: 'number' }],
         },
       ]);
     });

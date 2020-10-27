@@ -225,6 +225,18 @@ describe('test EosBlockchaincreateModel', () => {
       expect(sendTransactionMock).toBeCalledWith('crepoll', { testparamcreate: 'test' });
       expect(sendTransactionMock).toBeCalledTimes(1);
     });
+
+    it('should add item to blockchain with user', async () => {
+      const Poll = new EosBlockchainModel('Poll', testUrl, testActions, 'testcontract');
+      const sendTransactionMock = jest
+        .spyOn(Poll, '_sendTransaction')
+        .mockResolvedValueOnce({ transaction_id: 'trx_id_test' });
+
+      const res = await Poll.add({ testparamcreate: 'test', user: 'testaccount' });
+      expect(res).toEqual('trx_id_test');
+      expect(sendTransactionMock).toBeCalledWith('crepoll', { testparamcreate: 'test' });
+      expect(sendTransactionMock).toBeCalledTimes(1);
+    });
   });
 
   describe('update()', () => {
@@ -268,6 +280,22 @@ describe('test EosBlockchaincreateModel', () => {
       });
       expect(sendTransactionMock).toBeCalledTimes(1);
     });
+
+    it('should update item on blockchain', async () => {
+      const Poll = new EosBlockchainModel('Poll', testUrl, testActions, 'testcontract');
+      const sendTransactionMock = jest
+        .spyOn(Poll, '_sendTransaction')
+        .mockResolvedValueOnce({ transaction_id: 'trx_id_test' });
+
+      const res = await Poll.update({ id: '1' }, { testparamupdate: 'test', user: 'testaccount' });
+      expect(res).toEqual('trx_id_test');
+      expect(sendTransactionMock).toBeCalledWith('updpoll', {
+        id: '1',
+        user: 'testaccount',
+        testparamupdate: 'test',
+      });
+      expect(sendTransactionMock).toBeCalledTimes(1);
+    });
   });
 
   describe('delete()', () => {
@@ -300,6 +328,18 @@ describe('test EosBlockchaincreateModel', () => {
         .mockResolvedValueOnce({ transaction_id: 'trx_id_test' });
 
       const res = await Poll.delete({ id: '1' });
+      expect(res).toEqual('trx_id_test');
+      expect(sendTransactionMock).toBeCalledWith('delpoll', { id: '1', user: 'testaccount' });
+      expect(sendTransactionMock).toBeCalledTimes(1);
+    });
+
+    it('should remove item from blockchain', async () => {
+      const Poll = new EosBlockchainModel('Poll', testUrl, testActions, 'testcontract');
+      const sendTransactionMock = jest
+        .spyOn(Poll, '_sendTransaction')
+        .mockResolvedValueOnce({ transaction_id: 'trx_id_test' });
+
+      const res = await Poll.delete({ id: '1' }, 'testaccount');
       expect(res).toEqual('trx_id_test');
       expect(sendTransactionMock).toBeCalledWith('delpoll', { id: '1', user: 'testaccount' });
       expect(sendTransactionMock).toBeCalledTimes(1);

@@ -125,6 +125,8 @@ export class EosBlockchainModel extends BlockchainModel {
     const params = key;
     if (!user) {
       params.user = this.account.name;
+    } else {
+      params.user = user;
     }
     const validatedParams = this.validateParams(params, actionName, false);
     const res = await this._sendTransaction(actionName, validatedParams);

@@ -113,7 +113,7 @@ export abstract class BlockchainModel {
 
   abstract async update(key: { [key: string]: any }, params: object): Promise<any>;
 
-  abstract async delete(key: { [key: string]: any }): Promise<any>;
+  abstract async delete(key: { [key: string]: any }, user?: string): Promise<any>;
 }
 
 export type BlockchainAction = {

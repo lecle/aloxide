@@ -109,8 +109,6 @@ export class EosBlockchainService extends BlockchainService {
         case 'uint64':
         case 'float64':
           return 'number';
-        default:
-          return;
       }
     };
     const actions = actionsList.reduce((accumulator, action) => {
