@@ -29,7 +29,7 @@ export class SequelizeTypeInterpreter implements Interpreter<FieldTypeEnum, Data
         type = DataTypes.STRING;
         break;
       case FieldTypeEnum.string:
-        type = DataTypes.STRING;
+        type = DataTypes.TEXT;
         break;
       default:
         throw new Error(`unknow type ${input}`);
