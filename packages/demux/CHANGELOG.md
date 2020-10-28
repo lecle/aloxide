@@ -4,15 +4,17 @@
 **Table of content**
 
 - [Change Log](#change-log)
+- [0.3.0 (2020-10-28)](#030-2020-10-28)
+  - [Bug Fixes](#bug-fixes)
   - [0.2.1 (2020-09-29)](#021-2020-09-29)
-    - [Bug Fixes](#bug-fixes)
+    - [Bug Fixes](#bug-fixes-1)
     - [Features](#features)
 - [0.2.0 (2020-09-25)](#020-2020-09-25)
-  - [Bug Fixes](#bug-fixes-1)
+  - [Bug Fixes](#bug-fixes-2)
   - [Features](#features-1)
   - [BREAKING CHANGES](#breaking-changes)
 - [0.1.0 (2020-09-03)](#010-2020-09-03)
-  - [Bug Fixes](#bug-fixes-2)
+  - [Bug Fixes](#bug-fixes-3)
   - [Features](#features-2)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -21,6 +23,12 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.3.0](https://github.com/lecle/aloxide/compare/v0.2.1...v0.3.0) (2020-10-28)
+
+### Bug Fixes
+
+- **demux:** :bug: typo in file name ([7485a04](https://github.com/lecle/aloxide/commit/7485a044e7eb9316bcf42c88567ddc26f41aa0f7))
 
 ## [0.2.1](https://github.com/lecle/aloxide/compare/v0.2.0...v0.2.1) (2020-09-29)
 

@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/lecle/aloxide/compare/v0.2.1...v0.3.0) (2020-10-28)
+
+### Bug Fixes
+
+- **aloxide-js:** fix ICON SDK type definitions ([#50](https://github.com/lecle/aloxide/issues/50)) ([a323464](https://github.com/lecle/aloxide/commit/a3234646fbfdfa61b86bc75e8f05413699e10307))
+- **aloxide-js:** fix linter and beatify files ([#50](https://github.com/lecle/aloxide/issues/50)) ([7a44c1c](https://github.com/lecle/aloxide/commit/7a44c1cd0e77bba80875e7c4a4f2f0257e49b951))
+- **bridge:** :bug: generate EOS smart-contract with logDataOnly ([700bd93](https://github.com/lecle/aloxide/commit/700bd93a5c06e0835d44a9eccdfe3585fbe93ef9))
+- **chore:** change version of supported eosjs and icon sdk to newest and update yarn.lock ([#50](https://github.com/lecle/aloxide/issues/50)) ([7a71aea](https://github.com/lecle/aloxide/commit/7a71aead63f9ab2c1c754a2c6688a25ae6ce9f75))
+- **demux:** :bug: typo in file name ([7485a04](https://github.com/lecle/aloxide/commit/7485a044e7eb9316bcf42c88567ddc26f41aa0f7))
+- **example-api-gateway:** :bug: update configuration of model builder ([280b349](https://github.com/lecle/aloxide/commit/280b3493ea2bdb009688655ab54cd5c9d27714a7))
+- **example-demux:** :bug: fix mismatch version ([bd2adca](https://github.com/lecle/aloxide/commit/bd2adcac69d6b37ab87cdcbdc201421a4993d9d5))
+- **example-demux:** :bug: force recreate table ([fa0aa61](https://github.com/lecle/aloxide/commit/fa0aa6154e4cdff2ce290429a361ad54568d8fc2))
+- **example-generante-sm:** :bug: remove model of sequelize ([91bc96f](https://github.com/lecle/aloxide/commit/91bc96fa92ffc6dffe20a6ebbf7cd077e4897c12))
+- **model-knex:** :bug: fix mismatch version ([daef6c4](https://github.com/lecle/aloxide/commit/daef6c43a5ba0eac7273c6d76e6c71c50b88a4c5))
+- **model-sequelize:** :bug: fix map string type to text ([4ab0a1d](https://github.com/lecle/aloxide/commit/4ab0a1def5cac91f31129c1cd1b1167bbd37a0d8))
+- **model-sequelize:** :bug: private key with string can not have size greater than 3072 bytes ([22b96f1](https://github.com/lecle/aloxide/commit/22b96f1ccbf41406b8193b5ba7d25ade133005c4))
+- **setup:** :fire: remove ambiguous field version in the setup package.json file ([d1ce8be](https://github.com/lecle/aloxide/commit/d1ce8be99c20fe5be0a68d1f19f3869ad9c69298))
+
+### Features
+
+- **abstraction:** :sparkles: add command-line tool for generateing smart contract ([c523a72](https://github.com/lecle/aloxide/commit/c523a72a20172767777fe0da7153c26b06644e90))
+- **aloxide-js:** add Aloxide network config validation ([#50](https://github.com/lecle/aloxide/issues/50)) ([73ad30d](https://github.com/lecle/aloxide/commit/73ad30d3a10921b793ea5db466f4a8d8b5aa11d2))
+- **aloxide-js:** add Entity Manager to the SDK to make it easier to read/write data on blockchain ([#19](https://github.com/lecle/aloxide/issues/19)) ([04fefb9](https://github.com/lecle/aloxide/commit/04fefb9c5e6798283d986e398fdc037ce9da7841))
+- **aloxide-js:** add type definitions to aloxide JS ([#50](https://github.com/lecle/aloxide/issues/50)) ([3a5bf56](https://github.com/lecle/aloxide/commit/3a5bf56930312e77233c686c8b137a64475a8899))
+- **aloxide-js:** add unit test ([#19](https://github.com/lecle/aloxide/issues/19)) ([150ab56](https://github.com/lecle/aloxide/commit/150ab56c2a4c9c638c1f4b7778753d7aa6db5934))
+- **aloxide-js:** enhance SDK read/write function and clean code ([#19](https://github.com/lecle/aloxide/issues/19)) ([73fcdbe](https://github.com/lecle/aloxide/commit/73fcdbe5f109b7ee290b8be752dc91f2be4665ae))
+- **aloxide-js:** support configuring path for blockchain network ([#19](https://github.com/lecle/aloxide/issues/19)) ([bcc0e5e](https://github.com/lecle/aloxide/commit/bcc0e5e605e9e0a4d9d2231fe64c442893b5b73d))
+- **aloxide-js:** update test case ([#50](https://github.com/lecle/aloxide/issues/50)) ([b825ca0](https://github.com/lecle/aloxide/commit/b825ca0d8e73e79b3a8b4c03c5b02388d1d4bc08))
+- **aloxide-js:** update test case for helpers and EOS ([#50](https://github.com/lecle/aloxide/issues/50)) ([a04cde0](https://github.com/lecle/aloxide/commit/a04cde03f492df38b1cd1a764d74cca73f0db3f7))
+- **alxdjs:** sdk to deploy smart contract ([c7fda29](https://github.com/lecle/aloxide/commit/c7fda2946f2291163e299c0a95c5cf9af4b61e81))
+- **demux-icon:** add unit test for util ([832717b](https://github.com/lecle/aloxide/commit/832717bad03cce892e8d5c516cd18b7608cbafed))
+- **example-aloxide-js:** add example repo to show how to use Aloxidde JS SDK ([#19](https://github.com/lecle/aloxide/issues/19)) ([b482258](https://github.com/lecle/aloxide/commit/b4822585ac5e645ff471bedbae0ac6d71b5cbd1c))
+- **example-demux:** :pencil: push sample data to blockchain ([48a1199](https://github.com/lecle/aloxide/commit/48a1199d2bd673eb89efaab367191738a58a8c77))
+- **example-demux:** :sparkles: [#82](https://github.com/lecle/aloxide/issues/82) add example demux ([8a68e94](https://github.com/lecle/aloxide/commit/8a68e9487ca9a3603c0add83ef12b4cba1973968))
+- **example-demux:** :sparkles: deploy smart-contract to CAN ([d439e9c](https://github.com/lecle/aloxide/commit/d439e9c230322905485887dd88cf3e676dfbac01))
+- **example-demux:** :sparkles: index data to dynamodb ([f1ed0b8](https://github.com/lecle/aloxide/commit/f1ed0b825051d8f840a9bb1547c78cb23dc9fe84))
+- **example-demux:** :sparkles: index data to mongo DB ([2e816cd](https://github.com/lecle/aloxide/commit/2e816cdb7335eaa8277f481b4984f5b190636f15))
+- **example-demux:** :sparkles: index data to postgres and mysql ([f6fb35f](https://github.com/lecle/aloxide/commit/f6fb35fc74180acf2d5ffa57861cfe9f73ad3199))
+- **model-knex:** :package: add new module @aloxide/model-knex ([b6efb0e](https://github.com/lecle/aloxide/commit/b6efb0e1618efa1764d38fdc9613a7bc9a9339a1))
+- **model-sequelize:** enhance unit test ([bd1255a](https://github.com/lecle/aloxide/commit/bd1255a1d41976790f88480d05ff8596e043e41a))
+
 ## [0.2.1](https://github.com/lecle/aloxide/compare/v0.2.0...v0.2.1) (2020-09-29)
 
 ### Bug Fixes

@@ -4,12 +4,15 @@
 **Table of content**
 
 - [Change Log](#change-log)
+- [0.3.0 (2020-10-28)](#030-2020-10-28)
+  - [Bug Fixes](#bug-fixes)
+  - [Features](#features)
   - [0.2.1 (2020-09-29)](#021-2020-09-29)
 - [0.2.0 (2020-09-25)](#020-2020-09-25)
-  - [Bug Fixes](#bug-fixes)
-- [0.1.0 (2020-09-03)](#010-2020-09-03)
   - [Bug Fixes](#bug-fixes-1)
-  - [Features](#features)
+- [0.1.0 (2020-09-03)](#010-2020-09-03)
+  - [Bug Fixes](#bug-fixes-2)
+  - [Features](#features-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -17,6 +20,17 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.3.0](https://github.com/lecle/aloxide/compare/v0.2.1...v0.3.0) (2020-10-28)
+
+### Bug Fixes
+
+- **model-sequelize:** :bug: fix map string type to text ([4ab0a1d](https://github.com/lecle/aloxide/commit/4ab0a1def5cac91f31129c1cd1b1167bbd37a0d8))
+- **model-sequelize:** :bug: private key with string can not have size greater than 3072 bytes ([22b96f1](https://github.com/lecle/aloxide/commit/22b96f1ccbf41406b8193b5ba7d25ade133005c4))
+
+### Features
+
+- **model-sequelize:** enhance unit test ([bd1255a](https://github.com/lecle/aloxide/commit/bd1255a1d41976790f88480d05ff8596e043e41a))
 
 ## [0.2.1](https://github.com/lecle/aloxide/compare/v0.2.0...v0.2.1) (2020-09-29)
 

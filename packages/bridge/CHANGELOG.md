@@ -4,13 +4,15 @@
 **Table of content**
 
 - [Change Log](#change-log)
+- [0.3.0 (2020-10-28)](#030-2020-10-28)
+  - [Bug Fixes](#bug-fixes)
   - [0.2.1 (2020-09-29)](#021-2020-09-29)
-    - [Bug Fixes](#bug-fixes)
+    - [Bug Fixes](#bug-fixes-1)
 - [0.2.0 (2020-09-25)](#020-2020-09-25)
-  - [Bug Fixes](#bug-fixes-1)
+  - [Bug Fixes](#bug-fixes-2)
   - [Features](#features)
 - [0.1.0 (2020-09-03)](#010-2020-09-03)
-  - [Bug Fixes](#bug-fixes-2)
+  - [Bug Fixes](#bug-fixes-3)
   - [Features](#features-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -19,6 +21,12 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.3.0](https://github.com/lecle/aloxide/compare/v0.2.1...v0.3.0) (2020-10-28)
+
+### Bug Fixes
+
+- **bridge:** :bug: generate EOS smart-contract with logDataOnly ([700bd93](https://github.com/lecle/aloxide/commit/700bd93a5c06e0835d44a9eccdfe3585fbe93ef9))
 
 ## [0.2.1](https://github.com/lecle/aloxide/compare/v0.2.0...v0.2.1) (2020-09-29)
 

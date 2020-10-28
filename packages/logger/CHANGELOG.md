@@ -4,6 +4,7 @@
 **Table of content**
 
 - [Change Log](#change-log)
+- [0.3.0 (2020-10-28)](#030-2020-10-28)
   - [0.2.1 (2020-09-29)](#021-2020-09-29)
 - [0.2.0 (2020-09-25)](#020-2020-09-25)
   - [Bug Fixes](#bug-fixes)
@@ -18,6 +19,10 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.3.0](https://github.com/lecle/aloxide/compare/v0.2.1...v0.3.0) (2020-10-28)
+
+**Note:** Version bump only for package @aloxide/logger
 
 ## [0.2.1](https://github.com/lecle/aloxide/compare/v0.2.0...v0.2.1) (2020-09-29)
 

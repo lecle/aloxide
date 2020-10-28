@@ -4,11 +4,14 @@
 **Table of content**
 
 - [Change Log](#change-log)
-- [0.2.0 (2020-09-25)](#020-2020-09-25)
+- [0.3.0 (2020-10-28)](#030-2020-10-28)
   - [Bug Fixes](#bug-fixes)
-- [0.1.0 (2020-09-03)](#010-2020-09-03)
-  - [Bug Fixes](#bug-fixes-1)
   - [Features](#features)
+- [0.2.0 (2020-09-25)](#020-2020-09-25)
+  - [Bug Fixes](#bug-fixes-1)
+- [0.1.0 (2020-09-03)](#010-2020-09-03)
+  - [Bug Fixes](#bug-fixes-2)
+  - [Features](#features-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -16,6 +19,16 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.3.0](https://github.com/lecle/aloxide/compare/v0.2.1...v0.3.0) (2020-10-28)
+
+### Bug Fixes
+
+- **model-knex:** :bug: fix mismatch version ([daef6c4](https://github.com/lecle/aloxide/commit/daef6c43a5ba0eac7273c6d76e6c71c50b88a4c5))
+
+### Features
+
+- **model-knex:** :package: add new module @aloxide/model-knex ([b6efb0e](https://github.com/lecle/aloxide/commit/b6efb0e1618efa1764d38fdc9613a7bc9a9339a1))
 
 # 0.2.0 (2020-09-25)
 

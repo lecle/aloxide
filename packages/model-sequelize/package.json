@@ -1,7 +1,7 @@
 {
   "name": "@aloxide/model-sequelize",
   "description": "A model builder for Sequelize",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": "Lecle",
   "license": "Apache-2.0",
   "private": false,
@@ -31,10 +31,9 @@
     "test:coverage": "yarn test --collectCoverage"
   },
   "dependencies": {
-    "@aloxide/abstraction": "^0.2.1",
-    "@aloxide/bridge": "^0.2.1",
+    "@aloxide/abstraction": "^0.3.0",
+    "@aloxide/bridge": "^0.3.0",
     "sequelize": "^6.3.4"
   },
-  "devDependencies": {},
   "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a"
 }
