@@ -22,7 +22,7 @@
     "lint": "lerna run lint",
     "build": "lerna run build",
     "pub": "lerna publish",
-    "test": "jest --config ./jest-cov.config.js",
+    "test": "jest --config ./jest.config.js",
     "test:coverage": "yarn test --coverage"
   },
   "husky": {
