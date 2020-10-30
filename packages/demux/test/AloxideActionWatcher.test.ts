@@ -8,7 +8,7 @@ describe('AloxideActionWatcher', () => {
       info: {
         currentBlockNumber: 0,
         startAtBlock: 100,
-        headBlockNumber: 102,
+        headBlockNumber: 102
       },
       initialize: jest.fn(),
       seekToBlock: jest.fn(),
@@ -30,8 +30,7 @@ describe('AloxideActionWatcher', () => {
     // @ts-ignore
     jest.spyOn(aloxideActionWatcher.actionHandler, 'handleBlock').mockResolvedValueOnce(103);
     // @ts-ignore
-    jest
-      .spyOn(aloxideActionWatcher.actionReader, 'seekToBlock')
+    jest.spyOn(aloxideActionWatcher.actionReader, 'seekToBlock')
       // @ts-ignore
       .mockResolvedValueOnce(jest.fn());
 
@@ -98,8 +97,7 @@ describe('AloxideActionWatcher', () => {
     const aloxideActionWatcher = new AloxideActionWatcher(actionReader, actionHandler, {});
 
     // @ts-ignore
-    jest
-      .spyOn(aloxideActionWatcher.actionHandler, 'handleBlock')
+    jest.spyOn(aloxideActionWatcher.actionHandler, 'handleBlock')
       .mockRejectedValueOnce(new Error('Should throw error'));
 
     expect(aloxideActionWatcher).toBeDefined();
