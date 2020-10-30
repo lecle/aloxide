@@ -132,8 +132,6 @@ export class IconBlockchainService extends BlockchainService {
           return 'number';
         case 'str':
           return 'string';
-        default:
-          return;
       }
     };
     // Build Blockchain Action Input

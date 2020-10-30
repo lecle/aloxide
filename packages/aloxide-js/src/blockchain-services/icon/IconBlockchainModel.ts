@@ -75,7 +75,7 @@ export class IconBlockchainModel extends BlockchainModel {
   async get(key: { [key: string]: any }): Promise<object> {
     checkSingleKey(key);
     const methodName = `get${this.name}`;
-    const validatedParams = this.validateParams(key, methodName, false);
+    const validatedParams = this.validateParams(key, methodName);
     const callBuilder = new IconBuilder.CallBuilder();
     const call = callBuilder.to(this.contract).method(methodName).params(validatedParams).build();
     const res = await this.client.call(call).execute();
@@ -87,7 +87,7 @@ export class IconBlockchainModel extends BlockchainModel {
 
   async add(params: object): Promise<string> {
     const methodName = `cre${this.name}`;
-    const validatedParams = this.validateParams(params, methodName, false);
+    const validatedParams = this.validateParams(params, methodName);
     const res = await this._sendCallTransaction(methodName, validatedParams);
 
     return res;
@@ -100,7 +100,7 @@ export class IconBlockchainModel extends BlockchainModel {
       ...key,
     };
     const methodName = `upd${this.name}`;
-    const validatedParams = this.validateParams(params, methodName, false);
+    const validatedParams = this.validateParams(params, methodName);
     const res = await this._sendCallTransaction(methodName, validatedParams);
 
     return res;
@@ -110,7 +110,7 @@ export class IconBlockchainModel extends BlockchainModel {
     checkSingleKey(key);
 
     const methodName = `del${this.name}`;
-    const validatedParams = this.validateParams(key, methodName, false);
+    const validatedParams = this.validateParams(key, methodName);
     const res = await this._sendCallTransaction(methodName, validatedParams);
 
     return res;

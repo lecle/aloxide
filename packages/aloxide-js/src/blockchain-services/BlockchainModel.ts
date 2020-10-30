@@ -57,42 +57,13 @@ export abstract class BlockchainModel {
     return action;
   }
 
-  validateParams(params: object, actionName: string, strict: boolean = true): any {
+  validateParams(params: object, actionName: string): any {
     // Remove prototype props to not use them
     const value = Object.assign({}, params);
 
     const { inputs: inputSchema } = this.getAction(actionName);
     const valueKeys = Object.keys(value);
 
-    /**
-     * TODO: Support strictly checking type before sending to blockchain
-     */
-    // Check param to strictly follow input schema
-    // if (strict === true) {
-    //   if (inputSchema.length !== valueKeys.length) {
-    //     throw new Error(
-    //       `Expected ${inputSchema.length} arguments (${inputSchema
-    //         .map(input => `"${input.name}"`)
-    //         .join(', ')}), but got ${valueKeys.length}.`,
-    //     );
-    //   }
-
-    //   inputSchema.forEach(input => {
-    //     if (!value[input.name]) {
-    //       throw new Error(`Argument "${input.name}" was not provided.`);
-    //     }
-
-    //     if (typeof value[input.name] !== input.type) {
-    //       throw new Error(
-    //         `Argument "${input.name}" was expected to be ${input.type}, but got ${typeof value[
-    //           input.name
-    //         ]}: ${value[input.name]}`,
-    //       );
-    //     }
-    //   });
-
-    //   return value;
-    // } else {
     // Only check as if param is acceptable
     const inputParamNames = inputSchema.map(input => input.name);
     const res = valueKeys.reduce((accumulator, key) => {
@@ -104,7 +75,6 @@ export abstract class BlockchainModel {
     }, {});
 
     return res;
-    // }
   }
 
   abstract async get(key: { [key: string]: any }): Promise<object>;

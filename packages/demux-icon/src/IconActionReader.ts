@@ -1,7 +1,11 @@
 import { AbstractActionReader, Block, NotInitializedError } from 'demux';
 import fetch from 'node-fetch';
 
-import { RetrieveBlockError, RetrieveHeadBlockError, RetrieveIrreversibleBlockError } from './errors';
+import {
+  RetrieveBlockError,
+  RetrieveHeadBlockError,
+  RetrieveIrreversibleBlockError,
+} from './errors';
 import { IconBlock } from './IconBlock';
 import { Jsonrpc20 } from './Jsonrpc20';
 import { retry } from './utils';
@@ -76,7 +80,7 @@ export class IconActionReader extends AbstractActionReader {
 
       return irreversibleBlockNum;
     } catch (err) {
-      this.log.error(err);
+      // this.log.error(err);
       throw new RetrieveIrreversibleBlockError();
     }
   }
@@ -102,7 +106,7 @@ export class IconActionReader extends AbstractActionReader {
 
       return block;
     } catch (err) {
-      this.log.error(err);
+      // this.log.error(err);
       throw new RetrieveBlockError();
     }
   }
