@@ -74,7 +74,7 @@ export class EosBlockchainModel extends BlockchainModel {
   async get(key: { [key: string]: any }): Promise<any> {
     checkSingleKey(key);
     const k = Object.keys(key)[0];
-    this.validateParams(key, this.name, false);
+    this.validateParams(key, this.name);
 
     const res = await this.client.rpc.get_table_rows({
       json: true,
@@ -97,7 +97,7 @@ export class EosBlockchainModel extends BlockchainModel {
     if (!params.user) {
       params.user = this.account.name;
     }
-    const validatedParams = this.validateParams(params, actionName, false);
+    const validatedParams = this.validateParams(params, actionName);
     const res = await this._sendTransaction(actionName, validatedParams);
 
     return res.transaction_id;
@@ -113,7 +113,7 @@ export class EosBlockchainModel extends BlockchainModel {
     if (!params.user) {
       params.user = this.account.name;
     }
-    const validatedParams = this.validateParams(params, actionName, false);
+    const validatedParams = this.validateParams(params, actionName);
     const res = await this._sendTransaction(actionName, validatedParams);
 
     return res.transaction_id;
@@ -128,7 +128,7 @@ export class EosBlockchainModel extends BlockchainModel {
     } else {
       params.user = user;
     }
-    const validatedParams = this.validateParams(params, actionName, false);
+    const validatedParams = this.validateParams(params, actionName);
     const res = await this._sendTransaction(actionName, validatedParams);
 
     return res.transaction_id;

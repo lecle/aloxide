@@ -40,6 +40,112 @@ describe('test IconBlockchainService', () => {
 
       expect(trn).toBeDefined();
     }, 30000);
+
+    it('Should deploy the contract', async () => {
+      const iconTestnetService = await Aloxide.createService(iconTestnetConfig);
+      jest
+        // @ts-ignore
+        .spyOn(iconTestnetService.client, 'getScoreApi')
+        .mockReturnValueOnce({
+          // @ts-ignore
+          execute: async () => {
+            return {
+              getMethod: methodName => {
+                return {
+                  name: 'getMaxStepLimit',
+                  type: 'function',
+                  inputs: [{ name: 'contextType', type: 'str' }],
+                  outputs: [{ type: 'int' }],
+                  readonly: '0x1',
+                };
+              },
+            };
+          },
+        });
+
+      jest
+        // @ts-ignore
+        .spyOn(iconTestnetService.client, 'call')
+        .mockReturnValue({
+          // @ts-ignore
+          execute: async () => {
+            return '0x9502f900';
+          },
+        });
+
+      jest
+        // @ts-ignore
+        .spyOn(iconTestnetService.client, 'sendTransaction')
+        .mockReturnValue({
+          // @ts-ignore
+          execute: async () => {
+            return '0x5bf03aa6d9d1e6a0ec9a4138ef74a3b89ea0b071d8662d07233155544dcee972';
+          },
+        });
+
+      const trn = await iconTestnetService.deployContract(
+        { psPath: ICON_TOKEN_PATH },
+        new BlockchainAccount('592eb276d534e2c41a2d9356c0ab262dc233d87e4dd71ce705ec130a8d27ff0c'),
+        {
+          // Update contract
+          contract: 'cx26d2757d45ea7e559940d86761330005b0e9f2d8',
+        },
+      );
+
+      expect(trn).toBeDefined();
+      expect(trn).toBe('0x5bf03aa6d9d1e6a0ec9a4138ef74a3b89ea0b071d8662d07233155544dcee972');
+    });
+
+    it('Should deploy the contract without contract', async () => {
+      const iconTestnetService = await Aloxide.createService(iconTestnetConfig);
+      jest
+        // @ts-ignore
+        .spyOn(iconTestnetService.client, 'getScoreApi')
+        .mockReturnValueOnce({
+          // @ts-ignore
+          execute: async () => {
+            return {
+              getMethod: methodName => {
+                return {
+                  name: 'getMaxStepLimit',
+                  type: 'function',
+                  inputs: [{ name: 'contextType', type: 'str' }],
+                  outputs: [{ type: 'int' }],
+                  readonly: '0x1',
+                };
+              },
+            };
+          },
+        });
+
+      jest
+        // @ts-ignore
+        .spyOn(iconTestnetService.client, 'call')
+        .mockReturnValue({
+          // @ts-ignore
+          execute: async () => {
+            return '0x9502f900';
+          },
+        });
+
+      jest
+        // @ts-ignore
+        .spyOn(iconTestnetService.client, 'sendTransaction')
+        .mockReturnValue({
+          // @ts-ignore
+          execute: async () => {
+            return '0x7d780f8ca721aedb90ad488e4d129ed4a2c446fa43189dc1b2128fb8623889a3';
+          },
+        });
+
+      const trn = await iconTestnetService.deployContract(
+        { psPath: ICON_TOKEN_PATH },
+        new BlockchainAccount('592eb276d534e2c41a2d9356c0ab262dc233d87e4dd71ce705ec130a8d27ff0c'),
+      );
+
+      expect(trn).toBeDefined();
+      expect(trn).toBe('0x7d780f8ca721aedb90ad488e4d129ed4a2c446fa43189dc1b2128fb8623889a3');
+    });
   });
 
   describe('getBalance()', () => {
