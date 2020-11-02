@@ -22,12 +22,14 @@ class hello(IconScoreBase):
         return "Hi"
 
     {{#each tables}}
-    @external
+    ################################################
+    # "{{name}}" supported functions
+    ################################################
+
+    @external(readonly=True)
     def get{{name}}(self, {{#each fields}}{{#if @first}}{{name}}: {{type}}{{/if}}{{/each}}) -> str:
         return self._{{name}}_table[{{#each fields}}{{#if @first}}{{name}}{{/if}}{{/each}}]
-    {{/each}}
 
-    {{#each tables}}
     @external
     def cre{{name}}(self{{#each fields}}, {{name}}: {{type}}{{/each}}):
         inputData = {}
@@ -36,11 +38,8 @@ class hello(IconScoreBase):
         {{/each}}
         if self._{{name}}_table[{{key.name}}] != "":
             revert('{{key.name}} already exists')
-
         self._{{name}}_table[{{key.name}}] = json_dumps(inputData)
-    {{/each}}
 
-    {{#each tables}}
     @external
     def upd{{name}}(self{{#each fields}}, {{name}}: {{type}}{{/each}}):
         inputData = {}
@@ -49,15 +48,12 @@ class hello(IconScoreBase):
         {{/each}}
         if self._{{name}}_table[{{key.name}}] == "":
             revert('{{key.name}} does not exists')
-
         self._{{name}}_table[{{key.name}}] = json_dumps(inputData)
-    {{/each}}
 
-    {{#each tables}}
     @external
     def del{{name}}(self, {{key.name}}: {{key.type}}):
         if self._{{name}}_table[{{key.name}}] == "":
             revert('{{key.name}} does not exists')
-
         self._{{name}}_table.remove({{key.name}})
+
     {{/each}}

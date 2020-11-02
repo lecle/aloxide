@@ -28,7 +28,10 @@ describe('test IconBlockchainService', () => {
 
       const trn = await iconTestnetService.deployContract(
         { psPath: ICON_TOKEN_PATH },
-        new BlockchainAccount('592eb276d534e2c41a2d9356c0ab262dc233d87e4dd71ce705ec130a8d27ff0c'),
+        new BlockchainAccount(
+          'hxe7af5fcfd8dfc67530a01a0e403882687528dfcb',
+          '592eb276d534e2c41a2d9356c0ab262dc233d87e4dd71ce705ec130a8d27ff0c',
+        ),
         {
           // Update contract
           contract: 'cx26d2757d45ea7e559940d86761330005b0e9f2d8',
@@ -36,7 +39,7 @@ describe('test IconBlockchainService', () => {
       );
 
       expect(trn).toBeDefined();
-    });
+    }, 30000);
   });
 
   describe('getBalance()', () => {
