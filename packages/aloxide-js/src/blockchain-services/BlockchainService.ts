@@ -23,7 +23,7 @@ export abstract class BlockchainService {
 
   url() {
     const config = this.config;
-    return `${config.protocol}://${config.host}${config.port ? ':' : ''}${config.port}${
+    return `${config.protocol}://${config.host}${config.port ? `:${config.port}` : ''}${
       config.path ? '/' + config.path : ''
     }`;
   }

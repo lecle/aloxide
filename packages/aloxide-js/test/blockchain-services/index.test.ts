@@ -13,7 +13,7 @@ describe('test Aloxide', () => {
       };
 
       await expect(Aloxide.createService(invalidConfig)).rejects.toThrowError(
-        'Missing required configs: "name", "type", "protocol", "host", "port", "chainId", "coreToken"',
+        'Missing required configs: "name", "type", "protocol", "host", "chainId", "coreToken"',
       );
     });
 

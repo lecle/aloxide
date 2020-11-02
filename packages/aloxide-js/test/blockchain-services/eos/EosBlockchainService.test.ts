@@ -38,17 +38,19 @@ describe('test EosBlockchainService', () => {
     it('should return url based on config', () => {
       const eosService = new EosBlockchainService(testConfig);
 
+      // make url with port
+      testConfig.port = 443;
       expect(eosService.url()).toBe(
-        `${testConfig.protocol}://${testConfig.host}${testConfig.port ? ':' : ''}${
-          testConfig.port
+        `${testConfig.protocol}://${testConfig.host}:${testConfig.port}${
+          testConfig.path ? '/' + testConfig.path : ''
         }`,
       );
 
       // make url without port
       testConfig.port = null;
       expect(eosService.url()).toBe(
-        `${testConfig.protocol}://${testConfig.host}${testConfig.port ? ':' : ''}${
-          testConfig.port
+        `${testConfig.protocol}://${testConfig.host}${
+          testConfig.path ? '/' + testConfig.path : ''
         }`,
       );
     });
