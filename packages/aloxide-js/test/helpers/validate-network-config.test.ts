@@ -12,7 +12,7 @@ describe('test validate-network-config', () => {
       expect(() => {
         validateNetworkConfig({});
       }).toThrowError(
-        'Missing required configs: "name", "type", "protocol", "host", "port", "chainId", "coreToken"',
+        'Missing required configs: "name", "type", "protocol", "host", "chainId", "coreToken"',
       );
 
       expect(() => {

@@ -4,7 +4,7 @@ export type NetworkConfig = {
   protocol: string;
   host: string;
   path?: string;
-  port: number;
+  port?: number;
   chainId: string;
   coreToken: string;
 };

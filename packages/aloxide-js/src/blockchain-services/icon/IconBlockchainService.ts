@@ -64,7 +64,6 @@ export class IconBlockchainService extends BlockchainService {
     const timestamp = new Date().getTime() * 1000;
     const { DeployTransactionBuilder } = IconBuilder;
 
-    const deployTransactionBuilder = new DeployTransactionBuilder();
     // Default ICON contract, deploying to this contract will create a new address/contract
     let toAddress = 'cx0000000000000000000000000000000000000000';
 
@@ -72,10 +71,15 @@ export class IconBlockchainService extends BlockchainService {
       toAddress = contractAddress;
     }
 
-    const transaction = deployTransactionBuilder
-      .nid(networkId)
+    // Not calling or passing undefined params to `.params()` will cause error "[RPC ERROR] fail tx invalid signature"
+    if (!params) {
+      params = {};
+    }
+
+    const transaction = new DeployTransactionBuilder()
       .from(accountAddress)
       .to(toAddress)
+      .nid(networkId)
       .stepLimit(stepLimit)
       .timestamp(timestamp)
       .contentType(contentType)
@@ -83,6 +87,7 @@ export class IconBlockchainService extends BlockchainService {
       .params(params)
       .version(version)
       .build();
+
     return transaction;
   }
 
