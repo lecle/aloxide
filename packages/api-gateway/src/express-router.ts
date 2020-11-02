@@ -10,6 +10,10 @@ export interface CreateRouterConfig {
 }
 
 function createRouter(config: CreateRouterConfig) {
+  if (!config || !config.dataAdapter || !config.aloxideConfig) {
+    throw new Error('"dataAdapter" and "aloxideConfig" config are required');
+  }
+
   const {
     aloxideConfig: { entities },
     dataAdapter,
