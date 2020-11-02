@@ -1,7 +1,12 @@
 import { FieldTypeEnum, Interpreter } from '@aloxide/bridge';
 import { AloxideDataManager } from '@aloxide/demux';
 import { GraphQLObjectType } from 'graphql';
-import { connectionArgs, ConnectionConfigNodeType, connectionDefinitions, connectionFromArray } from 'graphql-relay';
+import {
+  connectionArgs,
+  ConnectionConfigNodeType,
+  connectionDefinitions,
+  connectionFromArray,
+} from 'graphql-relay';
 
 import { GraphqlTypeInterpreter } from './GraphqlTypeInterpreter';
 
@@ -27,6 +32,10 @@ export interface CreateGraphQlOutput {
 }
 
 export function createGraphQl(config: CreateGraphQlConfig): CreateGraphQlOutput[] {
+  if (!config || !config.dataAdapter || !config.aloxideConfig) {
+    throw new Error('"dataAdapter" and "aloxideConfig" config are required');
+  }
+
   const {
     aloxideConfig: { entities },
     dataAdapter,
