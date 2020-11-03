@@ -15,6 +15,13 @@ describe('AbsContractAdapter', () => {
       const a = new TestAdapterClass();
       a.logger = createLoggerTest();
       expect(a.config).toEqual({});
+
+      expect(a.templatePath).toEqual(
+        path.resolve(
+          path.dirname(require.resolve('@aloxide/bridge')),
+          '../smart-contract-templates',
+        ),
+      );
     });
   });
 
