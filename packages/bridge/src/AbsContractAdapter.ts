@@ -25,14 +25,16 @@ export abstract class AbsContractAdapter implements ContractAdapter {
     this.config = config || {};
     this.blockchainType = this.config.blockchainType;
     this.logDataOnly = this.config.logDataOnly;
-  }
 
-  generate(outputPath: string) {
     // read template from node_modules folder
     this.templatePath = path.resolve(
       path.dirname(require.resolve('@aloxide/bridge')),
       '../smart-contract-templates',
     );
+  }
+
+  generate(outputPath: string) {
+    if (!this.templatePath) throw new Error('Template path not found');
 
     if (this.config.outputPath) {
       this.outputPath = this.config.outputPath.startsWith('/')
