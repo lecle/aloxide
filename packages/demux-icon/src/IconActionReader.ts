@@ -80,7 +80,7 @@ export class IconActionReader extends AbstractActionReader {
 
       return irreversibleBlockNum;
     } catch (err) {
-      // this.log.error(err);
+      this.log.error(err);
       throw new RetrieveIrreversibleBlockError();
     }
   }
@@ -106,7 +106,7 @@ export class IconActionReader extends AbstractActionReader {
 
       return block;
     } catch (err) {
-      // this.log.error(err);
+      this.log.error(err);
       throw new RetrieveBlockError();
     }
   }
