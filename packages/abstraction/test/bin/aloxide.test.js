@@ -15,7 +15,5 @@ describe('aloxide', () => {
     expect(aloxide).toBeTruthy();
     expect(program.action).toBeCalledTimes(1);
     expect(program.parse).toBeCalledTimes(1);
-    expect(logger.debug).toBeCalledTimes(1);
-    expect(logger.debug).toBeCalledWith('use adapter', 'eos');
   });
 });
