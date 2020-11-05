@@ -18,7 +18,7 @@ program
     '-a, --adapters <adapters>',
     'adapters name: eos, can, icon. Multiple values are separated by comma',
     createAdapter,
-    createAdapter('eos'),
+    createAdapter('eos', true),
   )
   .option('-n, --contract-name <contractName>', 'name of the generated contract', 'hello')
   .option(
