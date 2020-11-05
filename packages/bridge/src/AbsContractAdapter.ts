@@ -35,7 +35,9 @@ export abstract class AbsContractAdapter implements ContractAdapter {
     );
 
     if (this.config.outputPath) {
-      this.outputPath = this.config.outputPath;
+      this.outputPath = this.config.outputPath.startsWith('/')
+        ? this.config.outputPath
+        : path.resolve(outputPath, this.config.outputPath);
     } else {
       this.outputPath = path.resolve(outputPath, this.blockchainType);
     }
