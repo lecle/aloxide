@@ -1,5 +1,5 @@
     require_auth(user);
-{{#unless @root._config.logDataOnly}}
+{{#if @root._config.useStateData}}
     {{tableName}}_table _{{tableName}}(get_self(), get_self().value);
     auto item = _{{tableName}}.find({{primaryKeyField.name}});
 
@@ -10,4 +10,4 @@
         row.{{name}} = {{name}};
         {{/each}}
     });
-{{/unless}}
+{{/if}}

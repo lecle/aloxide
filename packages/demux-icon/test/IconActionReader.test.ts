@@ -159,6 +159,8 @@ describe('test IconActionReader', () => {
         numRetries: 1,
         waitTimeMs: 1000,
       });
+      // @ts-ignore
+      const errorLog = (actionReader.log.error = jest.fn());
 
       // @ts-ignore
       jest.spyOn(actionReader, 'post').mockRejectedValue(new Error());
@@ -166,6 +168,7 @@ describe('test IconActionReader', () => {
       await expect(actionReader.getBlock(4194000)).rejects.toThrow(
         'Error block, max retries failed',
       );
+      expect(errorLog).toBeCalledTimes(1);
     },
     300 * 1000,
   );
@@ -177,6 +180,8 @@ describe('test IconActionReader', () => {
       numRetries: 1,
       waitTimeMs: 1000,
     });
+    // @ts-ignore
+    const errorLog = (actionReader.log.error = jest.fn());
 
     // @ts-ignore
     jest.spyOn(actionReader, 'getLastBlock').mockRejectedValue(new Error());
@@ -184,6 +189,7 @@ describe('test IconActionReader', () => {
     await expect(actionReader.getLastIrreversibleBlockNumber()).rejects.toThrow(
       'Error retrieving last irreversible block, max retries failed',
     );
+    expect(errorLog).toBeCalledTimes(1);
   });
 
   it('getHeadBlockNumber should throw error', async () => {

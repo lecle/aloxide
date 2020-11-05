@@ -139,7 +139,7 @@ describe('test EOS contract addapter', () => {
 
       expect(spyCompile).toBeCalledTimes(1);
       expect(template).toBeCalledWith({
-        _config: { logDataOnly: adapter.logDataOnly },
+        _config: { useStateData: !(adapter.logDataOnly && !adapter.keepVerification) },
         actions: undefined,
         contractName: undefined,
       });
@@ -148,7 +148,7 @@ describe('test EOS contract addapter', () => {
       adapter.generateFromTemplate();
 
       expect(template).toBeCalledWith({
-        _config: { logDataOnly: adapter.logDataOnly },
+        _config: { useStateData: !(adapter.logDataOnly && !adapter.keepVerification) },
         actions: undefined,
         contractName: undefined,
       });
@@ -157,7 +157,17 @@ describe('test EOS contract addapter', () => {
       adapter.generateFromTemplate();
 
       expect(template).toBeCalledWith({
-        _config: { logDataOnly: adapter.logDataOnly },
+        _config: { useStateData: !(adapter.logDataOnly && !adapter.keepVerification) },
+        actions: undefined,
+        contractName: undefined,
+      });
+
+      adapter.logDataOnly = true;
+      adapter.keepVerification = true;
+      adapter.generateFromTemplate();
+
+      expect(template).toBeCalledWith({
+        _config: { useStateData: !(adapter.logDataOnly && !adapter.keepVerification) },
         actions: undefined,
         contractName: undefined,
       });
@@ -187,7 +197,7 @@ describe('test EOS contract addapter', () => {
     });
   });
   describe('test generateHpp', () => {
-    it('should generateHpp successful', () => {
+    it('should generate smart contract Hpp file successful which use state data', () => {
       const adapter = new EOSContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
@@ -202,10 +212,102 @@ describe('test EOS contract addapter', () => {
         new CplusplusPrettier(),
         adapter.logger,
       );
+
+      const templateMock = jest.fn();
+      jest.spyOn(Handlebars, 'compile').mockReturnValueOnce(templateMock);
+      templateMock.mockReturnValueOnce('Generated test content');
       const spyPrint = jest.spyOn(adapter.printer, 'print').mockResolvedValueOnce('');
 
       adapter.generateHpp();
+
+      expect(templateMock).toBeCalledWith(
+        expect.objectContaining({
+          _config: {
+            useStateData: true,
+          },
+        }),
+      );
       expect(spyPrint).toBeCalledTimes(1);
+      expect(spyPrint).toBeCalledWith('contractName.hpp', 'Generated test content');
+    });
+
+    it("should generate Hpp smart contract which doesn't use state data", () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
+      const templatePath = path.resolve(__dirname, '../../smart-contract-templates/eos');
+      adapter.templatePath = templatePath;
+      adapter.contractName = 'contractName';
+      adapter.printer = new FilePrinter(
+        adapter.outputPath,
+        new CplusplusPrettier(),
+        adapter.logger,
+      );
+      adapter.logDataOnly = true;
+
+      const templateMock = jest.fn();
+      jest.spyOn(Handlebars, 'compile').mockReturnValueOnce(templateMock);
+      templateMock.mockReturnValueOnce('Generated test content');
+      const spyPrint = jest.spyOn(adapter.printer, 'print').mockResolvedValueOnce('');
+
+      adapter.generateHpp();
+
+      expect(templateMock).toBeCalledWith(
+        expect.objectContaining({
+          _config: {
+            useStateData: false,
+          },
+        }),
+      );
+      expect(spyPrint).toBeCalledTimes(1);
+      expect(spyPrint).toBeCalledWith('contractName.hpp', 'Generated test content');
+    });
+
+    it('should generate Hpp smart contract which use simple state data', () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
+      const templatePath = path.resolve(__dirname, '../../smart-contract-templates/eos');
+      adapter.templatePath = templatePath;
+      adapter.contractName = 'contractName';
+      adapter.printer = new FilePrinter(
+        adapter.outputPath,
+        new CplusplusPrettier(),
+        adapter.logger,
+      );
+      adapter.logDataOnly = true;
+      adapter.keepVerification = true;
+
+      const templateMock = jest.fn();
+      jest.spyOn(Handlebars, 'compile').mockReturnValueOnce(templateMock);
+      templateMock.mockReturnValueOnce('Generated test content');
+      const spyPrint = jest.spyOn(adapter.printer, 'print').mockResolvedValueOnce('');
+
+      // Create tables to use
+      adapter.createTables();
+      adapter.generateHpp();
+
+      expect(templateMock).toBeCalledWith(
+        expect.objectContaining({
+          _config: {
+            useStateData: true,
+          },
+          tables: expect.arrayContaining(
+            adapter.tables.map(t => ({
+              ...t,
+              fields: [t.primaryKeyField],
+            })),
+          ),
+        }),
+      );
+      expect(spyPrint).toBeCalledTimes(1);
+      expect(spyPrint).toBeCalledWith('contractName.hpp', 'Generated test content');
     });
   });
 

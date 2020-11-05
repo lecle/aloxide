@@ -12,6 +12,7 @@ export abstract class EOSAction implements ActionCreator {
   actionPrefix: string;
   templatePath: string;
   logDataOnly?: boolean;
+  keepVerification?: boolean;
 
   template: HandlebarsTemplateDelegate<any>;
 
@@ -41,7 +42,13 @@ export abstract class EOSAction implements ActionCreator {
       noEscape: true,
     });
 
-    return this.implement(entity);
+    const modifiedEntity = { ...entity };
+    // Only store primary key as state data when `keepVerification` is true.
+    if (this.logDataOnly === true && this.keepVerification === true) {
+      modifiedEntity.fields = [modifiedEntity.primaryKeyField];
+    }
+
+    return this.implement(modifiedEntity);
   }
 
   /**

@@ -39,6 +39,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
     this.actionCreators.forEach(ac => {
       ac.templatePath = this.templatePath;
       ac.logDataOnly = this.logDataOnly;
+      ac.keepVerification = this.keepVerification;
     });
 
     this.printer = new FilePrinter(this.outputPath, new CplusplusPrettier(), this.logger);
@@ -85,7 +86,7 @@ export class EOSContractAdapter extends AbsContractAdapter {
     // translate
     const outText = template({
       _config: {
-        logDataOnly: this.logDataOnly,
+        useStateData: !(this.logDataOnly === true && this.keepVerification !== true),
       },
       contractName: this.contractName,
       actions: this.actions,
@@ -102,14 +103,24 @@ export class EOSContractAdapter extends AbsContractAdapter {
       noEscape: true,
     });
 
+    let tables = this.tables;
+
+    // Only store primary key as state data when `keepVerification` is true.
+    if (this.logDataOnly === true && this.keepVerification === true) {
+      tables = tables.map(t => ({
+        ...t,
+        fields: [t.primaryKeyField],
+      }));
+    }
+
     // translate
     const outText = template({
       _config: {
-        logDataOnly: this.logDataOnly,
+        useStateData: !(this.logDataOnly === true && this.keepVerification !== true),
       },
       contractName: this.contractName,
       actions: this.actions,
-      tables: this.tables,
+      tables,
     });
 
     const fileName = `${this.contractName}.hpp`;

@@ -7,4 +7,5 @@ export interface ContractAdapterConfig {
   outputPath?: string;
 
   logDataOnly?: boolean;
+  keepVerification?: boolean;
 }
