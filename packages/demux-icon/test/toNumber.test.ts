@@ -10,7 +10,7 @@ describe('test to number', () => {
     expect(n2).toEqual(n);
   });
 
-  fit('Should be a bignumber', () => {
+  it('Should be a bignumber', () => {
     const n = toNumber(new BigNumber('823456789123456.2'));
     expect(n).toEqual(823456789123456.2);
   });

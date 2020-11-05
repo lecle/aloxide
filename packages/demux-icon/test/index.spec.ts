@@ -66,7 +66,7 @@ describe('test IconBlock', () => {
     ]);
   });
 
-  fit('test icon block without data', () => {
+  it('test icon block without data', () => {
     delete rawBlock.result.confirmed_transaction_list[2].data;
     const iconBlock = new IconBlock(rawBlock, logger);
     expect(iconBlock.blockInfo).toEqual({
