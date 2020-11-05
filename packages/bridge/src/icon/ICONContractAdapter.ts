@@ -24,15 +24,15 @@ export class ICONContractAdapter extends AbsContractAdapter {
       this.blockchainType = 'icon';
     }
     this.typeInterpreter = new ICONTypeInterpreter();
+    this.templatePath = path.resolve(this.templatePath, this.blockchainType);
   }
 
   generateFromTemplate() {
+    if (!this.templatePath) throw new Error('Template path not found');
     this.pyFilePrinter = new FilePrinter(this.outputPath, new PythonPrettier(), this.logger);
     this.jsFilePrinter = new FilePrinter(this.outputPath, new JsPrettier(), this.logger);
 
     // this.coder = new FileCoder(this.outputPath, new CplusplusPrettier(), this.logger);
-
-    this.templatePath = path.resolve(this.templatePath, this.blockchainType);
 
     this.generateInit();
     this.generatePackage();
