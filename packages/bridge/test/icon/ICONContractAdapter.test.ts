@@ -75,7 +75,7 @@ describe('test ICON contract addapter', () => {
       expect(adapter.templatePath).toEqual(
         path.resolve(
           path.dirname(require.resolve('@aloxide/bridge')),
-          '../smart-contract-templates',
+          '../smart-contract-templates/' + adapter.blockchainType,
         ),
       );
 
@@ -85,15 +85,24 @@ describe('test ICON contract addapter', () => {
     });
   });
   describe('test generateFromTemplate', () => {
-    it('should update templatePath to specific blockchain', () => {
+    it('should throw error when template path does not exist', () => {
       const adapter = new ICONContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
         info: jest.fn(),
         debug: jest.fn(),
       };
-      const templatePath = 'test-path';
-      adapter.templatePath = templatePath;
+      adapter.templatePath = null;
+      expect(() => adapter.generateFromTemplate()).toThrowError('Template path not found');
+    });
+
+    it('generateFromTemplate', () => {
+      const adapter = new ICONContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
 
       const spyGenerateInit = jest.spyOn(adapter, 'generateInit');
       spyGenerateInit.mockImplementation(jest.fn());
@@ -111,7 +120,6 @@ describe('test ICON contract addapter', () => {
       spyGenerateTXAPI.mockImplementation(jest.fn());
 
       adapter.generateFromTemplate();
-      expect(adapter.templatePath).toEqual(path.resolve(templatePath, blockchain));
 
       expect(spyGenerateInit).toBeCalledTimes(1);
       expect(spyGeneratePackage).toBeCalledTimes(1);

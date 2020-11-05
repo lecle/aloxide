@@ -62,7 +62,7 @@ describe('test EOS contract addapter', () => {
       expect(adapter.templatePath).toEqual(
         path.resolve(
           path.dirname(require.resolve('@aloxide/bridge')),
-          '../smart-contract-templates',
+          '../smart-contract-templates/' + adapter.blockchainType,
         ),
       );
 
@@ -72,15 +72,24 @@ describe('test EOS contract addapter', () => {
     });
   });
   describe('test generateFromTemplate', () => {
-    it('should update templatePath to specific blockchain', () => {
+    it('should throw exception when template is null', () => {
       const adapter = new EOSContractAdapter();
       adapter.entityConfigs = entityConfigs;
       adapter.logger = {
         info: jest.fn(),
         debug: jest.fn(),
       };
-      const templatePath = path.resolve(__dirname, '../../smart-contract-templates');
-      adapter.templatePath = templatePath;
+      adapter.templatePath = null;
+      expect(() => adapter.generateFromTemplate()).toThrowError('Template path not found');
+    });
+
+    it('should generateFromTemplate', () => {
+      const adapter = new EOSContractAdapter();
+      adapter.entityConfigs = entityConfigs;
+      adapter.logger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+      };
 
       const createTables = jest.spyOn(adapter, 'createTables');
       createTables.mockImplementation(jest.fn());
@@ -95,7 +104,6 @@ describe('test EOS contract addapter', () => {
       spyGenerateHpp.mockImplementation(jest.fn());
 
       adapter.generateFromTemplate();
-      expect(adapter.templatePath).toEqual(path.resolve(templatePath, blockchain));
 
       expect(createActions).toBeCalledTimes(1);
       expect(createActions).toBeCalledTimes(1);
@@ -110,9 +118,6 @@ describe('test EOS contract addapter', () => {
         info: jest.fn(),
         debug: jest.fn(),
       };
-
-      const templatePath = 'test-path';
-      adapter.templatePath = templatePath;
 
       const createTables = jest.spyOn(adapter, 'createTables');
       createTables.mockImplementation(jest.fn());
@@ -131,7 +136,6 @@ describe('test EOS contract addapter', () => {
       spyCompile.mockReturnValue(template);
 
       adapter.generateFromTemplate();
-      expect(adapter.templatePath).toEqual(path.resolve(templatePath, blockchain));
 
       expect(createActions).toBeCalledTimes(1);
       expect(createActions).toBeCalledTimes(1);

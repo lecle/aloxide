@@ -30,11 +30,11 @@ export class EOSContractAdapter extends AbsContractAdapter {
     }
 
     this.typeInterpreter = new EOSTypeInterpreter();
+    this.templatePath = path.resolve(this.templatePath, this.blockchainType);
   }
 
   generateFromTemplate() {
-    this.templatePath = path.resolve(this.templatePath, this.blockchainType);
-
+    if (!this.templatePath) throw new Error('Template path not found');
     this.actionCreators = [new EOSCreAction(), new EOSUpdAction(), new EOSDelAction()];
     this.actionCreators.forEach(ac => {
       ac.templatePath = this.templatePath;
