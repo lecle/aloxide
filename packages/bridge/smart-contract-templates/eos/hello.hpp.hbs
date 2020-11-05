@@ -13,7 +13,7 @@ class[[eosio::contract("{{contractName}}")]] {{contractName}} : public eosio::co
     [[eosio::action]] void {{actionName}}({{#each params}}{{type}} {{name}}{{#unless @last}}, {{/unless}}{{/each}});
 
     {{/each}}
-{{#unless _config.logDataOnly}}
+{{#if _config.useStateData}}
     {{#each tables}}
     TABLE {{name}}
     {
@@ -26,5 +26,5 @@ class[[eosio::contract("{{contractName}}")]] {{contractName}} : public eosio::co
     typedef eosio::multi_index<"{{name}}"_n, {{name}}> {{name}}_table;
 
     {{/each}}
-{{/unless}}
+{{/if}}
 };

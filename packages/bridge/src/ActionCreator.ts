@@ -19,6 +19,7 @@ export interface ActionCreator {
    * Default is false
    */
   logDataOnly?: boolean;
+  keepVerification?: boolean;
 
   create(entity: Table): Action;
 }

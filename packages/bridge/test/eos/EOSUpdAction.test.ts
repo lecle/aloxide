@@ -17,7 +17,7 @@ describe('test eos action upd', () => {
     a.implement(entity);
     expect(a.template).toBeCalledWith({
       _config: {
-        logDataOnly: a.logDataOnly,
+        useStateData: !(a.logDataOnly && !a.keepVerification),
       },
       primaryKeyField: {
         name: 'ee',
@@ -31,7 +31,37 @@ describe('test eos action upd', () => {
     a.implement(entity);
     expect(a.template).toBeCalledWith({
       _config: {
-        logDataOnly: a.logDataOnly,
+        useStateData: !(a.logDataOnly && !a.keepVerification),
+      },
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
+      fields: [],
+      tableName: 'x',
+    });
+
+    a.logDataOnly = true;
+    a.keepVerification = false;
+    a.implement(entity);
+    expect(a.template).toBeCalledWith({
+      _config: {
+        useStateData: !(a.logDataOnly && !a.keepVerification),
+      },
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
+      fields: [],
+      tableName: 'x',
+    });
+
+    a.logDataOnly = true;
+    a.keepVerification = true;
+    a.implement(entity);
+    expect(a.template).toBeCalledWith({
+      _config: {
+        useStateData: !(a.logDataOnly && !a.keepVerification),
       },
       primaryKeyField: {
         name: 'ee',
@@ -45,7 +75,37 @@ describe('test eos action upd', () => {
     a.implement(entity);
     expect(a.template).toBeCalledWith({
       _config: {
-        logDataOnly: a.logDataOnly,
+        useStateData: !(a.logDataOnly && !a.keepVerification),
+      },
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
+      fields: [],
+      tableName: 'x',
+    });
+
+    a.logDataOnly = false;
+    a.keepVerification = false;
+    a.implement(entity);
+    expect(a.template).toBeCalledWith({
+      _config: {
+        useStateData: !(a.logDataOnly && !a.keepVerification),
+      },
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
+      fields: [],
+      tableName: 'x',
+    });
+
+    a.logDataOnly = false;
+    a.keepVerification = true;
+    a.implement(entity);
+    expect(a.template).toBeCalledWith({
+      _config: {
+        useStateData: !(a.logDataOnly && !a.keepVerification),
       },
       primaryKeyField: {
         name: 'ee',

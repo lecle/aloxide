@@ -13,6 +13,7 @@ export interface ContractAdapter {
    * Default is false
    */
   logDataOnly?: boolean;
+  keepVerification?: boolean;
 
   generate(outpuPath: string);
 }
