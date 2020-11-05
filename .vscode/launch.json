@@ -7,13 +7,57 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Run <JS> file",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run <TS> file",
+      "program": "${workspaceFolder}/node_modules/.bin/ts-node",
+      "args": [
+        "${file}"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest All",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": [
+        "--runInBand",
+        "--config",
+        "jest-cov.config.js",
+        "--testTimeout",
+        "300000", // 5 minutes default timeout for every test case
+        "--detectOpenHandles"
+      ],
+      "env": {
+        "NODE_ENV": "test"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Jest Current File",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
       "args": [
         "${fileBasenameNoExtension}",
-        "--collectCoverage",
+        "--runInBand",
         "--config",
-        "jest.config.js",
+        "jest-cov.config.js",
+        "--testTimeout",
+        "30000", // 30 seconds default timeout for every test case
         "--detectOpenHandles",
         "--forceExit"
       ],
