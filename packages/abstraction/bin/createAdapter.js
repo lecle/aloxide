@@ -7,14 +7,17 @@ function createAdapter(adapterNames) {
     .split(',')
     .map(a => {
       let adapter;
+
       switch (a) {
         case 'eos':
-        case 'can':
-          logger.debug('use adapter', a);
           adapter = new EOSContractAdapter();
           break;
+        case 'can':
+          adapter = new EOSContractAdapter({
+            outputPath: a,
+          });
+          break;
         case 'icon':
-          logger.debug('use adapter', a);
           adapter = new ICONContractAdapter();
           break;
         default:
