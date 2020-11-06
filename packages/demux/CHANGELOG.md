@@ -4,18 +4,21 @@
 **Table of content**
 
 - [Change Log](#change-log)
-- [0.3.0 (2020-10-28)](#030-2020-10-28)
+- [0.4.0 (2020-11-06)](#040-2020-11-06)
   - [Bug Fixes](#bug-fixes)
+  - [Features](#features)
+- [0.3.0 (2020-10-28)](#030-2020-10-28)
+  - [Bug Fixes](#bug-fixes-1)
   - [0.2.1 (2020-09-29)](#021-2020-09-29)
-    - [Bug Fixes](#bug-fixes-1)
-    - [Features](#features)
+    - [Bug Fixes](#bug-fixes-2)
+    - [Features](#features-1)
 - [0.2.0 (2020-09-25)](#020-2020-09-25)
-  - [Bug Fixes](#bug-fixes-2)
-  - [Features](#features-1)
-  - [BREAKING CHANGES](#breaking-changes)
-- [0.1.0 (2020-09-03)](#010-2020-09-03)
   - [Bug Fixes](#bug-fixes-3)
   - [Features](#features-2)
+  - [BREAKING CHANGES](#breaking-changes)
+- [0.1.0 (2020-09-03)](#010-2020-09-03)
+  - [Bug Fixes](#bug-fixes-4)
+  - [Features](#features-3)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -23,6 +26,16 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.4.0](https://github.com/lecle/aloxide/compare/v0.3.0...v0.4.0) (2020-11-06)
+
+### Bug Fixes
+
+- **chore:** ignore ts ([f368768](https://github.com/lecle/aloxide/commit/f36876892fb98a5f9dd7c1e4ceb5e0882d01af70))
+
+### Features
+
+- **chore:** enhance unit test ([#109](https://github.com/lecle/aloxide/issues/109)) ([c14e84c](https://github.com/lecle/aloxide/commit/c14e84cbbf005e00bdfaa2873e461d15bfe3f8fa))
 
 # [0.3.0](https://github.com/lecle/aloxide/compare/v0.2.1...v0.3.0) (2020-10-28)
 

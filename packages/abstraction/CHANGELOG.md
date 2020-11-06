@@ -4,17 +4,20 @@
 **Table of content**
 
 - [Change Log](#change-log)
-- [0.3.0 (2020-10-28)](#030-2020-10-28)
+- [0.4.0 (2020-11-06)](#040-2020-11-06)
+  - [Bug Fixes](#bug-fixes)
   - [Features](#features)
-  - [0.2.1 (2020-09-29)](#021-2020-09-29)
-    - [Bug Fixes](#bug-fixes)
-- [0.2.0 (2020-09-25)](#020-2020-09-25)
-  - [Bug Fixes](#bug-fixes-1)
+- [0.3.0 (2020-10-28)](#030-2020-10-28)
   - [Features](#features-1)
-  - [BREAKING CHANGES](#breaking-changes)
-- [0.1.0 (2020-09-03)](#010-2020-09-03)
+  - [0.2.1 (2020-09-29)](#021-2020-09-29)
+    - [Bug Fixes](#bug-fixes-1)
+- [0.2.0 (2020-09-25)](#020-2020-09-25)
   - [Bug Fixes](#bug-fixes-2)
   - [Features](#features-2)
+  - [BREAKING CHANGES](#breaking-changes)
+- [0.1.0 (2020-09-03)](#010-2020-09-03)
+  - [Bug Fixes](#bug-fixes-3)
+  - [Features](#features-3)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -22,6 +25,16 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.4.0](https://github.com/lecle/aloxide/compare/v0.3.0...v0.4.0) (2020-11-06)
+
+### Bug Fixes
+
+- **abstraction:** :bug: remove redundant parameter ([b8b778a](https://github.com/lecle/aloxide/commit/b8b778a7c7325d11a7eeb419674626fe8d8c2edf))
+
+### Features
+
+- **abstraction:** :sparkles: separate the eos and can builder ([afeddc2](https://github.com/lecle/aloxide/commit/afeddc20b9050e0e44071c129e3a11517747c7c8))
 
 # [0.3.0](https://github.com/lecle/aloxide/compare/v0.2.1...v0.3.0) (2020-10-28)
 

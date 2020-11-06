@@ -4,15 +4,17 @@
 **Table of content**
 
 - [Change Log](#change-log)
-- [0.3.0 (2020-10-28)](#030-2020-10-28)
+- [0.4.0 (2020-11-06)](#040-2020-11-06)
   - [Bug Fixes](#bug-fixes)
+- [0.3.0 (2020-10-28)](#030-2020-10-28)
+  - [Bug Fixes](#bug-fixes-1)
   - [0.2.1 (2020-09-29)](#021-2020-09-29)
-    - [Bug Fixes](#bug-fixes-1)
+    - [Bug Fixes](#bug-fixes-2)
 - [0.2.0 (2020-09-25)](#020-2020-09-25)
-  - [Bug Fixes](#bug-fixes-2)
+  - [Bug Fixes](#bug-fixes-3)
   - [Features](#features)
 - [0.1.0 (2020-09-03)](#010-2020-09-03)
-  - [Bug Fixes](#bug-fixes-3)
+  - [Bug Fixes](#bug-fixes-4)
   - [Features](#features-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -21,6 +23,13 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.4.0](https://github.com/lecle/aloxide/compare/v0.3.0...v0.4.0) (2020-11-06)
+
+### Bug Fixes
+
+- **bridge:** :wheelchair: if outputPath is not absolute path then it should be a relative to the global config ([fcfd324](https://github.com/lecle/aloxide/commit/fcfd324bf5e9019429bb0ce41c077917453de43f))
+- **bridge:** fix issue that deployed smart contract doesn't show any GET methods ([#103](https://github.com/lecle/aloxide/issues/103)) ([1e1d40a](https://github.com/lecle/aloxide/commit/1e1d40a8bc7f739c8c04ac176e42ef34eff283c0))
 
 # [0.3.0](https://github.com/lecle/aloxide/compare/v0.2.1...v0.3.0) (2020-10-28)
 

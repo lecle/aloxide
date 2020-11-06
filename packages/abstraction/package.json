@@ -1,7 +1,7 @@
 {
   "name": "@aloxide/abstraction",
   "description": "Provide tool for generating smart-contract",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Lecle",
   "license": "Apache-2.0",
   "private": false,
@@ -36,7 +36,7 @@
     "test:coverage": "yarn test --collectCoverage"
   },
   "dependencies": {
-    "@aloxide/bridge": "^0.3.0",
+    "@aloxide/bridge": "^0.4.0",
     "commander": "^6.1.0",
     "js-yaml": "^3.12.0"
   },
