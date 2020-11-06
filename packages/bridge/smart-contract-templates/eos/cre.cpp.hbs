@@ -3,7 +3,7 @@
     {{tableName}}_table _{{tableName}}(get_self(), get_self().value);
     auto item = _{{tableName}}.find({{primaryKeyField.name}});
 
-    check(item == _{{tableName}}.end(), "item already existed")
+    check(item == _{{tableName}}.end(), "item already existed");
 
     _{{tableName}}.emplace(user, [&](auto &row) {
         {{#each fields}}

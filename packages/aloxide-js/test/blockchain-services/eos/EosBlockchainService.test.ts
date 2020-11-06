@@ -2,8 +2,8 @@ import { EosBlockchainModel, EosBlockchainService } from '../../../src/blockchai
 import { BlockchainAccount, canTestnetConfig } from '../../../src';
 import path from 'path';
 
-const SM_ABI_PATH = path.resolve(__dirname, '../resources/eos-source/hello.abi');
-const SM_WASM_PATH = path.resolve(__dirname, '../resources/eos-source/hello.wasm');
+const SM_ABI_PATH = path.resolve(__dirname, '../../resources/eos-source/hello.abi');
+const SM_WASM_PATH = path.resolve(__dirname, '../../resources/eos-source/hello.wasm');
 const testConfig = Object.assign({}, canTestnetConfig, {
   host: 'testnet.example.io',
   port: 443,

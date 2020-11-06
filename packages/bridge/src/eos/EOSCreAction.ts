@@ -15,6 +15,7 @@ export class EOSCreAction extends EOSAction {
       },
       tableName: entity.name,
       fields: entity.fields,
+      primaryKeyField: entity.primaryKeyField,
     });
   }
 

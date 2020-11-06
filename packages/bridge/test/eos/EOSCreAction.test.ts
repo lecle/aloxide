@@ -94,6 +94,10 @@ describe('test eos action cre', () => {
       },
       fields: [],
       tableName: 'x',
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
     });
 
     a.logDataOnly = true;
@@ -104,6 +108,10 @@ describe('test eos action cre', () => {
       },
       fields: [],
       tableName: 'x',
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
     });
 
     a.logDataOnly = true;
@@ -115,6 +123,10 @@ describe('test eos action cre', () => {
       },
       fields: [],
       tableName: 'x',
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
     });
 
     a.logDataOnly = true;
@@ -126,6 +138,10 @@ describe('test eos action cre', () => {
       },
       fields: [],
       tableName: 'x',
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
     });
 
     a.logDataOnly = false;
@@ -136,6 +152,10 @@ describe('test eos action cre', () => {
       },
       fields: [],
       tableName: 'x',
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
     });
 
     a.logDataOnly = false;
@@ -147,6 +167,10 @@ describe('test eos action cre', () => {
       },
       fields: [],
       tableName: 'x',
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
     });
 
     a.logDataOnly = false;
@@ -158,6 +182,10 @@ describe('test eos action cre', () => {
       },
       fields: [],
       tableName: 'x',
+      primaryKeyField: {
+        name: 'ee',
+        type: 'es',
+      },
     });
   });
 });
