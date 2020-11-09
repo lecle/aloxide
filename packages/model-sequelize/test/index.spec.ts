@@ -117,12 +117,13 @@ describe('model', () => {
         type: FieldTypeEnum.number,
       },
     ];
+
     const spyInterpret = jest.spyOn(typeInterpreter, 'interpret');
 
     ModelBuilder.mapField(typeInterpreter, fields, 'id-field');
 
     fields.forEach((f, i) => {
-      expect(spyInterpret).toHaveBeenNthCalledWith(i + 1, f.type);
+      expect(spyInterpret).toHaveBeenNthCalledWith(i + 1, f);
     });
   });
 });
