@@ -1,14 +1,14 @@
 import { FieldTypeEnum } from '@aloxide/bridge';
-import { DataTypes } from 'sequelize';
+import { DataTypes, TextLength } from 'sequelize';
 
-import type { Interpreter } from '@aloxide/bridge';
+import type { Interpreter, Field } from '@aloxide/bridge';
 import type { DataType } from 'sequelize/types';
 
-export class SequelizeTypeInterpreter implements Interpreter<FieldTypeEnum, DataType> {
-  interpret(input: FieldTypeEnum): DataType {
+export class SequelizeTypeInterpreter implements Interpreter<Field, DataType> {
+  interpret(input: Field): DataType {
     let type: DataType;
 
-    switch (input) {
+    switch (input.type) {
       case FieldTypeEnum.uint16_t:
         type = DataTypes.SMALLINT;
         break;
@@ -29,7 +29,19 @@ export class SequelizeTypeInterpreter implements Interpreter<FieldTypeEnum, Data
         type = DataTypes.STRING;
         break;
       case FieldTypeEnum.string:
-        type = DataTypes.TEXT;
+        if (input.meta) {
+          if (input.meta.length) {
+            type = DataTypes.STRING(input.meta.length);
+          } else if (input.meta.type) {
+            type = DataTypes.TEXT({
+              length: input.meta.type as TextLength,
+            });
+          }
+        }
+
+        if (!type) {
+          type = DataTypes.TEXT;
+        }
         break;
       default:
         throw new Error(`unknow type ${input}`);
