@@ -20,6 +20,9 @@ export const indexStateSchema: EntityConfig = {
     {
       name: 'handlerVersionName',
       type: FieldTypeEnum.string,
+      meta: {
+        length: 32,
+      },
     },
     {
       name: 'state',
