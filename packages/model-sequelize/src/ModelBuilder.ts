@@ -1,4 +1,3 @@
-import { FieldTypeEnum } from '@aloxide/bridge';
 import {
   DataType,
   DataTypes,
@@ -17,13 +16,13 @@ import type { Logger } from './Logger';
 
 export interface ModelBuilderConfig {
   aloxideConfig: AloxideConfig;
-  typeInterpreter?: Interpreter<FieldTypeEnum, DataType>;
+  typeInterpreter?: Interpreter<Field, DataType>;
   logger?: Logger;
 }
 
 export class ModelBuilder {
   aloxideConfig: AloxideConfig;
-  typeInterpreter: Interpreter<FieldTypeEnum, DataType>;
+  typeInterpreter: Interpreter<Field, DataType>;
   logger?: Logger;
 
   constructor({ aloxideConfig, typeInterpreter, logger }: ModelBuilderConfig) {
@@ -45,7 +44,7 @@ export class ModelBuilder {
 
   static makeModelFromEntityConfig(
     sequelize: Sequelize,
-    typeInterpreter: Interpreter<FieldTypeEnum, DataType>,
+    typeInterpreter: Interpreter<Field, DataType>,
     entityConfig: EntityConfig,
   ): ModelCtor<Model> {
     const { name, fields, key } = entityConfig;
@@ -53,13 +52,13 @@ export class ModelBuilder {
   }
 
   static mapField(
-    typeInterpreter: Interpreter<FieldTypeEnum, DataType>,
+    typeInterpreter: Interpreter<Field, DataType>,
     fields: Field[],
     key: string,
   ): ModelAttributes {
     return fields.reduce((a, c) => {
       const field: ModelAttributeColumnOptions<Model> = {
-        type: typeInterpreter.interpret(c.type as FieldTypeEnum),
+        type: typeInterpreter.interpret(c),
       };
 
       if (c.name === key) {
