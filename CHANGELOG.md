@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/lecle/aloxide/compare/v0.4.0...v0.5.0) (2020-11-10)
+
+### Bug Fixes
+
+- **demux:** :bug: handler version type as index need to have fix length ([556318f](https://github.com/lecle/aloxide/commit/556318f355b33a425aa3d64019c9b7a7b6b57697))
+
+### Features
+
+- **bridge:** :sparkles: add metadata to field ([a9621e7](https://github.com/lecle/aloxide/commit/a9621e7bb2760c2f1453a69adefc8c67b4080d30))
+- **model-sequelize:** :sparkles: apply advanced config with meta data in field config ([75e2f7f](https://github.com/lecle/aloxide/commit/75e2f7f2d3904af7559274d7190754d4907e0dfe))
+
 # [0.4.0](https://github.com/lecle/aloxide/compare/v0.3.0...v0.4.0) (2020-11-06)
 
 ### Bug Fixes

@@ -1,6 +1,6 @@
 {
   "name": "@aloxide/example-aloxide",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "An example for using Aloxide JS SDK",
   "author": "Lecle",
   "homepage": "https://github.com/lecle/aloxide/tree/master/packages/example-aloxide-js#readme",
@@ -30,8 +30,8 @@
     "url": "https://github.com/lecle/aloxide/issues"
   },
   "dependencies": {
-    "@aloxide/abstraction": "^0.4.0",
-    "@aloxide/aloxide-js": "^0.4.0"
+    "@aloxide/abstraction": "^0.5.0",
+    "@aloxide/aloxide-js": "^0.5.0"
   },
   "devDependencies": {
     "ts-node": "^9.0.0"
