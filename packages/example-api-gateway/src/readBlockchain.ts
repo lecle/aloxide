@@ -24,6 +24,7 @@ if (process.env.app_enable_eos == 'true') {
 
   dataAdapter.dataProviderMap.set('Poll', createDataProvider(sequelize, 'Poll', 'Poll'));
   dataAdapter.dataProviderMap.set('Vote', createDataProvider(sequelize, 'Vote', 'Vote'));
+  dataAdapter.dataProviderMap.set('History', createDataProvider(sequelize, 'History', 'History'));
 
   // watch EOS
   createWatcher({

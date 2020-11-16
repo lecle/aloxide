@@ -19,3 +19,16 @@ entities:
       - name: point
         type: number
     key: id
+  - name: History
+    fields:
+      - name: id
+        type: uint64_t
+      - name: blockNumber
+        type: uint64_t
+      - name: data
+        type: string
+      - name: entityName
+        type: string
+      - name: entityId
+        type: string
+    key: id

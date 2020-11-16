@@ -7,6 +7,18 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Run ts file",
+      "program": "${workspaceFolder}/node_modules/.bin/ts-node",
+      "args": [
+        "${file}"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+      // "envFile": "${workspaceFolder}/.env.defaults"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Jest Current File",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
       "args": [
