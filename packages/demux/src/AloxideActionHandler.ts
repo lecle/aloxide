@@ -1,5 +1,5 @@
-import { EntityConfig } from '@aloxide/bridge/src';
-import { AbstractActionHandler } from 'demux';
+import { EntityConfig } from '@aloxide/bridge';
+import { AbstractActionHandler, BlockInfo, Updater, VersionedAction } from 'demux';
 
 import { indexStateSchema } from './indexStateSchema';
 
@@ -13,9 +13,14 @@ import type {
 import type { DataAdapter } from './DataAdapter';
 import type { DMeta } from './DMeta';
 import type { IndexStateModel } from './IndexStateModel';
+import { VersatileUpdater } from './VersatileUpdater';
 
 export interface AloxideActionHandlerOptions extends ActionHandlerOptions {
   indexStateModelName?: string;
+  handlers?: {
+    actionName: string;
+    handler: (data: { state: any; payload: any; blockInfo: BlockInfo; context: any }) => void;
+  }[];
 }
 
 export interface AloxideActionHandlerContext {
@@ -37,11 +42,108 @@ export class AloxideActionHandler extends AbstractActionHandler {
     super(handlerVersions, options);
     if (options) {
       this.indexStateModelName = options.indexStateModelName;
+
+      // add initial handlers
+      const handlers = Array.isArray(options.handlers) ? options.handlers : [];
+
+      for (const { handler, actionName } of handlers) {
+        this.addHandler(handler, actionName);
+      }
     }
   }
 
   getIndexStateModelName() {
     return this.indexStateModelName || `DemuxIndexState_${this.bcName.replace(/\W+/, '_')}`;
+  }
+
+  /**
+   * @override
+   * @param candidateType   The incoming action's type
+   * @param subscribedType  The type the Updater of Effect is subscribed to
+   * @param _payload        The payload of the incoming Action.
+   */
+  matchActionType(candidateType, subscribedType, _payload?): boolean {
+    if (subscribedType === '*') {
+      return true;
+    }
+
+    return candidateType === subscribedType;
+  }
+
+  /**
+   * @override
+   * @param state
+   * @param nextBlock
+   * @param context
+   * @param isReplay
+   */
+  applyUpdaters(
+    state: any,
+    nextBlock: NextBlock,
+    context: any,
+    isReplay: boolean,
+  ): Promise<VersionedAction[]> {
+    // Add additional data to payload for further handling.
+    nextBlock.block.actions.forEach(action => {
+      action.payload.actionType = action.type;
+    });
+
+    return super.applyUpdaters(state, nextBlock, context, isReplay);
+  }
+
+  /**
+   * Add updater to handle data
+   * @param updater Updater
+   */
+  addUpdater(updater: Updater) {
+    // @ts-ignore
+    if (this.handlerVersionMap) {
+      // @ts-ignore
+      const updaters = this.handlerVersionMap[this.handlerVersionName].updaters;
+      updaters.push(updater);
+    } else {
+      throw new Error('"handlerVersionMap" not found');
+    }
+  }
+
+  /**
+   * Add custom handler for custom action
+   * @param handler     hanlder function
+   * @param actionName  action name string
+   */
+  addHandler(
+    handler: (data: { state: any; payload: any; blockInfo: BlockInfo; context: any }) => void,
+    actionName?: string,
+  ) {
+    const versatileUpdaters: VersatileUpdater[] = this.getVersatileUpdaters();
+
+    if (versatileUpdaters.length === 0) {
+      this.log.warn(
+        '"addHandler" is intended to use only with Versatile Updaters which can handle all types of actions (actionType = "*")',
+      );
+      return;
+    }
+
+    for (const updater of versatileUpdaters) {
+      updater.addHandler(handler, actionName);
+    }
+
+    return true;
+  }
+
+  private getVersatileUpdaters(): VersatileUpdater[] {
+    let updaters: any[] = [];
+    // @ts-ignore
+    if (this.handlerVersionMap) {
+      // @ts-ignore
+      updaters = this.handlerVersionMap[this.handlerVersionName].updaters;
+    }
+
+    return updaters.filter(
+      updater =>
+        (updater instanceof VersatileUpdater || typeof updater.addHandler === 'function') &&
+        updater.actionType === '*',
+    );
   }
 
   protected updateIndexState(

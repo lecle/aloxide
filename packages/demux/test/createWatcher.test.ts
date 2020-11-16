@@ -33,10 +33,10 @@ describe('test createWatcher', () => {
     logger: createLoggerTest(),
   };
 
-  it('throw error if missing of data provider', async () => {
-    expect(() => createWatcher(config)).rejects.toThrow(
-      'Missing data provider name: DemuxIndexState_any',
-    );
+  it('throw error if missing of data provider', () => {
+    expect(() => {
+      createWatcher(config);
+    }).toThrow('Missing data provider name: DemuxIndexState_any');
   });
 
   const dataAdapter = new AloxideDataManager({
@@ -63,7 +63,7 @@ describe('test createWatcher', () => {
     find: jest.fn(),
   });
 
-  it('return an watcher', async () => {
+  it('return an watcher', () => {
     config.dataAdapter = dataAdapter;
     config.aloxideConfig.entities.push({
       name: 'e1',
@@ -76,11 +76,11 @@ describe('test createWatcher', () => {
       key: 'f1',
     });
 
-    const watcher = await createWatcher(config);
+    const watcher = createWatcher(config);
     expect(watcher).toBeInstanceOf(BaseActionWatcher);
   });
 
-  it('return an watcher', async () => {
+  it('return an watcher', () => {
     const logger = createLoggerTest();
 
     config.dataAdapter = dataAdapter;
@@ -92,7 +92,7 @@ describe('test createWatcher', () => {
       ),
     ];
 
-    const watcher = await createWatcher(config);
+    const watcher = createWatcher(config);
     expect(watcher).toBeInstanceOf(BaseActionWatcher);
 
     config.actionHandler = {
@@ -105,11 +105,11 @@ describe('test createWatcher', () => {
       },
       initialize: jest.fn(),
     };
-    const watcher2 = await createWatcher(config);
+    const watcher2 = createWatcher(config);
     expect(watcher2).toBeInstanceOf(BaseActionWatcher);
   });
 
-  it('return an watcher', async () => {
+  it('return an watcher', () => {
     config.dataAdapter = dataAdapter;
 
     config.actionHandler = {
@@ -123,7 +123,7 @@ describe('test createWatcher', () => {
       initialize: jest.fn(),
     };
 
-    const watcher = await createWatcher(config);
+    const watcher = createWatcher(config);
     expect(watcher).toBeInstanceOf(BaseActionWatcher);
   });
 });

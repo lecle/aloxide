@@ -9,6 +9,7 @@ import type { ActionReader, ActionHandler, HandlerVersion, ActionWatcherOptions 
 import type { AloxideActionHandlerOptions } from './AloxideActionHandler';
 import type { Logger } from './Logger';
 import type { AloxideConfig } from '@aloxide/abstraction';
+import { VersatileUpdater } from './VersatileUpdater';
 
 export interface CreateWatcherConfig {
   /**
@@ -27,7 +28,7 @@ export interface CreateWatcherConfig {
   actionWatcherOptions?: ActionWatcherOptions;
 }
 
-export async function createWatcher(config: CreateWatcherConfig): Promise<BaseActionWatcher> {
+export function createWatcher(config: CreateWatcherConfig): BaseActionWatcher {
   const {
     bcName,
     accountName,
@@ -47,7 +48,11 @@ export async function createWatcher(config: CreateWatcherConfig): Promise<BaseAc
       handlerVersions = [
         new BaseHandlerVersion(
           versionName,
-          createDbUpdater(accountName, dataAdapter, aloxideConfig.entities, logger),
+          [
+            ...createDbUpdater(accountName, dataAdapter, aloxideConfig.entities, logger),
+            // Versatile Updater is used to handle all actions by default
+            new VersatileUpdater(),
+          ],
           [],
         ),
       ];
