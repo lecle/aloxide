@@ -78,6 +78,9 @@ export class ICONContractAdapter extends AbsContractAdapter {
     const template = Handlebars.compile(hbsTemplate);
 
     const outText = template({
+      _config: {
+        logDataOnly: this.logDataOnly,
+      },
       tables: this.entityConfigs.map(item => {
         const key = item.fields.find(({ name }) => name == item.key);
         return {

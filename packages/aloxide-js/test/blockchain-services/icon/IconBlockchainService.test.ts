@@ -165,7 +165,7 @@ describe('test IconBlockchainService', () => {
   });
 
   describe('model()', () => {
-    it('should create model', async () => {
+    xit('should create model', async () => {
       const iconService = new IconBlockchainService(iconTestnetConfig);
       const iconBcModel = await iconService.createModel(
         'Poll',
