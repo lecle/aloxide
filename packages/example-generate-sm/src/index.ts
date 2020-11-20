@@ -14,6 +14,10 @@ const contractGenerator = new ContractGenerator({
       outputPath: path.resolve(outputPath, 'eos-no-state'),
     }) /* generate smart contract for EOS network */,
     new ICONContractAdapter(),
+    new ICONContractAdapter({
+      outputPath: path.resolve(outputPath, 'icon-no-state'),
+      logDataOnly: true,
+    }),
   ],
   logger: createLogger({
     level: 'debug',

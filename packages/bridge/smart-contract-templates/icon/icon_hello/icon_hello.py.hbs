@@ -7,9 +7,12 @@ class hello(IconScoreBase):
 
     def __init__(self, db: IconScoreDatabase) -> None:
         super().__init__(db)
+    {{#unless @root._config.logDataOnly}}
     {{#each tables}}
         self._{{name}}_table = DictDB('{{name}}tbl', db, value_type=str)
     {{/each}}
+    {{/unless}}
+
     def on_install(self) -> None:
         super().on_install()
 
@@ -28,10 +31,17 @@ class hello(IconScoreBase):
 
     @external(readonly=True)
     def get{{name}}(self, {{#each fields}}{{#if @first}}{{name}}: {{type}}{{/if}}{{/each}}) -> str:
+    {{#if @root._config.logDataOnly}}
+        return '{"message":"Log data only"}'
+    {{else}}
         return self._{{name}}_table[{{#each fields}}{{#if @first}}{{name}}{{/if}}{{/each}}]
+    {{/if}}
 
     @external
     def cre{{name}}(self{{#each fields}}, {{name}}: {{type}}{{/each}}):
+    {{#if @root._config.logDataOnly}}
+        pass
+    {{else}}
         inputData = {}
         {{#each fields}}
         inputData["{{name}}"] = str({{name}})
@@ -39,9 +49,13 @@ class hello(IconScoreBase):
         if self._{{name}}_table[{{key.name}}] != "":
             revert('{{key.name}} already exists')
         self._{{name}}_table[{{key.name}}] = json_dumps(inputData)
+    {{/if}}
 
     @external
     def upd{{name}}(self{{#each fields}}, {{name}}: {{type}}{{/each}}):
+    {{#if @root._config.logDataOnly}}
+        pass
+    {{else}}
         inputData = {}
         {{#each fields}}
         inputData["{{name}}"] = str({{name}})
@@ -49,11 +63,16 @@ class hello(IconScoreBase):
         if self._{{name}}_table[{{key.name}}] == "":
             revert('{{key.name}} does not exists')
         self._{{name}}_table[{{key.name}}] = json_dumps(inputData)
+    {{/if}}
 
     @external
     def del{{name}}(self, {{key.name}}: {{key.type}}):
+    {{#if @root._config.logDataOnly}}
+        pass
+    {{else}}
         if self._{{name}}_table[{{key.name}}] == "":
             revert('{{key.name}} does not exists')
         self._{{name}}_table.remove({{key.name}})
+    {{/if}}
 
     {{/each}}
