@@ -54,6 +54,9 @@ export function createGraphQl(config: CreateGraphQlConfig): CreateGraphQlOutput[
 
     logger?.debug('create connection for entity:', name);
 
+    fields.push({ name: 'createdAt', type: FieldTypeEnum.string });
+    fields.push({ name: 'updatedAt', type: FieldTypeEnum.string });
+
     const metaData: DMeta = {
       entity,
     };
