@@ -58,5 +58,10 @@
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "json2yaml": "^1.1.0",
+    "node-emoji": "^1.10.0"
   }
 }
