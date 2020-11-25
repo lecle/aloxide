@@ -1,5 +1,6 @@
 import { FieldTypeEnum } from '@aloxide/bridge';
-import { HandlerVersion, NextBlock } from 'demux';
+import { HandlerVersion, NextBlock, AbstractActionHandler } from 'demux';
+import { VersatileUpdater } from '../src/VersatileUpdater';
 
 import {
   AloxideActionHandler,
@@ -118,6 +119,225 @@ describe('test AloxideActionHandler', () => {
         indexStateModelName,
       });
       expect(handler.getIndexStateModelName()).toEqual(indexStateModelName);
+    });
+
+    it('should not add any handler when there\'s no "handlers" config found', () => {
+      const adapter = new AloxideDataManager({
+        dataProviderMap: new Map(),
+      });
+      const addHandlerMock = jest.spyOn(AloxideActionHandler.prototype, 'addHandler');
+      const actionHandler = new AloxideActionHandler(bcName, adapter, handlerVersions);
+
+      expect(actionHandler).toBeDefined();
+      expect(addHandlerMock).toBeCalledTimes(0);
+    });
+
+    it('should add handler defined in "handlers" config on creation stage', () => {
+      const adapter = new AloxideDataManager({
+        dataProviderMap: new Map(),
+      });
+      const addHandlerMock = jest
+        .spyOn(AloxideActionHandler.prototype, 'addHandler')
+        .mockReturnValueOnce(true);
+      const handler = () => {};
+      const actionHandler = new AloxideActionHandler(bcName, adapter, handlerVersions, {
+        handlers: [
+          {
+            actionName: 'account::test_action1',
+            handler,
+          },
+          {
+            actionName: 'account::test_action2',
+            handler,
+          },
+        ],
+      });
+
+      expect(actionHandler).toBeDefined();
+      expect(addHandlerMock).toBeCalledTimes(2);
+      expect(addHandlerMock.mock.calls[0]).toEqual([handler, 'account::test_action1']);
+      expect(addHandlerMock.mock.calls[1]).toEqual([handler, 'account::test_action2']);
+    });
+  });
+
+  describe('matchActionType()', () => {
+    const adapter = new AloxideDataManager({
+      dataProviderMap: new Map(),
+    });
+    const actionHandler = new AloxideActionHandler(bcName, adapter, handlerVersions);
+
+    it('should not be matched when action type and subscribed type are not equal', () => {
+      let res = actionHandler.matchActionType('some_action', 'subscribed_action');
+      expect(res).toBe(false);
+
+      res = actionHandler.matchActionType('some_action', 'some_other_action');
+      expect(res).toBe(false);
+    });
+
+    it('should be matched when action type and subscribed type are exactly equal', () => {
+      const res = actionHandler.matchActionType('some_action', 'some_action');
+
+      expect(res).toBe(true);
+    });
+
+    it('should be matched when subscribed type are "*" (means "all")', () => {
+      let res = actionHandler.matchActionType('some_action', '*');
+      expect(res).toBe(true);
+
+      res = actionHandler.matchActionType('some_other_action', '*');
+      expect(res).toBe(true);
+    });
+  });
+
+  describe('applyUpdaters()', () => {
+    const adapter = new AloxideDataManager({
+      dataProviderMap: new Map(),
+    });
+
+    it('should add additional data to payload before further process', () => {
+      const blockInfo = {
+        block: {
+          actions: [
+            {
+              type: 'type1',
+              payload: {
+                somedata: 'test_payload',
+              },
+            },
+            {
+              type: 'type2',
+              payload: {
+                somedata: 'test_payload',
+              },
+            },
+          ],
+          blockInfo: {
+            blockHash: 'test_hash',
+            blockNumber: 123,
+            previousBlockHash: 'test_hash',
+            timestamp: new Date(),
+          },
+        },
+        blockMeta: {
+          isRollback: true,
+          isEarliestBlock: true,
+          isNewBlock: true,
+        },
+        lastIrreversibleBlockNumber: 123,
+      };
+      const applyUpdatersParentMock = jest
+        // @ts-ignore
+        .spyOn(AbstractActionHandler.prototype, 'applyUpdaters')
+        // @ts-ignore
+        .mockReturnValueOnce('test');
+      const actionHandler = new AloxideActionHandler(bcName, adapter, handlerVersions);
+
+      const res = actionHandler.applyUpdaters('test_state', blockInfo, 'context', true);
+
+      expect(res).toBe('test');
+      expect(applyUpdatersParentMock).toBeCalledTimes(1);
+      expect(applyUpdatersParentMock).toBeCalledWith('test_state', blockInfo, 'context', true);
+    });
+  });
+
+  describe('addUpdater()', () => {
+    it('should throw error when cannot find parent handler version map', () => {
+      const adapter = new AloxideDataManager({
+        dataProviderMap: new Map(),
+      });
+      const actionHandler = new AloxideActionHandler(bcName, adapter, handlerVersions);
+      const updater = new VersatileUpdater();
+
+      // @ts-ignore
+      actionHandler.handlerVersionMap = undefined;
+
+      expect(() => {
+        actionHandler.addUpdater(updater);
+      }).toThrowError('"handlerVersionMap" not found');
+    });
+
+    it('should add updater', () => {
+      const adapter = new AloxideDataManager({
+        dataProviderMap: new Map(),
+      });
+      const handlerVer: HandlerVersion[] = [new BaseHandlerVersion('v1', [], [])];
+      const actionHandler = new AloxideActionHandler(bcName, adapter, handlerVer);
+      const updater = new VersatileUpdater();
+
+      // @ts-ignore
+      expect(actionHandler.handlerVersionMap[actionHandler.handlerVersionName].updaters).toEqual(
+        [],
+      );
+
+      actionHandler.addUpdater(updater);
+      // @ts-ignore
+      expect(actionHandler.handlerVersionMap[actionHandler.handlerVersionName].updaters).toEqual([
+        updater,
+      ]);
+    });
+  });
+
+  describe('addHandler()', () => {
+    it('should warn and not allow to add handler when cannot find any Versatile Updater', () => {
+      const adapter = new AloxideDataManager({
+        dataProviderMap: new Map(),
+      });
+      const handlerVer: HandlerVersion[] = [new BaseHandlerVersion('v1', [], [])];
+      const actionHandler = new AloxideActionHandler(bcName, adapter, handlerVer);
+      // @ts-ignore
+      const loggerMock = (actionHandler.log.warn = jest.fn());
+      const handler = () => {};
+
+      const res = actionHandler.addHandler(handler, 'some_action');
+      expect(res).toBeUndefined();
+      expect(loggerMock).toBeCalledWith(
+        '"addHandler" is intended to use only with Versatile Updaters which can handle all types of actions (actionType = "*")',
+      );
+    });
+
+    it("should allow to add handler when there's any Versatile Updater", () => {
+      const adapter = new AloxideDataManager({
+        dataProviderMap: new Map(),
+      });
+      const updater = new VersatileUpdater();
+      updater.addHandler = jest.fn();
+      const handlerVer: HandlerVersion[] = [new BaseHandlerVersion('v1', [updater], [])];
+      const actionHandler = new AloxideActionHandler(bcName, adapter, handlerVer);
+      // @ts-ignore
+      const loggerMock = (actionHandler.log.warn = jest.fn());
+      const handler = () => {};
+
+      const res = actionHandler.addHandler(handler, 'some_action');
+      expect(res).toBe(true);
+      expect(loggerMock).toBeCalledTimes(0);
+      expect(updater.addHandler).toBeCalledTimes(1);
+    });
+
+    it('should call addHandler() of Updaters, which can handle all types of action, to add handlers', () => {
+      const adapter = new AloxideDataManager({
+        dataProviderMap: new Map(),
+      });
+      const updater = new VersatileUpdater();
+      updater.addHandler = jest.fn();
+      const updater2 = new VersatileUpdater({
+        actionType: 'some_action',
+      });
+      updater2.addHandler = jest.fn();
+      const handlerVer: HandlerVersion[] = [new BaseHandlerVersion('v1', [], [])];
+      const actionHandler = new AloxideActionHandler(bcName, adapter, handlerVer);
+      // @ts-ignore
+      actionHandler.log.warn = jest.fn();
+      const handler = () => {};
+
+      actionHandler.addUpdater(updater);
+      actionHandler.addUpdater(updater2);
+
+      const res = actionHandler.addHandler(handler, 'some_action');
+      expect(res).toBe(true);
+
+      expect(updater.addHandler).toBeCalledTimes(1);
+      expect(updater.addHandler).toBeCalledWith(handler, 'some_action');
+      expect(updater2.addHandler).toBeCalledTimes(0);
     });
   });
 

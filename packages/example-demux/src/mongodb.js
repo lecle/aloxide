@@ -13,16 +13,7 @@ const client = new MongoClient(url);
 let db;
 
 // Use connect method to connect to the Server
-const pConnectDb = new Promise((resolve, reject) =>
-  client.connect(function (err) {
-    if (err) {
-      return reject(err);
-    }
-
-    db = client.db('aloxide');
-    resolve(db);
-  }),
-);
+let pConnectDb;
 
 function createModel(entity, mongoDb) {
   let coll;
@@ -84,6 +75,17 @@ function createModel(entity, mongoDb) {
 }
 
 function createMongoDbConnection(entities) {
+  pConnectDb = new Promise((resolve, reject) =>
+    client.connect(function(err) {
+      if (err) {
+        return reject(err);
+      }
+
+      db = client.db('aloxide');
+      resolve(db);
+    }),
+  );
+
   function authenticate() {
     return pConnectDb;
   }
@@ -105,7 +107,7 @@ function createMongoDbConnection(entities) {
   };
 }
 
-process.on('unhandledRejection', function (reason, p) {
+process.on('unhandledRejection', function(reason, p) {
   logger.error('Unhandled', reason, p); // log all your errors, "unsuppressing" them.
   client.close();
   process.exit(1);

@@ -1,5 +1,6 @@
 import Logger from 'bunyan';
 import dote from 'dotenv-extended';
+import path from 'path';
 
 declare global {
   var logger: Logger;
@@ -14,8 +15,8 @@ declare global {
     encoding: 'utf8',
     silent: true,
     path: '.env',
-    defaults: '.env.defaults',
-    schema: '.env.defaults',
+    defaults: path.resolve(__dirname, '../.env.defaults'),
+    schema: path.resolve(__dirname, '../.env.defaults'),
     errorOnMissing: true,
     errorOnExtra: true,
     errorOnRegex: false,
