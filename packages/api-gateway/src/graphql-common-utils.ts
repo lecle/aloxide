@@ -1,19 +1,50 @@
-import { Connection, cursorToOffset, offsetToCursor } from 'graphql-relay';
+import { Connection, ConnectionCursor } from 'graphql-relay';
 import type { QueryInput } from '@aloxide/demux';
 
-const DEFAULT_ITEM_PER_PAGE = 20;
+export interface PageInfoInput {
+  entityName: string;
+  edges: any[];
+  limit: number;
+  offset?: string;
+}
 
-export function updateCursorToOffet(args: any): QueryInput {
-  const updatedArgs: QueryInput = Object.assign({}, args);
-  const { after, before } = updatedArgs;
+const NUMER_OF_ITEMS_PER_PAGE = 20;
 
-  if (typeof before === 'string' && !isNaN(cursorToOffset(before))) {
-    updatedArgs.before = cursorToOffset(before).toString();
-  } else delete updatedArgs.before;
+export type Base64String = string;
 
-  if (typeof after === 'string' && !isNaN(cursorToOffset(after))) {
-    updatedArgs.after = cursorToOffset(after).toString();
-  } else delete updatedArgs.after;
+export function base64(i: string): Base64String {
+  return Buffer.from(i, 'utf8').toString('base64');
+}
+
+export function unbase64(i: Base64String): string {
+  return Buffer.from(i, 'base64').toString('utf8');
+}
+
+/**
+ * Creates the cursor string from an offset.
+ */
+export function offsetToCursor(prefix: string, offset: number): ConnectionCursor {
+  return base64(prefix + offset);
+}
+/**
+ * Rederives the offset from the cursor string.
+ */
+export function cursorToOffset(prefix: string, cursor: ConnectionCursor): number {
+  if (cursor) return parseInt(unbase64(cursor).substring(prefix.length), 10);
+  return NaN;
+}
+
+export function convertCursorToOffet(entityName: string, args: any): QueryInput {
+  const updatedArgs: QueryInput = { ...args };
+
+  const beforOffset = cursorToOffset(entityName, updatedArgs.before);
+  const afterOffset = cursorToOffset(entityName, updatedArgs.after);
+
+  if (isNaN(beforOffset)) delete updatedArgs.before;
+  else updatedArgs.before = beforOffset.toString();
+
+  if (isNaN(afterOffset)) delete updatedArgs.after;
+  else updatedArgs.after = afterOffset.toString();
 
   if (updatedArgs.first) updatedArgs.first += 1;
   if (updatedArgs.last) updatedArgs.last += 1;
@@ -21,30 +52,40 @@ export function updateCursorToOffet(args: any): QueryInput {
   return updatedArgs;
 }
 
-export function paginationInfo<T>(items: any[], args: QueryInput): Connection<T> {
+export function paginationInfo<T>(
+  entityName: string,
+  items: any[],
+  args: QueryInput,
+): Connection<T> {
   if (args.first) {
-    return forwardPaginationInfo(items, args.first, args.after);
+    return forwardPaginationInfo({
+      entityName,
+      edges: items,
+      limit: args.first,
+      offset: args.after,
+    });
   }
 
   if (args.last) {
-    return backwardPaginationInfo(items, args.last, args.before);
+    return backwardPaginationInfo({
+      entityName,
+      edges: items,
+      limit: args.last,
+      offset: args.before,
+    });
   }
 
-  return forwardPaginationInfo(items, DEFAULT_ITEM_PER_PAGE);
+  return forwardPaginationInfo({ entityName, edges: items, limit: NUMER_OF_ITEMS_PER_PAGE });
 }
 
-export function forwardPaginationInfo<T>(
-  edges: any[],
-  first: number,
-  after: string = null,
-): Connection<T> {
+export function forwardPaginationInfo<T>(pageInput: PageInfoInput): Connection<T> {
   let hasNextPage = false;
-  if (edges.length > first) {
-    edges = edges.slice(0, first);
+  if (pageInput.edges.length > pageInput.limit) {
+    pageInput.edges = pageInput.edges.slice(0, pageInput.limit);
     hasNextPage = true;
   }
-  edges = edges.map(value => ({
-    cursor: offsetToCursor(value.id),
+  const edges = pageInput.edges.map(value => ({
+    cursor: offsetToCursor(pageInput.entityName, value.id),
     node: value,
   }));
   return {
@@ -53,23 +94,19 @@ export function forwardPaginationInfo<T>(
       startCursor: edges[0]?.cursor,
       endCursor: edges[edges.length - 1]?.cursor,
       hasNextPage,
-      hasPreviousPage: after ? true : false,
+      hasPreviousPage: pageInput.offset ? true : false,
     },
   };
 }
 
-export function backwardPaginationInfo<T>(
-  edges: any[],
-  last: number,
-  before: string = null,
-): Connection<T> {
+export function backwardPaginationInfo<T>(pageInput: PageInfoInput): Connection<T> {
   let hasPreviousPage = false;
-  if (edges.length > last) {
-    edges = edges.slice(0, last);
+  if (pageInput.edges.length > pageInput.limit) {
+    pageInput.edges = pageInput.edges.slice(0, pageInput.limit);
     hasPreviousPage = true;
   }
-  edges = edges?.reverse()?.map(value => ({
-    cursor: offsetToCursor(value.id),
+  const edges = pageInput.edges?.reverse()?.map(value => ({
+    cursor: offsetToCursor(pageInput.entityName, value.id),
     node: value,
   }));
   return {
@@ -77,7 +114,7 @@ export function backwardPaginationInfo<T>(
     pageInfo: {
       startCursor: edges[0]?.cursor,
       endCursor: edges[edges.length - 1]?.cursor,
-      hasNextPage: before ? true : false,
+      hasNextPage: pageInput.offset ? true : false,
       hasPreviousPage,
     },
   };

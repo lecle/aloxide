@@ -4,7 +4,7 @@ import { GraphQLObjectType } from 'graphql';
 import { connectionArgs, ConnectionConfigNodeType, connectionDefinitions } from 'graphql-relay';
 
 import { GraphqlTypeInterpreter } from './GraphqlTypeInterpreter';
-import { updateCursorToOffet, paginationInfo } from './graphql-common-utils';
+import { convertCursorToOffet, paginationInfo } from './graphql-common-utils';
 
 import type { GraphQLFieldConfig, GraphQLScalarType, GraphQLNamedType } from 'graphql';
 import type { GraphQLConnectionDefinitions } from 'graphql-relay';
@@ -75,10 +75,10 @@ export function createGraphQl(config: CreateGraphQlConfig): CreateGraphQlOutput[
       type: connectionType,
       args: connectionArgs,
       resolve: (_, args) => {
-        const queryInput: QueryInput = updateCursorToOffet(args);
+        const queryInput: QueryInput = convertCursorToOffet(connectionType.name, args);
         return dataAdapter
           .findAll(name, queryInput, metaData)
-          .then(items => paginationInfo(items, args));
+          .then(items => paginationInfo(connectionType.name, items, args));
       },
     };
 
