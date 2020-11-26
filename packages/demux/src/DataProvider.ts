@@ -60,4 +60,12 @@ export interface DataProvider<ID = any, D = any> {
    * @param meta metadata (to be updated)
    */
   delete(id: ID, meta: DMeta): Promise<boolean>;
+
+  updateHistory(id: ID, meta: DMeta): Promise<D>;
+
+  findBlockNumber(blockNumber: any): Promise<D>;
+
+  updateOne(id, data): Promise<D>;
+
+  deleteOne(id): Promise<D>;
 }
