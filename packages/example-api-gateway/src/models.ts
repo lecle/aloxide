@@ -57,15 +57,28 @@ export function createDataProvider(
       return m.count();
     },
 
-    findAll({ limit, after }, { entity: { key } }): Promise<any[]> {
-      return m.findAll({
-        limit,
-        where: after && {
-          [key]: {
-            [Op.gt]: after,
+    findAll({ first, after, last, before }, { entity: { key } }): Promise<any[]> {
+      if (first)
+        return m.findAll({
+          limit: first,
+          where: after && {
+            [key]: {
+              [Op.gt]: after,
+            },
           },
-        },
-      });
+          order: [[key, 'asc']],
+        });
+
+      if (last)
+        return m.findAll({
+          limit: last,
+          where: before && {
+            [key]: {
+              [Op.lt]: before,
+            },
+          },
+          order: [[key, 'desc']],
+        });
     },
 
     find(id: any, meta?: any): Promise<any> {

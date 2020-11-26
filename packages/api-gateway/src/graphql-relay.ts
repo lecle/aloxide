@@ -1,14 +1,10 @@
 import { FieldTypeEnum, Interpreter } from '@aloxide/bridge';
 import { AloxideDataManager } from '@aloxide/demux';
 import { GraphQLObjectType } from 'graphql';
-import {
-  connectionArgs,
-  ConnectionConfigNodeType,
-  connectionDefinitions,
-  connectionFromArray,
-} from 'graphql-relay';
+import { connectionArgs, ConnectionConfigNodeType, connectionDefinitions } from 'graphql-relay';
 
 import { GraphqlTypeInterpreter } from './GraphqlTypeInterpreter';
+import { convertCursorToOffet, paginationInfo } from './graphql-common-utils';
 
 import type { GraphQLFieldConfig, GraphQLScalarType, GraphQLNamedType } from 'graphql';
 import type { GraphQLConnectionDefinitions } from 'graphql-relay';
@@ -79,11 +75,10 @@ export function createGraphQl(config: CreateGraphQlConfig): CreateGraphQlOutput[
       type: connectionType,
       args: connectionArgs,
       resolve: (_, args) => {
-        const queryInput: QueryInput = args;
-        // TODO fix find all
+        const queryInput: QueryInput = convertCursorToOffet(connectionType.name, args);
         return dataAdapter
           .findAll(name, queryInput, metaData)
-          .then(items => connectionFromArray(items, args));
+          .then(items => paginationInfo(connectionType.name, items, args));
       },
     };
 
