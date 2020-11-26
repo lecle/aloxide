@@ -105,7 +105,7 @@ export function backwardPaginationInfo<T>(pageInput: PageInfoInput): Connection<
     pageInput.edges = pageInput.edges.slice(0, pageInput.limit);
     hasPreviousPage = true;
   }
-  const edges = pageInput.edges?.reverse()?.map(value => ({
+  const edges = pageInput.edges.reverse().map(value => ({
     cursor: offsetToCursor(pageInput.entityName, value.id),
     node: value,
   }));

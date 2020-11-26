@@ -86,7 +86,30 @@ describe('Graphql Common Ultils', () => {
     expect(resp.pageInfo.hasPreviousPage).toBe(false);
   });
 
-  it('Should backward pagination 2', () => {
+  it('Should forward pagination with after', () => {
+    const items = [
+      {
+        id: 1,
+      },
+      {
+        id: 2,
+      },
+      {
+        id: 3,
+      },
+    ];
+
+    const resp = paginationInfo(entityName, items, { first: 2, after: 'test' });
+
+    expect(resp.edges).toBeDefined();
+    expect(resp.edges[0].cursor).toBe('dGVzdDE=');
+    expect(resp.pageInfo.startCursor).toBe('dGVzdDE=');
+    expect(resp.pageInfo.endCursor).toBe('dGVzdDI=');
+    expect(resp.pageInfo.hasNextPage).toBe(true);
+    expect(resp.pageInfo.hasPreviousPage).toBe(true);
+  });
+
+  it('Should backward pagination', () => {
     const items = [
       {
         id: 37,
@@ -107,5 +130,38 @@ describe('Graphql Common Ultils', () => {
     expect(resp.pageInfo.endCursor).toBe('dGVzdDM3');
     expect(resp.pageInfo.hasNextPage).toBe(false);
     expect(resp.pageInfo.hasPreviousPage).toBe(true);
+  });
+
+  it('Should backward pagination with before', () => {
+    const items = [
+      {
+        id: 37,
+      },
+      {
+        id: 36,
+      },
+      {
+        id: 35,
+      },
+    ];
+
+    const resp = paginationInfo(entityName, items, { last: 2, before: 'test' });
+
+    expect(resp.edges).toBeDefined();
+    expect(resp.edges[0].cursor).toBe('dGVzdDM2');
+    expect(resp.pageInfo.startCursor).toBe('dGVzdDM2');
+    expect(resp.pageInfo.endCursor).toBe('dGVzdDM3');
+    expect(resp.pageInfo.hasNextPage).toBe(true);
+    expect(resp.pageInfo.hasPreviousPage).toBe(true);
+  });
+
+  it('Should backward pagination by emtpy items', () => {
+    const resp = paginationInfo(entityName, [], { last: 2, before: 'test' });
+
+    expect(resp.edges).toBeDefined();
+    expect(resp.pageInfo.startCursor).toBeUndefined();
+    expect(resp.pageInfo.endCursor).toBeUndefined();
+    expect(resp.pageInfo.hasNextPage).toBe(true);
+    expect(resp.pageInfo.hasPreviousPage).toBe(false);
   });
 });
