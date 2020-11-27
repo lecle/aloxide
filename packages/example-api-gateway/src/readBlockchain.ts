@@ -1,7 +1,6 @@
 import { readAloxideConfig } from '@aloxide/abstraction';
-import { AloxideDataManager, createWatcher } from '@aloxide/demux';
+import { AloxideDataManager, HyperionActionReader, createWatcher } from '@aloxide/demux';
 import { IconActionReader } from '@aloxide/demux-icon';
-import { NodeosActionReader } from 'demux-eos';
 
 import config, { connectDb } from './config';
 import { createDataProvider } from './models';
@@ -32,10 +31,12 @@ if (process.env.app_enable_eos == 'true') {
     aloxideConfig,
     dataAdapter,
     logger: config.logger,
-    actionReader: new NodeosActionReader({
-      nodeosEndpoint: process.env.app_nodeosEndpoint,
+    actionReader: new HyperionActionReader({
+      hyperionEndpoint: process.env.app_hyperionEndpoint,
       onlyIrreversible: false,
       startAtBlock: parseInt(process.env.app_startAtBlock, 10),
+      logLevel: 'info',
+      logSource: 'reader-EOS',
     }),
     actionWatcherOptions: {
       pollInterval: 5000,

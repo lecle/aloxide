@@ -53,8 +53,33 @@ cleost push action helloworld12 delpoll '["helloworld12", 1005]' -p helloworld12
 cleost push action helloworld12 crevote '["helloworld12", 1005, 1, 2, 3]' -p helloworld12
 cleost push action helloworld12 updvote '["helloworld12", 1005, 10, 200, 5]' -p helloworld12
 cleost push action helloworld12 delvote '["helloworld12", 1005]' -p helloworld12
-
 ```
+
+Use `testtransact` [contract](https://github.com/danielAlvess/eos-send-inline-and-deferred-transaction) to test inline and deferred action
+
+
+```bash
+## push action create POLL as inline action
+
+# delegate creator permission to testtransact account
+cleost set account permission daniel111111 active '{"threshold": 1,"keys": [{"key": "EOS6yfoREUrCWa1MZkjnfhLyG2cBk9spkayth6NKPBCmpLkzEK7NG","weight": 1}],"accounts": [{"permission":{"actor":"testtransact","permission":"eosio.code"},"weight":1}]}' owner -p daniel111111
+
+
+# pack action data to create POLL
+cleost convert pack_action_data helloworld12 crepoll '["daniel111111", 64, "poll test", "test test test"]'
+1042082144e5a649400000000000000009706f6c6c20746573740e7465737420746573742074657374
+
+# send inline action to create POLL
+cleos -u https://testnet.canfoundation.io push action testtransact sendinline '["daniel111111", "helloworld12", "crepoll", "1042082144e5a649400000000000000009706f6c6c20746573740e7465737420746573742074657374"]' -p daniel111111
+
+# send deferred action to create POLL
+cleos -u https://testnet.canfoundation.io convert pack_action_data helloworld12 crepoll '["daniel111111", 65, "poll test", "test test test"]'
+1042082144e5a649410000000000000009706f6c6c20746573740e7465737420746573742074657374
+
+cleos -u https://testnet.canfoundation.io push action testtransact senddeferred '["daniel111111", "helloworld12", "crepoll", "1042082144e5a649410000000000000009706f6c6c20746573740e7465737420746573742074657374"]' -p daniel111111
+```
+
+
 
 ### Enable watcher on ICON loop
 
@@ -67,7 +92,7 @@ app_enable_icon=true
 
 ## Start demo
 
-We can start demo if with defaul setting.
+We can start demo if with default setting.
 
 1. change directory to `.../aloxide`
 2. start local posgres database using docker compose: `docker-compose up -d`

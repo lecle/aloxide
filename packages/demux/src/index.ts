@@ -12,6 +12,7 @@ export type { DbUpdaterActionPayload } from './DbUpdater';
 
 export { BaseHandlerVersion } from './BaseHandlerVersion';
 export { AloxideActionHandler } from './AloxideActionHandler';
+export { HyperionActionReader } from './HyperionActionReader';
 export { DbUpdater } from './DbUpdater';
 export { AloxideDataManager } from './AloxideDataManager';
 export { indexStateSchema } from './indexStateSchema';
