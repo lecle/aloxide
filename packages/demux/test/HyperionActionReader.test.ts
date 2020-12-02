@@ -19,6 +19,28 @@ describe('NodeosActionReader', () => {
     });
   });
 
+  it('should initilize reader', async () => {
+    const localReader = new HyperionActionReader({
+      startAtBlock: 10,
+      onlyIrreversible: false,
+    });
+
+    const onlineReader = new HyperionActionReader({
+      hyperionEndpoint,
+      startAtBlock: 10,
+      onlyIrreversible: false,
+    });
+
+    const defaultEndpoint = new HyperionActionReader();
+
+    // @ts-ignore
+    expect(localReader.hyperionEndpoint).toBe('http://localhost:8888');
+    // @ts-ignore
+    expect(onlineReader.hyperionEndpoint).toBe(hyperionEndpoint);
+    // @ts-ignore
+    expect(defaultEndpoint.hyperionEndpoint).toBe('http://localhost:8888');
+  });
+
   it('should get connection agent', async () => {
     const httpURL = {
       protocol: 'http:',
@@ -32,10 +54,18 @@ describe('NodeosActionReader', () => {
     const httpConnection = await reader.getConnectionAgent(httpURL);
 
     // @ts-ignore
+    const currentHttpConnection = await reader.getConnectionAgent(httpURL);
+
+    // @ts-ignore
     const httpsConnection = await reader.getConnectionAgent(httpsURL);
+
+    // @ts-ignore
+    const currentHttpsConnection = await reader.getConnectionAgent(httpsURL);
 
     expect(httpConnection).toBeInstanceOf(http.Agent);
     expect(httpsConnection).toBeInstanceOf(https.Agent);
+    expect(currentHttpConnection).toBe(currentHttpConnection);
+    expect(currentHttpsConnection).toBe(httpsConnection);
   });
 
   it('should check transaction include meta action', async () => {
@@ -91,6 +121,11 @@ describe('NodeosActionReader', () => {
       actions: [{ ...sampleAction, action: 'delegatebw' }],
     };
 
+    const linkauthTransaction = {
+      id: '637fb1f1fb82d903893aedf966ce37880d6ae96031b3acf7466ae8978adbbcc2',
+      actions: [{ ...sampleAction, action: 'linkauth' }],
+    };
+
     // @ts-ignore
     const result1 = await reader.includeMetaAction(newAccountTransaction);
     // @ts-ignore
@@ -107,10 +142,14 @@ describe('NodeosActionReader', () => {
     const result7 = await reader.includeMetaAction(undelegatebwTransaction);
     // @ts-ignore
     const result8 = await reader.includeMetaAction(delegatebwTransaction);
+    // @ts-ignore
+    const result9 = await reader.includeMetaAction(linkauthTransaction);
 
     expect(
       result1 && result2 && result3 && result4 && result5 && result6 && result7 && result8,
     ).toBe(true);
+
+    expect(result9).toBe(false);
   });
 
   it('should get action meta', async () => {
