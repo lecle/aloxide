@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/lecle/aloxide/compare/v0.5.0...v0.6.0) (2020-12-16)
+
+### Features
+
+- **demux:** :sparkles: support get blockchain data from hyperion api ([1b38168](https://github.com/lecle/aloxide/commit/1b38168af1a214d6141ce0777a3ef4d6386d187f))
+
 # [0.5.0](https://github.com/lecle/aloxide/compare/v0.4.0...v0.5.0) (2020-11-10)
 
 ### Bug Fixes
