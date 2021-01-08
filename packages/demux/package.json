@@ -1,7 +1,7 @@
 {
   "name": "@aloxide/demux",
   "description": "Implement demux pattern for sync data from blockchain to a centralized database",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Lecle",
   "license": "Apache-2.0",
   "private": false,

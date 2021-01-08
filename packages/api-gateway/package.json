@@ -1,7 +1,7 @@
 {
   "name": "@aloxide/api-gateway",
   "description": "Provide an API template for the back-end side",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Lecle",
   "license": "Apache-2.0",
   "private": false,
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@aloxide/abstraction": "^0.6.0",
-    "@aloxide/demux": "^0.6.0",
+    "@aloxide/demux": "^0.6.1",
     "express": "^4.17.1",
     "graphql": "^14.0.0",
     "graphql-relay": "^0.6.0"

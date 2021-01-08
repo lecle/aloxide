@@ -4,6 +4,7 @@
 **Table of content**
 
 - [Change Log](#change-log)
+  - [0.6.1 (2021-01-08)](#061-2021-01-08)
 - [0.6.0 (2020-12-16)](#060-2020-12-16)
   - [Features](#features)
 - [0.5.0 (2020-11-10)](#050-2020-11-10)
@@ -30,6 +31,10 @@
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [0.6.1](https://github.com/lecle/aloxide/compare/v0.6.0...v0.6.1) (2021-01-08)
+
+**Note:** Version bump only for package @aloxide/demux
 
 # [0.6.0](https://github.com/lecle/aloxide/compare/v0.5.0...v0.6.0) (2020-12-16)
 

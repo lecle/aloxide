@@ -1,6 +1,6 @@
 {
   "name": "@aloxide/example-demux",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "description": "Example of `@aloxide/demux`",
   "keywords": [
@@ -36,7 +36,7 @@
   "dependencies": {
     "@aloxide/abstraction": "^0.6.0",
     "@aloxide/bridge": "^0.6.0",
-    "@aloxide/demux": "^0.6.0",
+    "@aloxide/demux": "^0.6.1",
     "@aloxide/demux-icon": "^0.6.0",
     "@aloxide/model-sequelize": "^0.6.0",
     "aws-sdk": "^2.766.0",
