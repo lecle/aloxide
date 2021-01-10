@@ -19,12 +19,14 @@ export abstract class AbsContractAdapter implements ContractAdapter {
   typeInterpreter: AbsTypeInterpreter;
   blockchainType: string;
   logDataOnly?: boolean;
+  keepVerification?: boolean;
   config: ContractAdapterConfig;
 
   constructor(config?: ContractAdapterConfig) {
     this.config = config || {};
     this.blockchainType = this.config.blockchainType;
     this.logDataOnly = this.config.logDataOnly;
+    this.keepVerification = this.config.keepVerification;
   }
 
   generate(outputPath: string) {

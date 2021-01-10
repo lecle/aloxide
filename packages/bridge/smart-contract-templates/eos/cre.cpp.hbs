@@ -1,10 +1,13 @@
     require_auth(user);
-{{#unless @root._config.logDataOnly}}
+{{#if @root._config.useStateData}}
     {{tableName}}_table _{{tableName}}(get_self(), get_self().value);
+    auto item = _{{tableName}}.find({{primaryKeyField.name}});
+
+    check(item == _{{tableName}}.end(), "item already existed");
 
     _{{tableName}}.emplace(user, [&](auto &row) {
         {{#each fields}}
         row.{{name}} = {{name}};
         {{/each}}
     });
-{{/unless}}
+{{/if}}

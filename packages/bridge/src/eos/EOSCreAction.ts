@@ -11,10 +11,11 @@ export class EOSCreAction extends EOSAction {
   implement(entity: Table): string {
     return this.template({
       _config: {
-        logDataOnly: this.logDataOnly,
+        useStateData: !(this.logDataOnly === true && this.keepVerification !== true),
       },
       tableName: entity.name,
       fields: entity.fields,
+      primaryKeyField: entity.primaryKeyField,
     });
   }
 
