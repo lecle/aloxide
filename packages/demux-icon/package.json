@@ -35,7 +35,7 @@
     "bignumber.js": "^9.0.0",
     "bunyan": "^1.8.14",
     "demux": "https://github.com/lecle/demux-js.git#develop",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^3.1.1"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.6"
