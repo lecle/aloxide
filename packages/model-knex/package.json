@@ -33,7 +33,7 @@
   "dependencies": {
     "@aloxide/abstraction": "^0.6.0",
     "@aloxide/bridge": "^0.6.0",
-    "knex": "^0.21.6"
+    "knex": "^2.4.0"
   },
   "gitHead": "636d0f53a109303b0badb07772646a0cba14b41a"
 }
